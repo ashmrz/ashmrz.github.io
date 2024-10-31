@@ -1,0 +1,77 @@
+{
+    "papers": [
+      {
+        "title": "3D Gaussian Ray Tracing: Fast Tracing of Particle Scenes",
+        "authors": "Ashkan Mirzaei*, Nicolas Moenne-Loccoz*, Or Perel, Riccardo de Lutio, Janick Martinez Esturo, Gavriel State, Sanja Fidler, Nicholas Sharp, Zan Gojcic",
+        "venue": "SIGGRAPH Asia 2024 (Journal Track)", 
+        "url": "https://gaussiantracer.github.io/",
+        "media": "https://gaussiantracer.github.io/res/teaser/bicycle_morph_electric.mp4"
+      },
+      {
+        "title": "GaussianCut: Fast Interactive Segmentation via Graph Cut for 3D Gaussian Splatting",
+        "authors": "Umangi Jain, Ashkan Mirzaei, Igor Gilitschenski",
+        "venue": "NeurIPS 2024",
+        "media": "media/gaussiancut.png"
+      },
+      {
+        "title": "Large 4D Gaussian Reconstruction Model",
+        "authors": "Jiawei Ren, Kevin Xie, Ashkan Mirzaei, Hanxue Liang, Xiaohui Zeng, Karsten Kreis, Ziwei Liu, Antonio Torralba, Sanja Fidler, Seung Wook Kim, Huan Ling",
+        "venue": "NeurIPS 2024",
+        "url": "https://research.nvidia.com/labs/toronto-ai/l4gm/",
+        "media": "https://research.nvidia.com/labs/toronto-ai/l4gm/assets/4d_scenes/regular_assets/w_interp_otter-on-surfboard.mp4"
+      },
+      {
+        "title": "RefFusion: Reference Adapted Diffusion Models for 3D Scene Inpainting",
+        "authors": "Ashkan Mirzaei, Riccardo De Lutio, Seung Wook Kim, David Acuna, Jonathan Kelly, Sanja Fidler, Igor Gilitschenski, Zan Gojcic",
+        "venue": "2024",
+        "url": "https://reffusion.github.io/",
+        "media": "https://reffusion.github.io/res/thanos/garden.mp4"
+      },
+      {
+        "title": "Watch Your Steps: Local Image and Scene Editing by Text Instructions",
+        "authors": "Ashkan Mirzaei, Tristan Aumentado-Armstrong, Marcus Brubaker, Jonathan Kelly, Alex Levinshtein, Konstantinos Derpanis, Igor Gilitschenski",
+        "venue": "ECCV 2024 (Oral)",
+        "url": "https://ashmrz.github.io/WatchYourSteps/",
+        "media": "https://ashmrz.github.io/WatchYourSteps/data/videos/face-joker-ours.mp4"
+      },
+      {
+        "title": "Reference-guided Controllable Inpainting of Neural Radiance Fields",
+        "authors": "Ashkan Mirzaei*, Tristan Aumentado-Armstrong*, Marcus A. Brubaker, Jonathan Kelly, Alex Levinshtein, Konstantinos G. Derpanis, Igor Gilitschenski",
+        "venue": "ICCV 2023",
+        "url": "https://ashmrz.github.io/reference-guided-3d/",
+        "media": "https://ashmrz.github.io/reference-guided-3d/data/videos/control/3.mp4"
+      },
+      {
+        "title": "Exploring Reconstructive Latent-Space Neural Radiance Fields",
+        "authors": "Ashkan Mirzaei*, Tristan Aumentado-Armstrong*, Marcus A. Brubaker, Jonathan Kelly, Alex Levinshtein, Konstantinos G. Derpanis, Igor Gilitschenski",
+        "venue": "ICCV NeRF4ADR 2023",
+        "media": "media/reconstructive.png"
+      },
+      {
+        "title": "SPIn-NeRF: Multiview Segmentation and Perceptual Inpainting with Neural Radiance Fields",
+        "authors": "Ashkan Mirzaei, Tristan Aumentado-Armstrong, Konstantinos G. Derpanis, Jonathan Kelly, Marcus A. Brubaker, Igor Gilitschenski, Alex Levinshtein",
+        "venue": "CVPR 2023",
+        "url": "https://spinnerf3d.github.io/",
+        "media": "media/spinnerf.mp4"
+      },
+      {
+        "title": "CAMM: Building Category-Agnostic and Animatable 3D Models from Monocular Videos",
+        "authors": "Tiahshu Kuai, Akash Karthikeyan, Yash Kant, Ashkan Mirzaei, Igor Gilitschenski",
+        "venue": "CVPR DynaVis 2023",
+        "media": "media/camm.png"
+      },
+      {
+        "title": "LaTeRF: Label and Text Driven Object Radiance Fields",
+        "authors": "Ashkan Mirzaei, Yash Kant, Jonathan Kelly, Igor Gilitschenski",
+        "venue": "ECCV 2022",
+        "url": "https://arxiv.org/abs/2207.01583",
+        "media": "media/laterf.png"
+      },
+      {
+        "title": "Coordinated Multi-Agent Motion Planning via Imitation Learning",
+        "authors": "Andrei Ivanovic, Rowan McAllister, Ashkan Mirzaei, Igor Gilitschenski",
+        "venue": "ICRA Autonomous Driving 2022",
+        "media": "media/coordinated.png"
+      }
+    ]
+  }
