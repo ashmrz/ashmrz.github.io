@@ -341,6 +341,37 @@
         .search-input::placeholder {
             color: rgba(71, 85, 105, 0.6);
         }
+
+        /* Abstract toggle button styles */
+        .abstract-toggle {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 1rem;
+            padding: 0.5rem 1rem;
+            color: #475569;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            margin-top: 1rem;
+        }
+
+        .abstract-toggle:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .abstract-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            margin-top: 0.5rem;
+        }
+
+        .abstract-content.expanded {
+            max-height: 500px;
+            transition: max-height 0.5s ease-in;
+        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -454,7 +485,7 @@
             <h2 class="text-4xl font-bold mb-4">Publications</h2>
             <!-- Search Bar -->
             <div class="search-container" data-aos="fade-up">
-                <input type="text" id="publicationSearch" class="search-input" placeholder="Search publications by title, authors, or venue..." oninput="filterPublications()">
+                <input type="text" id="publicationSearch" class="search-input" placeholder="Search publications by title, authors, venue, or abstract..." oninput="filterPublications()">
             </div>
             <div class="row g-3" id="publications-container">
                 <!-- Publications will be loaded here -->
@@ -495,6 +526,15 @@
                 console.error('Error loading publications:', error);
             });
 
+        function toggleAbstract(index) {
+            const abstractContent = document.getElementById(`abstract-${index}`);
+            const toggleButton = document.getElementById(`toggle-${index}`);
+            abstractContent.classList.toggle('expanded');
+            toggleButton.innerHTML = abstractContent.classList.contains('expanded') ? 
+                '<i class="fas fa-chevron-up"></i> Hide Abstract' : 
+                '<i class="fas fa-chevron-down"></i> Show Abstract';
+        }
+
         function displayPublications(papers) {
             const container = document.getElementById('publications-container');
             container.innerHTML = '';
@@ -514,10 +554,18 @@
                                     }
                                 </div>
                                 <div class="col-md-9">
-                                    <div class="publication-body p-2">
+                                    <div class="publication-body p-4">
                                         <span class="venue-badge">${paper.venue}</span>
                                         <h5 class="mb-1">${paper.title}</h5>
                                         <p class="mb-0 small">${paper.authors}</p>
+                                        ${paper.abstract ? `
+                                            <button class="abstract-toggle btn btn-sm text-muted px-0 py-1" id="toggle-${index}" onclick="event.preventDefault(); toggleAbstract(${index})" style="font-size: 0.8rem; font-weight: 400;">
+                                                <i class="fas fa-chevron-down"></i> Abstract
+                                            </button>
+                                            <div class="abstract-content" id="abstract-${index}">
+                                                <p class="mt-2 small text-muted">${paper.abstract}</p>
+                                            </div>
+                                        ` : ''}
                                     </div>
                                 </div>
                             </div>
@@ -540,26 +588,27 @@
             const filteredPapers = publications.filter(paper => {
                 return paper.title.toLowerCase().includes(searchTerm) ||
                        paper.authors.toLowerCase().includes(searchTerm) ||
-                       paper.venue.toLowerCase().includes(searchTerm);
+                       paper.venue.toLowerCase().includes(searchTerm) ||
+                       (paper.abstract && paper.abstract.toLowerCase().includes(searchTerm));
             });
             displayPublications(filteredPapers);
         }
 
-		function toggleResearch() {
-			var dots = document.getElementById("dots");
-			var moreText = document.getElementById("more");
-			var btnText = document.getElementById("readMoreBtn");
+        function toggleResearch() {
+            var dots = document.getElementById("dots");
+            var moreText = document.getElementById("more");
+            var btnText = document.getElementById("readMoreBtn");
 
-			if (dots.style.display === "none") {
-				dots.style.display = "inline";
-				btnText.innerHTML = "Read more";
-				moreText.style.display = "none";
-			} else {
-				dots.style.display = "none";
-				btnText.innerHTML = "Read less";
-				moreText.style.display = "inline";
-			}
-		}
+            if (dots.style.display === "none") {
+                dots.style.display = "inline";
+                btnText.innerHTML = "Read more";
+                moreText.style.display = "none";
+            } else {
+                dots.style.display = "none";
+                btnText.innerHTML = "Read less";
+                moreText.style.display = "inline";
+            }
+        }
     </script>
 </body>
 </html>
