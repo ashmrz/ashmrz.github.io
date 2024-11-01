@@ -312,6 +312,35 @@
         .venue-badge {
             background: linear-gradient(120deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.2));
         }
+
+        /* Search bar styles */
+        .search-container {
+            margin-bottom: 2rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border-radius: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: #475569;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(31, 38, 135, 0.1);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 25px rgba(31, 38, 135, 0.15);
+        }
+
+        .search-input::placeholder {
+            color: rgba(71, 85, 105, 0.6);
+        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -423,6 +452,10 @@
         <!-- Publications Section -->
         <section id="publications" class="mt-5" data-aos="fade-up">
             <h2 class="text-4xl font-bold mb-4">Publications</h2>
+            <!-- Search Bar -->
+            <div class="search-container" data-aos="fade-up">
+                <input type="text" id="publicationSearch" class="search-input" placeholder="Search publications by title, authors, or venue..." oninput="filterPublications()">
+            </div>
             <div class="row g-3" id="publications-container">
                 <!-- Publications will be loaded here -->
             </div>
@@ -449,56 +482,68 @@
             });
         });
 
+        let publications = []; // Store publications data globally
+
         // Load and display publications
         fetch('content/papers.json')
             .then(response => response.json())
             .then(data => {
-                const container = document.getElementById('publications-container');
-                // Clear the container first
-                container.innerHTML = '';
-                
-                // Build complete HTML string before inserting
-                let allPapersHTML = '';
-                data.papers.forEach((paper, index) => {
-                    // Reduce delay and cap it to avoid timing issues
-                    const delay = Math.min((index + 1) * 50, 500);
-                    const paperHTML = `
-                        <div class="col-md-12" data-aos="fade-up" data-aos-delay="${delay}">
-                            ${paper.url ? `<a href="${paper.url}" target="_blank" class="text-decoration-none text-reset">` : ''}
-                            <div class="card publication-card shadow-sm">
-                                <div class="row g-0">
-                                    <div class="col-md-3">
-                                        ${paper.media.endsWith('.mp4') ? 
-                                            `<video src="${paper.media}" class="publication-media rounded-start" autoplay loop muted playsinline style="width: 100%; object-fit: cover; aspect-ratio: 16/9;" onerror="this.style.display='none'"></video>` :
-                                            `<img src="${paper.media}" alt="${paper.title} Preview" class="publication-media rounded-start" style="width: 100%; object-fit: cover; aspect-ratio: 16/9;" onerror="this.style.display='none'">`
-                                        }
-                                    </div>
-                                    <div class="col-md-9">
-                                        <div class="publication-body p-2">
-                                            <span class="venue-badge">${paper.venue}</span>
-                                            <h5 class="mb-1">${paper.title}</h5>
-                                            <p class="mb-0 small">${paper.authors}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            ${paper.url ? '</a>' : ''}
-                        </div>
-                    `;
-                    allPapersHTML += paperHTML;
-                });
-                
-                // Set innerHTML once with complete content
-                container.innerHTML = allPapersHTML;
-                
-                // Refresh AOS after content is loaded
-                setTimeout(() => {
-                    AOS.refresh();
-                }, 100);
+                publications = data.papers; // Store the publications
+                displayPublications(publications);
             })
             .catch(error => {
                 console.error('Error loading publications:', error);
             });
+
+        function displayPublications(papers) {
+            const container = document.getElementById('publications-container');
+            container.innerHTML = '';
+            
+            let allPapersHTML = '';
+            papers.forEach((paper, index) => {
+                const delay = Math.min((index + 1) * 50, 500);
+                const paperHTML = `
+                    <div class="col-md-12" data-aos="fade-up" data-aos-delay="${delay}">
+                        ${paper.url ? `<a href="${paper.url}" target="_blank" class="text-decoration-none text-reset">` : ''}
+                        <div class="card publication-card shadow-sm">
+                            <div class="row g-0">
+                                <div class="col-md-3">
+                                    ${paper.media.match(/\.(mp4|webm|mov|avi|mkv)$/) ? 
+                                        `<video src="${paper.media}" class="publication-media rounded-start" autoplay loop muted playsinline style="width: 100%; object-fit: cover; aspect-ratio: 16/9;" onerror="this.style.display='none'"></video>` :
+                                        `<img src="${paper.media}" alt="${paper.title} Preview" class="publication-media rounded-start" style="width: 100%; object-fit: cover; aspect-ratio: 16/9;" onerror="this.style.display='none'">`
+                                    }
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="publication-body p-2">
+                                        <span class="venue-badge">${paper.venue}</span>
+                                        <h5 class="mb-1">${paper.title}</h5>
+                                        <p class="mb-0 small">${paper.authors}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        ${paper.url ? '</a>' : ''}
+                    </div>
+                `;
+                allPapersHTML += paperHTML;
+            });
+            
+            container.innerHTML = allPapersHTML;
+            
+            setTimeout(() => {
+                AOS.refresh();
+            }, 100);
+        }
+
+        function filterPublications() {
+            const searchTerm = document.getElementById('publicationSearch').value.toLowerCase();
+            const filteredPapers = publications.filter(paper => {
+                return paper.title.toLowerCase().includes(searchTerm) ||
+                       paper.authors.toLowerCase().includes(searchTerm) ||
+                       paper.venue.toLowerCase().includes(searchTerm);
+            });
+            displayPublications(filteredPapers);
+        }
 
 		function toggleResearch() {
 			var dots = document.getElementById("dots");
