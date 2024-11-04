@@ -531,8 +531,8 @@
             const toggleButton = document.getElementById(`toggle-${index}`);
             abstractContent.classList.toggle('expanded');
             toggleButton.innerHTML = abstractContent.classList.contains('expanded') ? 
-                '<i class="fas fa-chevron-up"></i> Hide Abstract' : 
-                '<i class="fas fa-chevron-down"></i> Show Abstract';
+                '<i class="fas fa-chevron-up"></i>&nbsp;&nbsp;Hide Abstract' : 
+                '<i class="fas fa-chevron-down"></i>&nbsp;&nbsp;Show Abstract';
         }
 
         function displayPublications(papers) {
@@ -559,8 +559,8 @@
                                         <h5 class="mb-1">${paper.title}</h5>
                                         <p class="mb-0 small">${paper.authors}</p>
                                         ${paper.abstract ? `
-                                            <button class="abstract-toggle btn btn-sm text-muted px-0 py-1" id="toggle-${index}" onclick="event.preventDefault(); toggleAbstract(${index})" style="font-size: 0.8rem; font-weight: 400;">
-                                                <i class="fas fa-chevron-down"></i> Abstract
+                                            <button class="abstract-toggle btn btn-sm text-muted px-3 py-2 mt-2" id="toggle-${index}" onclick="event.preventDefault(); toggleAbstract(${index})" style="font-size: 0.8rem; font-weight: 400;">
+                                                <i class="fas fa-chevron-down"></i>&nbsp;&nbsp;Abstract
                                             </button>
                                             <div class="abstract-content" id="abstract-${index}">
                                                 <p class="mt-2 small text-muted">${paper.abstract}</p>
