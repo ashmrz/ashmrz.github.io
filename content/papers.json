@@ -3,7 +3,7 @@
       {
         "title": "Feed-Forward Bullet-Time Reconstruction of Dynamic Scenes from Monocular Videos",
         "authors": "Ashkan Mirzaei*, Hanxue Liang*, Jiawei Ren*, Antonio Torralba, Ziwei Liu, Igor Gilitschenski, Sanja Fidler, Cengiz Oztireli, Huan Ling, Zan Gojcic, Jiahui Huang",
-        "venue": "2025",
+        "venue": "2024",
         "url": "https://research.nvidia.com/labs/toronto-ai/bullet-timer/",
         "media": "https://research.nvidia.com/labs/toronto-ai/bullet-timer/sora_results/robot-video-game_vid.mp4",
         "abstract": "Recent advancements in static feed-forward scene reconstruction have demonstrated significant progress in high-quality novel view synthesis. However, these models often struggle with generalizability across diverse environments and fail to effectively handle dynamic content. We present BTimer (short for BulletTimer), the first motion-aware feed-forward model for real-time reconstruction and novel view synthesis of dynamic scenes. Our approach reconstructs the full scene in a 3D Gaussian Splatting representation at a given target ('bullet') timestamp by aggregating information from all the context frames. Such a formulation allows BTimer to gain scalability and generalization by leveraging both static and dynamic scene datasets. Given a casual monocular dynamic video, BTimer reconstructs a bullet-time scene within 150ms while reaching state-of-the-art performance on both static and dynamic scene datasets, even compared with optimization-based approaches."
