@@ -183,9 +183,17 @@
 
         .social-links {
             display: flex;
-            gap: 0.75rem;
+            gap: 0.3rem;
             justify-content: center;
             margin-top: 2rem;
+        }
+
+        /* Style for the Bluesky icon */
+        .social-links .social-link img[alt="Bluesky Icon"] {
+        width: 20px;  /* Adjust if needed */
+        height: 20px; /* Adjust if needed */
+        vertical-align: middle;
+        filter: invert(21%) sepia(22%) saturate(3444%) hue-rotate(186deg) brightness(70%) contrast(40%);
         }
 
         .social-link {
@@ -425,6 +433,9 @@
                                 </a>
                                 <a href="https://twitter.com/ashmrz10" class="social-link" title="Follow me on Twitter" target="_blank">
                                     <i class="fab fa-twitter"></i>
+                                </a>
+                                <a href="https://bsky.app/profile/ashmrz.bsky.social" class="social-link" title="Follow me on Bluesky" target="_blank">
+                                    <img src="icons/bluesky.svg" alt="Bluesky Icon">
                                 </a>
                                 <a href="media/CV.pdf" class="social-link" title="Download CV" target="_blank">
                                     <i class="fas fa-file-alt"></i>
