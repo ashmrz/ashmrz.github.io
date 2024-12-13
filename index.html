@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="icon" href="icons/laptop.png" type="image/png"> 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ashkan Mirzaei</title>
@@ -22,6 +23,8 @@
             margin: 0;
             padding: 0;
             min-height: 100vh;
+            font-family: 'Inter', sans-serif; /* Modern and elegant font */
+            line-height: 1.6;
         }
 
         body::before {
@@ -401,6 +404,9 @@
             box-shadow: 0 4px 15px rgba(31, 38, 135, 0.1);
         }
     </style>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 </head>
 <body class="min-h-screen">
     <div class="moving-gradient"></div>
@@ -526,7 +532,7 @@
     <!-- Footer -->
     <footer class="mt-2 py-4 w-100" data-aos="fade-up">
         <div class="text-center text-gray-400 text-sm">
-            <p class="mb-0 opacity-60">&copy; 2024 Ashkan Mirzaei</p>
+            <p class="mb-0 opacity-60">© 2024 Ashkan Mirzaei</p>
         </div>
     </footer>
 
@@ -563,6 +569,10 @@
             card.classList.toggle('expanded');
             abstractContent.style.maxHeight = card.classList.contains('expanded') ? 
                 `${abstractContent.scrollHeight}px` : '0';
+            const chevronIcon = card.querySelector('.fa-chevron-down');
+            if (chevronIcon) {
+                chevronIcon.classList.toggle('rotate-180');
+            }
         }
 
         function displayPublications(papers) {
@@ -632,21 +642,6 @@
             displayPublications(filteredPapers);
         }
 
-        function toggleResearch() {
-            var dots = document.getElementById("dots");
-            var moreText = document.getElementById("more");
-            var btnText = document.getElementById("readMoreBtn");
-
-            if (dots.style.display === "none") {
-                dots.style.display = "inline";
-                btnText.innerHTML = "Read more";
-                moreText.style.display = "none";
-            } else {
-                dots.style.display = "none";
-                btnText.innerHTML = "Read less";
-                moreText.style.display = "inline";
-            }
-        }
     </script>
 </body>
 </html>
