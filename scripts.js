@@ -18,7 +18,7 @@
         let publications = []; // Store publications data globally
 
         // Load and display publications
-        fetch('content/papers.json')
+        fetch('content/papers.json?' + new Date().getTime())
             .then(response => response.json())
             .then(data => {
                 publications = data.papers; // Store the publications
