@@ -74,7 +74,7 @@
                                          : ''}
                                         ${paper.abstract ?
                                             `<div class="abstract-content overflow-hidden transition-all duration-300" id="abstract-${index}" style="max-height: 0;">
-                                                <p class="mt-2 small text-muted">${paper.abstract}</p>
+                                                <p class="mt-2 small">${paper.abstract}</p>
                                             </div>
                                             <div class="text-center mt-2">
                                                 <i class="fas fa-chevron-down text-gray-400 transition-transform duration-300 ${index}"></i>
