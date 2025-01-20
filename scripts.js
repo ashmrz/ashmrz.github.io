@@ -126,16 +126,17 @@ function filterPublications() {
 }
 
 function loadAndDisplayExperience() {
-  fetch("content/experience.json?" + new Date().getTime())
-    .then((response) => response.json())
-    .then((data) => {
-      const experience = data.experience;
-      displayExperience(experience);
-    })
-    .catch((error) => {
-      console.error("Error loading experience data:", error);
-    });
+    fetch("content/experience.json?" + new Date().getTime())
+        .then((response) => response.json())
+        .then((data) => {
+            const experience = data.experience;
+            displayExperience(experience);
+        })
+        .catch((error) => {
+            console.error("Error loading experience data:", error);
+        });
 }
+
 
 function displayExperience(experience) {
   const timeline = document.getElementById("timeline");
