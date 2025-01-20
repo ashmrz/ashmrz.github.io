@@ -180,7 +180,7 @@ body {
 
 h1, h2, h3, h4 {
     color: transparent;
-    background: linear-gradient(90deg, #00ffff, #0080ff); /* Applying a custom gradient */
+    background: linear-gradient(90deg, #11F6FF, #7168fa); /* Applying a custom gradient */
     -webkit-background-clip: text;
     background-clip: text;
     font-weight: 600;
@@ -251,7 +251,7 @@ h1, h2, h3, h4 {
 }
 
 .publication-card h5 {
-    background: linear-gradient(90deg, #00ffff, #0080ff);
+    background: linear-gradient(90deg, #11F6FF, #7168fa);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -261,7 +261,7 @@ h1, h2, h3, h4 {
 }
 
 .publication-card:hover h5 {
-    background: linear-gradient(90deg, #00ffff, #0080ff);
+    background: linear-gradient(90deg, #11F6FF, #7168fa);
      -webkit-background-clip: text;
     background-clip: text;
 }
