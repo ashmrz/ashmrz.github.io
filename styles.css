@@ -151,7 +151,7 @@ body {
      width: 16px;  /* Slightly smaller */
     height: 16px; /* Slightly smaller */
     vertical-align: middle;
-     filter: invert(100%) sepia(150%) saturate(615%) hue-rotate(186deg) brightness(70%) contrast(50%) opacity(70%);
+     filter: invert(100%) sepia(150%) saturate(615%) hue-rotate(186deg) brightness(150%) contrast(100%) opacity(70%);
 }
 
 .social-link {
@@ -270,6 +270,24 @@ h1, h2, h3, h4 {
 .publication-body p, .publication-body small {
      color: #ddd; /* Light gray for better contrast */
 }
+
+
+/* Make sure the text in the education section has enough contrast */
+#education .card p, #education .card span, #education .card h4{
+    color: #ddd !important;
+}
+
+
+/* Improve the contrast for research text */
+#research .card p {
+    color: #ddd !important;
+}
+
+/* Increase contrast for footer text */
+footer p {
+    color: #ddd !important;
+}
+
 
 .profile-card {
      animation: cardFloat 6s ease-in-out infinite alternate;
