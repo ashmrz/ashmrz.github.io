@@ -1,0 +1,19 @@
+{
+  "experience": [
+    {
+      "title": "Research Assistant",
+      "company": "Toronto Intelligent Systems Lab (TISL)",
+      "time": "Sep 2021 - Present"
+    },
+    {
+      "title": "Research Intern (MITACS)",
+      "company": "Samsung AI Center Toronto",
+      "time": "Jul 2022 - Sep 2023"
+    },
+    {
+      "title": "Research Intern",
+      "company": "Nvidia Toronto AI Lab",
+      "time": "Sep 2023 - Nov 2024"
+    }
+  ]
+}
