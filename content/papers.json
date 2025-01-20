@@ -1,105 +1,113 @@
 {
-    "papers": [
-      {
-        "title": "3DGUT: Enabling Distorted Cameras and Secondary Rays in Gaussian Splatting",
-        "authors": "Qi Wu*, Janick Martinez Esturo*, Ashkan Mirzaei, Nicolas Moenne-Loccoz, Zan Gojcic",
-        "venue": "2025",
-        "url": "https://research.nvidia.com/labs/toronto-ai/3DGUT/",
-        "media": "media/paper_videos/reduced_quality/3dgut.mp4",
-        "abstract": "3D Gaussian Splatting (3DGS) has shown great potential for efficient reconstruction and high-fidelity real-time rendering of complex scenes on consumer hardware. However, due to its rasterization-based formulation, 3DGS is constrained to ideal pinhole cameras and lacks support for secondary lighting effects. Recent methods address these limitations by tracing volumetric particles instead, however, this comes at the cost of significantly slower rendering speeds. In this work, we propose 3D Gaussian Unscented Transform (3DGUT), replacing the EWA splatting formulation in 3DGS with the Unscented Transform that approximates the particles through sigma points, which can be projected exactly under any nonlinear projection function. This modification enables trivial support of distorted cameras with time dependent effects such as rolling shutter, while retaining the efficiency of rasterization. Additionally, we align our rendering formulation with that of tracing-based methods, enabling secondary ray tracing required to represent phenomena such as reflections and refraction within the same 3D representation."
-      },
-      {
-        "title": "Feed-Forward Bullet-Time Reconstruction of Dynamic Scenes from Monocular Videos",
-        "authors": "Ashkan Mirzaei*, Hanxue Liang*, Jiawei Ren*, Antonio Torralba, Ziwei Liu, Igor Gilitschenski, Sanja Fidler, Cengiz Oztireli, Huan Ling, Zan Gojcic, Jiahui Huang",
-        "venue": "2025",
-        "url": "https://research.nvidia.com/labs/toronto-ai/bullet-timer/",
-        "media": "media/paper_videos/reduced_quality/robot-video-game_vid.mp4",
-        "abstract": "Recent advancements in static feed-forward scene reconstruction have demonstrated significant progress in high-quality novel view synthesis. However, these models often struggle with generalizability across diverse environments and fail to effectively handle dynamic content. We present BTimer (short for BulletTimer), the first motion-aware feed-forward model for real-time reconstruction and novel view synthesis of dynamic scenes. Our approach reconstructs the full scene in a 3D Gaussian Splatting representation at a given target ('bullet') timestamp by aggregating information from all the context frames. Such a formulation allows BTimer to gain scalability and generalization by leveraging both static and dynamic scene datasets. Given a casual monocular dynamic video, BTimer reconstructs a bullet-time scene within 150ms while reaching state-of-the-art performance on both static and dynamic scene datasets, even compared with optimization-based approaches."
-      },
-      {
-        "title": "3D Gaussian Ray Tracing: Fast Tracing of Particle Scenes",
-        "authors": "Ashkan Mirzaei*, Nicolas Moenne-Loccoz*, Or Perel, Riccardo de Lutio, Janick Martinez Esturo, Gavriel State, Sanja Fidler, Nicholas Sharp, Zan Gojcic",
-        "venue": "SIGGRAPH Asia 2024 (Journal Track)", 
-        "url": "https://gaussiantracer.github.io/",
-        "media": "media/paper_videos/reduced_quality/bicycle_morph_electric.mp4", 
-        "abstract": "Particle-based representations of radiance fields such as 3D Gaussian Splatting have found great success for reconstructing and re-rendering of complex scenes. Most existing methods render particles via rasterization, projecting them to screen space tiles for processing in a sorted order. This work instead considers ray tracing the particles, building a bounding volume hierarchy and casting a ray for each pixel using high-performance GPU ray tracing hardware. To efficiently handle large numbers of semi-transparent particles, we describe a specialized rendering algorithm which encapsulates particles with bounding meshes to leverage fast ray-triangle intersections, and shades batches of intersections in depth-order. The benefits of ray tracing are well-known in computer graphics: processing incoherent rays for secondary lighting effects such as shadows and reflections, rendering from highly-distorted cameras common in robotics, stochastically sampling rays, and more. With our renderer, this flexibility comes at little cost compared to rasterization. Experiments demonstrate the speed and accuracy of our approach, as well as several applications in computer graphics and vision. We further propose related improvements to the basic Gaussian representation, including a simple use of generalized kernel functions which significantly reduces particle hit counts."
-      },
-      {
-        "title": "GaussianCut: Fast Interactive Segmentation via Graph Cut for 3D Gaussian Splatting",
-        "authors": "Umangi Jain, Ashkan Mirzaei, Igor Gilitschenski",
-        "venue": "NeurIPS 2024",
-        "url": "https://openreview.net/forum?id=Ns0LQokxa5", 
-        "abstract": "We introduce GaussianCut, a new method for interactive multiview segmentation of scenes represented as 3D Gaussians. Our approach allows for selecting the objects to be segmented by interacting with a single view. It accepts intuitive user input, such as point clicks, coarse scribbles, or text. Using 3D Gaussian Splatting (3DGS) as the underlying scene representation simplifies the extraction of objects of interest which are considered to be a subset of the scene's Gaussians. Our key idea is to represent the scene as a graph and use the graph-cut algorithm to minimize an energy function to effectively partition the Gaussians into foreground and background. To achieve this, we construct a graph based on scene Gaussians and devise a segmentation-aligned energy function on the graph to combine user inputs with scene properties. To obtain an initial coarse segmentation, we leverage 2D image/video segmentation models and further refine these coarse estimates using our graph construction. Our empirical evaluations show the adaptability of GaussianCut across a diverse set of scenes. GaussianCut achieves competitive performance with state-of-the-art approaches for 3D segmentation without requiring any additional segmentation-aware training.",
-        "media": "media/gaussiancut.png"
-      },
-      {
-        "title": "Large 4D Gaussian Reconstruction Model",
-        "authors": "Jiawei Ren, Kevin Xie, Ashkan Mirzaei, Hanxue Liang, Xiaohui Zeng, Karsten Kreis, Ziwei Liu, Antonio Torralba, Sanja Fidler, Seung Wook Kim, Huan Ling",
-        "venue": "NeurIPS 2024",
-        "url": "https://research.nvidia.com/labs/toronto-ai/l4gm/",
-        "media": "media/paper_videos/reduced_quality/w_interp_otter-on-surfboard.mp4", 
-        "abstract": "We present L4GM, the first 4D Large Reconstruction Model that produces animated objects from a single-view video input -- in a single feed-forward pass that takes only a second. Key to our success is a novel dataset of multiview videos containing curated, rendered animated objects from Objaverse. This dataset depicts 44K diverse objects with 110K animations rendered in 48 viewpoints, resulting in 12M videos with a total of 300M frames. We keep our L4GM simple for scalability and build directly on top of LGM, a pretrained 3D Large Reconstruction Model that outputs 3D Gaussian ellipsoids from multiview image input. L4GM outputs a per-frame 3D Gaussian Splatting representation from video frames sampled at a low fps and then upsamples the representation to a higher fps to achieve temporal smoothness. We add temporal self-attention layers to the base LGM to help it learn consistency across time, and utilize a per-timestep multiview rendering loss to train the model. The representation is upsampled to a higher framerate by training an interpolation model which produces intermediate 3D Gaussian representations. We showcase that L4GM that is only trained on synthetic data generalizes extremely well on in-the-wild videos, producing high quality animated 3D assets."
-      },
-      {
-        "title": "RefFusion: Reference Adapted Diffusion Models for 3D Scene Inpainting",
-        "authors": "Ashkan Mirzaei, Riccardo De Lutio, Seung Wook Kim, David Acuna, Jonathan Kelly, Sanja Fidler, Igor Gilitschenski, Zan Gojcic",
-        "venue": "2024",
-        "url": "https://reffusion.github.io/",
-        "media": "media/paper_videos/reduced_quality/garden.mp4", 
-        "abstract": "Neural reconstruction approaches are rapidly emerging as the preferred representation for 3D scenes, but their limited editability is still posing a challenge. In this work, we propose an approach for 3D scene inpainting -- the task of coherently replacing parts of the reconstructed scene with desired content. Scene inpainting is an inherently ill-posed task as there exist many solutions that plausibly replace the missing content. A good inpainting method should therefore not only enable high-quality synthesis but also a high degree of control. Based on this observation, we focus on enabling explicit control over the inpainted content and leverage a reference image as an efficient means to achieve this goal. Specifically, we introduce RefFusion, a novel 3D inpainting method based on a multi-scale personalization of an image inpainting diffusion model to the given reference view. The personalization effectively adapts the prior distribution to the target scene, resulting in a lower variance of score distillation objective and hence significantly sharper details. Our framework achieves state-of-the-art results for object removal while maintaining high controllability. We further demonstrate the generality of our formulation on other downstream tasks such as object insertion, scene outpainting, and sparse view reconstruction."
-      },
-      {
-        "title": "Watch Your Steps: Local Image and Scene Editing by Text Instructions",
-        "authors": "Ashkan Mirzaei, Tristan Aumentado-Armstrong, Marcus Brubaker, Jonathan Kelly, Alex Levinshtein, Konstantinos Derpanis, Igor Gilitschenski",
-        "venue": "ECCV 2024 (Oral)",
-        "url": "https://ashmrz.github.io/WatchYourSteps/",
-        "media": "media/paper_videos/reduced_quality/face-joker-ours.mp4", 
-        "abstract": "Denoising diffusion models have enabled high-quality image generation and editing. We present a method to localize the desired edit region implicit in a text instruction. We leverage InstructPix2Pix (IP2P) and identify the discrepancy between IP2P predictions with and without the instruction. This discrepancy is referred to as the relevance map. The relevance map conveys the importance of changing each pixel to achieve the edits, and is used to to guide the modifications. This guidance ensures that the irrelevant pixels remain unchanged. Relevance maps are further used to enhance the quality of text-guided editing of 3D scenes in the form of neural radiance fields. A field is trained on relevance maps of training views, denoted as the relevance field, defining the 3D region within which modifications should be made. We perform iterative updates on the training views guided by rendered relevance maps from the relevance field. Our method achieves state-of-the-art performance on both image and NeRF editing tasks. "
-      },
-      {
-        "title": "Reference-guided Controllable Inpainting of Neural Radiance Fields",
-        "authors": "Ashkan Mirzaei*, Tristan Aumentado-Armstrong*, Marcus A. Brubaker, Jonathan Kelly, Alex Levinshtein, Konstantinos G. Derpanis, Igor Gilitschenski",
-        "venue": "ICCV 2023",
-        "url": "https://ashmrz.github.io/reference-guided-3d/",
-        "media": "media/paper_videos/reduced_quality/3.mp4", 
-        "abstract": "The popularity of Neural Radiance Fields (NeRFs) for view synthesis has led to a desire for NeRF editing tools. Here, we focus on inpainting regions in a view-consistent and controllable manner. In addition to the typical NeRF inputs and masks delineating the unwanted region in each view, we require only a single inpainted view of the scene, i.e., a reference view. We use monocular depth estimators to back-project the inpainted view to the correct 3D positions. Then, via a novel rendering technique, a bilateral solver can construct view-dependent effects in non-reference views, making the inpainted region appear consistent from any view. For non-reference disoccluded regions, which cannot be supervised by the single reference view, we devise a method based on image inpainters to guide both the geometry and appearance. Our approach shows superior performance to NeRF inpainting baselines, with the additional advantage that a user can control the generated scene via a single inpainted image."
-      },
-      {
-        "title": "Exploring Reconstructive Latent-Space Neural Radiance Fields",
-        "authors": "Ashkan Mirzaei*, Tristan Aumentado-Armstrong*, Marcus A. Brubaker, Jonathan Kelly, Alex Levinshtein, Konstantinos G. Derpanis, Igor Gilitschenski",
-        "venue": "ICCV NeRF4ADR 2023",
-        "media": "media/reconstructive.png", 
-        "abstract": "Neural Radiance Fields (NeRFs) have proven to be powerful 3D representations, capable of high quality novel view synthesis of complex scenes. While NeRFs have been applied to graphics, vision, and robotics, problems with slow rendering speed and characteristic visual artifacts prevent adoption in many use cases. In this work, we investigate combining an autoencoder (AE) with a NeRF, in which latent features (instead of colours) are rendered and then convolutionally decoded. The resulting latent-space NeRF can produce novel views with higher quality than standard colour-space NeRFs, as the AE can correct certain visual artifacts, while rendering over three times faster. Our work is orthogonal to other techniques for improving NeRF efficiency. Further, we can control the tradeoff between efficiency and image quality by shrinking the AE architecture, achieving over 13 times faster rendering with only a small drop in performance. We hope that our approach can form the basis of an efficient, yet high-fidelity, 3D scene representation for downstream tasks, especially when retaining differentiability is useful, as in many robotics scenarios requiring continual learning."
-      },
-      {
-        "title": "SPIn-NeRF: Multiview Segmentation and Perceptual Inpainting with Neural Radiance Fields",
-        "authors": "Ashkan Mirzaei, Tristan Aumentado-Armstrong, Konstantinos G. Derpanis, Jonathan Kelly, Marcus A. Brubaker, Igor Gilitschenski, Alex Levinshtein",
-        "venue": "CVPR 2023",
-        "url": "https://spinnerf3d.github.io/",
-        "media": "media/paper_videos/reduced_quality/spinnerf.mp4", 
-        "abstract": "Neural Radiance Fields (NeRFs) have emerged as a popular approach for novel view synthesis. While NeRFs are quickly being adapted for a wider set of applications, intuitively editing NeRF scenes is still an open challenge. One important editing task is the removal of unwanted objects from a 3D scene, such that the replaced region is visually plausible and consistent with its context. We refer to this task as 3D inpainting. In 3D, solutions must be both consistent across multiple views and geometrically valid. In this paper, we propose a novel 3D inpainting method that addresses these challenges. Given a small set of posed images and sparse annotations in a single input image, our framework first rapidly obtains a 3D segmentation mask for a target object. Using the mask, a perceptual optimizationbased approach is then introduced that leverages learned 2D image inpainters, distilling their information into 3D space, while ensuring view consistency. We also address the lack of a diverse benchmark for evaluating 3D scene inpainting methods by introducing a dataset comprised of challenging real-world scenes. In particular, our dataset contains views of the same scene with and without a target object, enabling more principled benchmarking of the 3D inpainting task. We first demonstrate the superiority of our approach on multiview segmentation, comparing to NeRFbased methods and 2D segmentation approaches. We then evaluate on the task of 3D inpainting, establishing state-ofthe-art performance against other NeRF manipulation algorithms, as well as a strong 2D image inpainter baseline."
-      },
-      {
-        "title": "CAMM: Building Category-Agnostic and Animatable 3D Models from Monocular Videos",
-        "authors": "Tiahshu Kuai, Akash Karthikeyan, Yash Kant, Ashkan Mirzaei, Igor Gilitschenski",
-        "venue": "CVPR DynaVis 2023",
-        "media": "media/camm.png", 
-        "abstract": "Animating an object in 3D often requires an articulated structure, e.g. a kinematic chain or skeleton of the manipulated object with proper skinning weights, to obtain smooth movements and surface deformations. However, existing models that allow direct pose manipulations are either limited to specific object categories or built with specialized equipment. To reduce the work needed for creating animatable 3D models, we propose a novel reconstruction method that learns an animatable kinematic chain for any articulated object. Our method operates on monocular videos without prior knowledge of the object's shape or underlying structure. Our approach is on par with state-of-the-art 3D surface reconstruction methods on various articulated object categories while enabling direct pose manipulations by re-posing the learned kinematic chain."
-      },
-      {
-        "title": "LaTeRF: Label and Text Driven Object Radiance Fields",
-        "authors": "Ashkan Mirzaei, Yash Kant, Jonathan Kelly, Igor Gilitschenski",
-        "venue": "ECCV 2022",
-        "url": "https://arxiv.org/abs/2207.01583",
-        "media": "media/laterf.png", 
-        "abstract": "Obtaining 3D object representations is important for creating photo-realistic simulations and for collecting AR and VR assets. Neural fields have shown their effectiveness in learning a continuous volumetric representation of a scene from 2D images, but acquiring object representations from these models with weak supervision remains an open challenge. In this paper we introduce LaTeRF, a method for extracting an object of interest from a scene given 2D images of the entire scene, known camera poses, a natural language description of the object, and a set of point-labels of object and non-object points in the input images. To faithfully extract the object from the scene, LaTeRF extends the NeRF formulation with an additional `objectness' probability at each 3D point. Additionally, we leverage the rich latent space of a pre-trained CLIP model combined with our differentiable object renderer, to inpaint the occluded parts of the object. We demonstrate high-fidelity object extraction on both synthetic and real-world datasets and justify our design choices through an extensive ablation study."
-      },
-      {
-        "title": "Coordinated Multi-Agent Motion Planning via Imitation Learning",
-        "authors": "Andrei Ivanovic, Rowan McAllister, Ashkan Mirzaei, Igor Gilitschenski",
-        "venue": "ICRA Autonomous Driving 2022",
-        "media": "media/coordinated.png", 
-        "abstract": "As autonomous vehicles (AVs) become increasingly adopted, many opportunities to share information and communicate with one another will arise. This ability to communicate reduces future uncertainties and allows for collaboration in downstream tasks, such as planning, ensuring increased roadside safety. Currently, many motion planners treat other AVs as standalone human agents and plan to avoid their futures without exploring the potential for collaboration and betterinformed motion planning. Towards this end, we present a method for coordinated multi-agent motion planning between two or more AVs that search over a distribution of expert future trajectories to jointly plan paths. We evaluate our model on a didactic, illustrative dataset to experimentally verify its performance, with future plans to use more realistic perception data."
-      }
-    ]
-  }
+  "papers": [
+    {
+      "title": "3DGUT: Enabling Distorted Cameras and Secondary Rays in Gaussian Splatting",
+      "authors": "Qi Wu*, Janick Martinez Esturo*, Ashkan Mirzaei, Nicolas Moenne-Loccoz, Zan Gojcic",
+      "venue": "2025",
+      "url": "https://research.nvidia.com/labs/toronto-ai/3DGUT/",
+      "media": "media/paper_videos/reduced_quality/3dgut.mp4",
+      "abstract": "3D Gaussian Splatting (3DGS) has shown great potential for efficient reconstruction and high-fidelity real-time rendering of complex scenes on consumer hardware. However, due to its rasterization-based formulation, 3DGS is constrained to ideal pinhole cameras and lacks support for secondary lighting effects. Recent methods address these limitations by tracing volumetric particles instead, however, this comes at the cost of significantly slower rendering speeds. In this work, we propose 3D Gaussian Unscented Transform (3DGUT), replacing the EWA splatting formulation in 3DGS with the Unscented Transform that approximates the particles through sigma points, which can be projected exactly under any nonlinear projection function. This modification enables trivial support of distorted cameras with time dependent effects such as rolling shutter, while retaining the efficiency of rasterization. Additionally, we align our rendering formulation with that of tracing-based methods, enabling secondary ray tracing required to represent phenomena such as reflections and refraction within the same 3D representation."
+    },
+    {
+      "title": "Feed-Forward Bullet-Time Reconstruction of Dynamic Scenes from Monocular Videos",
+      "authors": "Ashkan Mirzaei*, Hanxue Liang*, Jiawei Ren*, Antonio Torralba, Ziwei Liu, Igor Gilitschenski, Sanja Fidler, Cengiz Oztireli, Huan Ling, Zan Gojcic, Jiahui Huang",
+      "venue": "2025",
+      "url": "https://research.nvidia.com/labs/toronto-ai/bullet-timer/",
+      "media": "media/paper_videos/reduced_quality/robot-video-game_vid.mp4",
+      "abstract": "Recent advancements in static feed-forward scene reconstruction have demonstrated significant progress in high-quality novel view synthesis. However, these models often struggle with generalizability across diverse environments and fail to effectively handle dynamic content. We present BTimer (short for BulletTimer), the first motion-aware feed-forward model for real-time reconstruction and novel view synthesis of dynamic scenes. Our approach reconstructs the full scene in a 3D Gaussian Splatting representation at a given target ('bullet') timestamp by aggregating information from all the context frames. Such a formulation allows BTimer to gain scalability and generalization by leveraging both static and dynamic scene datasets. Given a casual monocular dynamic video, BTimer reconstructs a bullet-time scene within 150ms while reaching state-of-the-art performance on both static and dynamic scene datasets, even compared with optimization-based approaches."
+    },
+    {
+      "title": "3D Gaussian Ray Tracing: Fast Tracing of Particle Scenes",
+      "authors": "Ashkan Mirzaei*, Nicolas Moenne-Loccoz*, Or Perel, Riccardo de Lutio, Janick Martinez Esturo, Gavriel State, Sanja Fidler, Nicholas Sharp, Zan Gojcic",
+      "venue": "SIGGRAPH Asia 2024 (Journal Track)",
+      "url": "https://gaussiantracer.github.io/",
+      "media": "media/paper_videos/reduced_quality/bicycle_morph_electric.mp4",
+      "abstract": "Particle-based representations of radiance fields such as 3D Gaussian Splatting have found great success for reconstructing and re-rendering of complex scenes. Most existing methods render particles via rasterization, projecting them to screen space tiles for processing in a sorted order. This work instead considers ray tracing the particles, building a bounding volume hierarchy and casting a ray for each pixel using high-performance GPU ray tracing hardware. To efficiently handle large numbers of semi-transparent particles, we describe a specialized rendering algorithm which encapsulates particles with bounding meshes to leverage fast ray-triangle intersections, and shades batches of intersections in depth-order. The benefits of ray tracing are well-known in computer graphics: processing incoherent rays for secondary lighting effects such as shadows and reflections, rendering from highly-distorted cameras common in robotics, stochastically sampling rays, and more. With our renderer, this flexibility comes at little cost compared to rasterization. Experiments demonstrate the speed and accuracy of our approach, as well as several applications in computer graphics and vision. We further propose related improvements to the basic Gaussian representation, including a simple use of generalized kernel functions which significantly reduces particle hit counts."
+    },
+    {
+      "title": "GaussianCut: Fast Interactive Segmentation via Graph Cut for 3D Gaussian Splatting",
+      "authors": "Umangi Jain, Ashkan Mirzaei, Igor Gilitschenski",
+      "venue": "NeurIPS 2024",
+      "url": "https://openreview.net/forum?id=Ns0LQokxa5",
+      "abstract": "We introduce GaussianCut, a new method for interactive multiview segmentation of scenes represented as 3D Gaussians. Our approach allows for selecting the objects to be segmented by interacting with a single view. It accepts intuitive user input, such as point clicks, coarse scribbles, or text. Using 3D Gaussian Splatting (3DGS) as the underlying scene representation simplifies the extraction of objects of interest which are considered to be a subset of the scene's Gaussians. Our key idea is to represent the scene as a graph and use the graph-cut algorithm to minimize an energy function to effectively partition the Gaussians into foreground and background. To achieve this, we construct a graph based on scene Gaussians and devise a segmentation-aligned energy function on the graph to combine user inputs with scene properties. To obtain an initial coarse segmentation, we leverage 2D image/video segmentation models and further refine these coarse estimates using our graph construction. Our empirical evaluations show the adaptability of GaussianCut across a diverse set of scenes. GaussianCut achieves competitive performance with state-of-the-art approaches for 3D segmentation without requiring any additional segmentation-aware training.",
+      "media": "media/gaussiancut.png"
+    },
+    {
+      "title": "EventSplat: 3D Gaussian Splatting from Moving Event Cameras for Real-time Rendering",
+      "authors": "Toshiya Yura, Ashkan Mirzaei, Igor Gilitschenski",
+      "venue": "2024",
+      "url": "https://arxiv.org/abs/2412.07293",
+      "media": "media/eventsplat.png",
+      "abstract": "We introduce a method for using event camera data in novel view synthesis via Gaussian Splatting. Event cameras offer exceptional temporal resolution and a high dynamic range. Leveraging these capabilities allows us to effectively address the novel view synthesis challenge in the presence of fast camera motion. For initialization of the optimization process, our approach uses prior knowledge encoded in an event-to-video model. We also use spline interpolation for obtaining high quality poses along the event camera trajectory. This enhances the reconstruction quality from fast-moving cameras while overcoming the computational limitations traditionally associated with event-based Neural Radiance Field (NeRF) methods. Our experimental evaluation demonstrates that our results achieve higher visual fidelity and better performance than existing event-based NeRF approaches while being an order of magnitude faster to render."
+    },
+    {
+      "title": "Large 4D Gaussian Reconstruction Model",
+      "authors": "Jiawei Ren, Kevin Xie, Ashkan Mirzaei, Hanxue Liang, Xiaohui Zeng, Karsten Kreis, Ziwei Liu, Antonio Torralba, Sanja Fidler, Seung Wook Kim, Huan Ling",
+      "venue": "NeurIPS 2024",
+      "url": "https://research.nvidia.com/labs/toronto-ai/l4gm/",
+      "media": "media/paper_videos/reduced_quality/w_interp_otter-on-surfboard.mp4",
+      "abstract": "We present L4GM, the first 4D Large Reconstruction Model that produces animated objects from a single-view video input -- in a single feed-forward pass that takes only a second. Key to our success is a novel dataset of multiview videos containing curated, rendered animated objects from Objaverse. This dataset depicts 44K diverse objects with 110K animations rendered in 48 viewpoints, resulting in 12M videos with a total of 300M frames. We keep our L4GM simple for scalability and build directly on top of LGM, a pretrained 3D Large Reconstruction Model that outputs 3D Gaussian ellipsoids from multiview image input. L4GM outputs a per-frame 3D Gaussian Splatting representation from video frames sampled at a low fps and then upsamples the representation to a higher fps to achieve temporal smoothness. We add temporal self-attention layers to the base LGM to help it learn consistency across time, and utilize a per-timestep multiview rendering loss to train the model. The representation is upsampled to a higher framerate by training an interpolation model which produces intermediate 3D Gaussian representations. We showcase that L4GM that is only trained on synthetic data generalizes extremely well on in-the-wild videos, producing high quality animated 3D assets."
+    },
+    {
+      "title": "RefFusion: Reference Adapted Diffusion Models for 3D Scene Inpainting",
+      "authors": "Ashkan Mirzaei, Riccardo De Lutio, Seung Wook Kim, David Acuna, Jonathan Kelly, Sanja Fidler, Igor Gilitschenski, Zan Gojcic",
+      "venue": "2024",
+      "url": "https://reffusion.github.io/",
+      "media": "media/paper_videos/reduced_quality/garden.mp4",
+      "abstract": "Neural reconstruction approaches are rapidly emerging as the preferred representation for 3D scenes, but their limited editability is still posing a challenge. In this work, we propose an approach for 3D scene inpainting -- the task of coherently replacing parts of the reconstructed scene with desired content. Scene inpainting is an inherently ill-posed task as there exist many solutions that plausibly replace the missing content. A good inpainting method should therefore not only enable high-quality synthesis but also a high degree of control. Based on this observation, we focus on enabling explicit control over the inpainted content and leverage a reference image as an efficient means to achieve this goal. Specifically, we introduce RefFusion, a novel 3D inpainting method based on a multi-scale personalization of an image inpainting diffusion model to the given reference view. The personalization effectively adapts the prior distribution to the target scene, resulting in a lower variance of score distillation objective and hence significantly sharper details. Our framework achieves state-of-the-art results for object removal while maintaining high controllability. We further demonstrate the generality of our formulation on other downstream tasks such as object insertion, scene outpainting, and sparse view reconstruction."
+    },
+    {
+      "title": "Watch Your Steps: Local Image and Scene Editing by Text Instructions",
+      "authors": "Ashkan Mirzaei, Tristan Aumentado-Armstrong, Marcus Brubaker, Jonathan Kelly, Alex Levinshtein, Konstantinos Derpanis, Igor Gilitschenski",
+      "venue": "ECCV 2024 (Oral)",
+      "url": "https://ashmrz.github.io/WatchYourSteps/",
+      "media": "media/paper_videos/reduced_quality/face-joker-ours.mp4",
+      "abstract": "Denoising diffusion models have enabled high-quality image generation and editing. We present a method to localize the desired edit region implicit in a text instruction. We leverage InstructPix2Pix (IP2P) and identify the discrepancy between IP2P predictions with and without the instruction. This discrepancy is referred to as the relevance map. The relevance map conveys the importance of changing each pixel to achieve the edits, and is used to to guide the modifications. This guidance ensures that the irrelevant pixels remain unchanged. Relevance maps are further used to enhance the quality of text-guided editing of 3D scenes in the form of neural radiance fields. A field is trained on relevance maps of training views, denoted as the relevance field, defining the 3D region within which modifications should be made. We perform iterative updates on the training views guided by rendered relevance maps from the relevance field. Our method achieves state-of-the-art performance on both image and NeRF editing tasks. "
+    },
+    {
+      "title": "Reference-guided Controllable Inpainting of Neural Radiance Fields",
+      "authors": "Ashkan Mirzaei*, Tristan Aumentado-Armstrong*, Marcus A. Brubaker, Jonathan Kelly, Alex Levinshtein, Konstantinos G. Derpanis, Igor Gilitschenski",
+      "venue": "ICCV 2023",
+      "url": "https://ashmrz.github.io/reference-guided-3d/",
+      "media": "media/paper_videos/reduced_quality/3.mp4",
+      "abstract": "The popularity of Neural Radiance Fields (NeRFs) for view synthesis has led to a desire for NeRF editing tools. Here, we focus on inpainting regions in a view-consistent and controllable manner. In addition to the typical NeRF inputs and masks delineating the unwanted region in each view, we require only a single inpainted view of the scene, i.e., a reference view. We use monocular depth estimators to back-project the inpainted view to the correct 3D positions. Then, via a novel rendering technique, a bilateral solver can construct view-dependent effects in non-reference views, making the inpainted region appear consistent from any view. For non-reference disoccluded regions, which cannot be supervised by the single reference view, we devise a method based on image inpainters to guide both the geometry and appearance. Our approach shows superior performance to NeRF inpainting baselines, with the additional advantage that a user can control the generated scene via a single inpainted image."
+    },
+    {
+      "title": "Exploring Reconstructive Latent-Space Neural Radiance Fields",
+      "authors": "Ashkan Mirzaei*, Tristan Aumentado-Armstrong*, Marcus A. Brubaker, Jonathan Kelly, Alex Levinshtein, Konstantinos G. Derpanis, Igor Gilitschenski",
+      "venue": "ICCV NeRF4ADR 2023",
+      "media": "media/reconstructive.png",
+      "abstract": "Neural Radiance Fields (NeRFs) have proven to be powerful 3D representations, capable of high quality novel view synthesis of complex scenes. While NeRFs have been applied to graphics, vision, and robotics, problems with slow rendering speed and characteristic visual artifacts prevent adoption in many use cases. In this work, we investigate combining an autoencoder (AE) with a NeRF, in which latent features (instead of colours) are rendered and then convolutionally decoded. The resulting latent-space NeRF can produce novel views with higher quality than standard colour-space NeRFs, as the AE can correct certain visual artifacts, while rendering over three times faster. Our work is orthogonal to other techniques for improving NeRF efficiency. Further, we can control the tradeoff between efficiency and image quality by shrinking the AE architecture, achieving over 13 times faster rendering with only a small drop in performance. We hope that our approach can form the basis of an efficient, yet high-fidelity, 3D scene representation for downstream tasks, especially when retaining differentiability is useful, as in many robotics scenarios requiring continual learning."
+    },
+    {
+      "title": "SPIn-NeRF: Multiview Segmentation and Perceptual Inpainting with Neural Radiance Fields",
+      "authors": "Ashkan Mirzaei, Tristan Aumentado-Armstrong, Konstantinos G. Derpanis, Jonathan Kelly, Marcus A. Brubaker, Igor Gilitschenski, Alex Levinshtein",
+      "venue": "CVPR 2023",
+      "url": "https://spinnerf3d.github.io/",
+      "media": "media/paper_videos/reduced_quality/spinnerf.mp4",
+      "abstract": "Neural Radiance Fields (NeRFs) have emerged as a popular approach for novel view synthesis. While NeRFs are quickly being adapted for a wider set of applications, intuitively editing NeRF scenes is still an open challenge. One important editing task is the removal of unwanted objects from a 3D scene, such that the replaced region is visually plausible and consistent with its context. We refer to this task as 3D inpainting. In 3D, solutions must be both consistent across multiple views and geometrically valid. In this paper, we propose a novel 3D inpainting method that addresses these challenges. Given a small set of posed images and sparse annotations in a single input image, our framework first rapidly obtains a 3D segmentation mask for a target object. Using the mask, a perceptual optimizationbased approach is then introduced that leverages learned 2D image inpainters, distilling their information into 3D space, while ensuring view consistency. We also address the lack of a diverse benchmark for evaluating 3D scene inpainting methods by introducing a dataset comprised of challenging real-world scenes. In particular, our dataset contains views of the same scene with and without a target object, enabling more principled benchmarking of the 3D inpainting task. We first demonstrate the superiority of our approach on multiview segmentation, comparing to NeRFbased methods and 2D segmentation approaches. We then evaluate on the task of 3D inpainting, establishing state-ofthe-art performance against other NeRF manipulation algorithms, as well as a strong 2D image inpainter baseline."
+    },
+    {
+      "title": "CAMM: Building Category-Agnostic and Animatable 3D Models from Monocular Videos",
+      "authors": "Tiahshu Kuai, Akash Karthikeyan, Yash Kant, Ashkan Mirzaei, Igor Gilitschenski",
+      "venue": "CVPR DynaVis 2023",
+      "media": "media/camm.png",
+      "abstract": "Animating an object in 3D often requires an articulated structure, e.g. a kinematic chain or skeleton of the manipulated object with proper skinning weights, to obtain smooth movements and surface deformations. However, existing models that allow direct pose manipulations are either limited to specific object categories or built with specialized equipment. To reduce the work needed for creating animatable 3D models, we propose a novel reconstruction method that learns an animatable kinematic chain for any articulated object. Our method operates on monocular videos without prior knowledge of the object's shape or underlying structure. Our approach is on par with state-of-the-art 3D surface reconstruction methods on various articulated object categories while enabling direct pose manipulations by re-posing the learned kinematic chain."
+    },
+    {
+      "title": "LaTeRF: Label and Text Driven Object Radiance Fields",
+      "authors": "Ashkan Mirzaei, Yash Kant, Jonathan Kelly, Igor Gilitschenski",
+      "venue": "ECCV 2022",
+      "url": "https://arxiv.org/abs/2207.01583",
+      "media": "media/laterf.png",
+      "abstract": "Obtaining 3D object representations is important for creating photo-realistic simulations and for collecting AR and VR assets. Neural fields have shown their effectiveness in learning a continuous volumetric representation of a scene from 2D images, but acquiring object representations from these models with weak supervision remains an open challenge. In this paper we introduce LaTeRF, a method for extracting an object of interest from a scene given 2D images of the entire scene, known camera poses, a natural language description of the object, and a set of point-labels of object and non-object points in the input images. To faithfully extract the object from the scene, LaTeRF extends the NeRF formulation with an additional `objectness' probability at each 3D point. Additionally, we leverage the rich latent space of a pre-trained CLIP model combined with our differentiable object renderer, to inpaint the occluded parts of the object. We demonstrate high-fidelity object extraction on both synthetic and real-world datasets and justify our design choices through an extensive ablation study."
+    },
+    {
+      "title": "Coordinated Multi-Agent Motion Planning via Imitation Learning",
+      "authors": "Andrei Ivanovic, Rowan McAllister, Ashkan Mirzaei, Igor Gilitschenski",
+      "venue": "ICRA Autonomous Driving 2022",
+      "media": "media/coordinated.png",
+      "abstract": "As autonomous vehicles (AVs) become increasingly adopted, many opportunities to share information and communicate with one another will arise. This ability to communicate reduces future uncertainties and allows for collaboration in downstream tasks, such as planning, ensuring increased roadside safety. Currently, many motion planners treat other AVs as standalone human agents and plan to avoid their futures without exploring the potential for collaboration and betterinformed motion planning. Towards this end, we present a method for coordinated multi-agent motion planning between two or more AVs that search over a distribution of expert future trajectories to jointly plan paths. We evaluate our model on a didactic, illustrative dataset to experimentally verify its performance, with future plans to use more realistic perception data."
+    }
+  ]
+}
