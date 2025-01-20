@@ -81,7 +81,7 @@ function displayPublications(papers) {
                                       <i class="fas fa-external-link-alt"></i>
                                       Project Page
                                   </a>
-                              </div>`
+                               </div>`
                               : ""
                           }
                           ${
@@ -149,7 +149,7 @@ function displayExperience(experience) {
     const timelineItem = `
       <div class="timeline-item" data-aos="fade-up" data-aos-delay="${delay}">
           <h4>${item.company}</h4>
-          <p>${item.title}</p>
+          <p>${item.title}</p>          
           <p class="time-range">${item.time}</p>
       </div>
   `;

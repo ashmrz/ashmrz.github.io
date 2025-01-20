@@ -140,7 +140,6 @@ body {
   justify-content: center;
   margin-top: 2rem;
 }
-
 .social-links .social-link img[alt="Bluesky Icon"] {
   width: 16px;
   height: 16px;
@@ -439,11 +438,24 @@ footer p {
   padding: 1rem 0;
 }
 
+.timeline-item {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(16px);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    min-width: 300px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transition: transform 0.4s ease, box-shadow 0.4s ease, background 0.4s ease, border-color 0.4s ease;
+    box-shadow: 0 4px 18px rgba(31, 38, 135, 0.05);
+    flex: none;
+    position: relative;
+}
+
 .timeline-item:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(31, 38, 135, 0.08);
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(194, 224, 255, 0.2);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(31, 38, 135, 0.08);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(194, 224, 255, 0.2);
 }
 
 .timeline-item h4 {
@@ -459,21 +471,8 @@ footer p {
   color: #aaa;
 }
 
-.timeline-item {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(16px);
-  border-radius: 1rem;
-  padding: 1.5rem;
-  min-width: 300px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
-  box-shadow: 0 4px 18px rgba(31, 38, 135, 0.05);
-  flex: none;
-  position: relative;
-}
-
 .timeline-item::before {
-    content: "…";
+    content: "…";    
     font-size: 2rem;
     position: absolute;
     right: calc(-1.7rem); /* Position to the right of the item with spacing */
@@ -486,7 +485,8 @@ footer p {
     pointer-events: none;
 }
 
-/*Remove before element animation*/
-.timeline-container::before {
+
+/*Remove dots from the last element*/
+.timeline-item:last-child::before {
     display: none;
 }
