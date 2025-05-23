@@ -13,7 +13,6 @@
       "authors": "Toshiya Yura, Ashkan Mirzaei, Igor Gilitschenski",
       "venue": "CVPR 2025",
       "url": "https://arxiv.org/abs/2412.07293",
-      "media": "media/eventsplat.png",
       "abstract": "We introduce a method for using event camera data in novel view synthesis via Gaussian Splatting. Event cameras offer exceptional temporal resolution and a high dynamic range. Leveraging these capabilities allows us to effectively address the novel view synthesis challenge in the presence of fast camera motion. For initialization of the optimization process, our approach uses prior knowledge encoded in an event-to-video model. We also use spline interpolation for obtaining high quality poses along the event camera trajectory. This enhances the reconstruction quality from fast-moving cameras while overcoming the computational limitations traditionally associated with event-based Neural Radiance Field (NeRF) methods. Our experimental evaluation demonstrates that our results achieve higher visual fidelity and better performance than existing event-based NeRF approaches while being an order of magnitude faster to render."
     },
     {
@@ -76,7 +75,6 @@
       "title": "Exploring Reconstructive Latent-Space Neural Radiance Fields",
       "authors": "Ashkan Mirzaei*, Tristan Aumentado-Armstrong*, Marcus A. Brubaker, Jonathan Kelly, Alex Levinshtein, Konstantinos G. Derpanis, Igor Gilitschenski",
       "venue": "ICCV NeRF4ADR 2023",
-      "media": "media/reconstructive.png",
       "abstract": "Neural Radiance Fields (NeRFs) have proven to be powerful 3D representations, capable of high quality novel view synthesis of complex scenes. While NeRFs have been applied to graphics, vision, and robotics, problems with slow rendering speed and characteristic visual artifacts prevent adoption in many use cases. In this work, we investigate combining an autoencoder (AE) with a NeRF, in which latent features (instead of colours) are rendered and then convolutionally decoded. The resulting latent-space NeRF can produce novel views with higher quality than standard colour-space NeRFs, as the AE can correct certain visual artifacts, while rendering over three times faster. Our work is orthogonal to other techniques for improving NeRF efficiency. Further, we can control the tradeoff between efficiency and image quality by shrinking the AE architecture, achieving over 13 times faster rendering with only a small drop in performance. We hope that our approach can form the basis of an efficient, yet high-fidelity, 3D scene representation for downstream tasks, especially when retaining differentiability is useful, as in many robotics scenarios requiring continual learning."
     },
     {
@@ -91,7 +89,6 @@
       "title": "CAMM: Building Category-Agnostic and Animatable 3D Models from Monocular Videos",
       "authors": "Tiahshu Kuai, Akash Karthikeyan, Yash Kant, Ashkan Mirzaei, Igor Gilitschenski",
       "venue": "CVPR DynaVis 2023",
-      "media": "media/camm.png",
       "abstract": "Animating an object in 3D often requires an articulated structure, e.g. a kinematic chain or skeleton of the manipulated object with proper skinning weights, to obtain smooth movements and surface deformations. However, existing models that allow direct pose manipulations are either limited to specific object categories or built with specialized equipment. To reduce the work needed for creating animatable 3D models, we propose a novel reconstruction method that learns an animatable kinematic chain for any articulated object. Our method operates on monocular videos without prior knowledge of the object's shape or underlying structure. Our approach is on par with state-of-the-art 3D surface reconstruction methods on various articulated object categories while enabling direct pose manipulations by re-posing the learned kinematic chain."
     },
     {
@@ -106,7 +103,6 @@
       "title": "Coordinated Multi-Agent Motion Planning via Imitation Learning",
       "authors": "Andrei Ivanovic, Rowan McAllister, Ashkan Mirzaei, Igor Gilitschenski",
       "venue": "ICRA Autonomous Driving 2022",
-      "media": "media/coordinated.png",
       "abstract": "As autonomous vehicles (AVs) become increasingly adopted, many opportunities to share information and communicate with one another will arise. This ability to communicate reduces future uncertainties and allows for collaboration in downstream tasks, such as planning, ensuring increased roadside safety. Currently, many motion planners treat other AVs as standalone human agents and plan to avoid their futures without exploring the potential for collaboration and betterinformed motion planning. Towards this end, we present a method for coordinated multi-agent motion planning between two or more AVs that search over a distribution of expert future trajectories to jointly plan paths. We evaluate our model on a didactic, illustrative dataset to experimentally verify its performance, with future plans to use more realistic perception data."
     }
   ]

@@ -18,10 +18,10 @@
     <style>
         html { scroll-behavior: smooth; }
         body {
-            background: #000;
-            color: #fff;
+            background: #f7f8fa;
+            color: #222;
             min-height: 100vh;
-            font-family: "Roboto", sans-serif;
+            font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
             line-height: 1.6;
             margin: 0; padding: 0;
             overflow-x: hidden;
@@ -34,19 +34,19 @@
             position: relative; padding: 2rem 0; margin: 0;
         }
         .publication-card, .profile-card, .timeline-item {
-            background: rgba(255,255,255,0.08);
-            backdrop-filter: blur(16px);
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(8px);
             border-radius: 1.5rem;
-            border: 1px solid rgba(255,255,255,0.15);
-            box-shadow: 0 8px 25px rgba(31,38,135,0.05);
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 8px 25px rgba(60,60,60,0.06);
             transition: transform 0.4s, box-shadow 0.4s, background 0.4s, border-color 0.4s;
             will-change: transform, box-shadow, background, border-color;
         }
         .publication-card:hover, .profile-card:hover, .timeline-item:hover {
             transform: translateY(-6px);
-            background: rgba(255,255,255,0.1);
-            border-color: rgba(194,224,255,0.2);
-            box-shadow: 0 10px 30px rgba(31,38,135,0.08);
+            background: #fff;
+            border-color: #d1d5db;
+            box-shadow: 0 10px 30px rgba(60,60,60,0.10);
         }
         .publication-media {
             width: 100%; object-fit: cover;
@@ -54,70 +54,70 @@
             aspect-ratio: 16/9;
         }
         .publication-card:hover .publication-media { transform: scale(1.02); }
-        .publication-body { padding: 2rem; background: rgba(255,255,255,0.03); }
+        .publication-body { padding: 2rem; background: rgba(245,247,250,0.7); }
         .venue-badge {
-            background: linear-gradient(120deg,rgba(194,224,255,0.08),rgba(147,197,253,0.15));
-            color: #ddd; padding: 0.5rem 1.2rem; border-radius: 9999px;
+            background: linear-gradient(120deg,rgba(209,213,219,0.10),rgba(156,163,175,0.12));
+            color: #222; padding: 0.5rem 1.2rem; border-radius: 9999px;
             font-size: 0.875rem; font-weight: 500; display: inline-block;
-            margin-bottom: 1rem; border: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 1rem; border: 1px solid #e0e7ef;
             box-shadow: 0 2px 8px rgba(0,0,0,0.03);
         }
-        .venue-badge:hover { background: rgba(255,255,255,0.08); }
+        .venue-badge:hover { background: #f3f4f6; }
         .profile-card {
             border-radius: 2rem; padding: 3rem; height: auto; position: relative;
             overflow: hidden; animation: cardFloat 6s ease-in-out infinite alternate;
         }
         .profile-image {
             width: 160px; height: 160px; border-radius: 50%; object-fit: cover;
-            border: 3px solid rgba(194,224,255,0.15);
-            box-shadow: 0 4px 18px rgba(31,38,135,0.08);
+            border: 3px solid #e0e7ef;
+            box-shadow: 0 4px 18px rgba(60,60,60,0.08);
             transition: transform 0.4s, border-color 0.4s, box-shadow 0.4s;
         }
         .profile-image:hover {
             transform: scale(1.05);
-            border-color: rgba(194,224,255,0.3);
-            box-shadow: 0 8px 24px rgba(31,38,135,0.1);
+            border-color: #d1d5db;
+            box-shadow: 0 8px 24px rgba(60,60,60,0.12);
         }
         .social-links { display: flex; gap: 0.75rem; justify-content: center; margin-top: 2rem; }
         .social-link {
             width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;
-            border-radius: 50%; background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1); color: #ddd;
+            border-radius: 50%; background: #f1f5f9;
+            border: 1px solid #e0e7ef; color: #666;
             transition: transform 0.3s, background-color 0.3s, color 0.3s, box-shadow 0.3s;
-            box-shadow: 0 2px 8px rgba(31,38,135,0.05);
+            box-shadow: 0 2px 8px rgba(60,60,60,0.05);
             aspect-ratio: 1;
         }
         .social-link:hover {
             transform: translateY(-2px) scale(1.08);
-            background: rgba(194,224,255,0.1);
-            color: #fff;
-            border-color: rgba(194,224,255,0.2);
-            box-shadow: 0 4px 14px rgba(31,38,135,0.08);
+            background: #f3f4f6;
+            color: #111;
+            border-color: #d1d5db;
+            box-shadow: 0 4px 14px rgba(60,60,60,0.08);
         }
         .social-links .social-link img[alt="Bluesky Icon"] {
             width: 16px; height: 16px; vertical-align: middle;
-            filter: invert(100%) sepia(150%) saturate(615%) hue-rotate(186deg) brightness(150%) contrast(100%) opacity(70%);
+            filter: grayscale(40%) brightness(90%) opacity(80%);
         }
         h1, h2, h3, h4 {
             color: transparent;
-            background: linear-gradient(90deg,#11f6ff,#7168fa);
+            background: linear-gradient(90deg,#222,#6b7280);
             -webkit-background-clip: text; background-clip: text;
             font-weight: 600;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.04);
         }
         .scroll-indicator {
             position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
-            animation: bounce 2s infinite; color: rgba(107,114,128,0.7);
+            animation: bounce 2s infinite; color: #a3a3a3;
             cursor: pointer; padding: 0.7rem; border-radius: 50%;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 2px 8px rgba(31,38,135,0.05);
+            background: #f1f5f9;
+            border: 1px solid #e0e7ef;
+            box-shadow: 0 2px 8px rgba(60,60,60,0.05);
         }
         .scroll-indicator:hover {
-            color: rgba(107,114,128,0.9);
-            background: rgba(194,224,255,0.1);
+            color: #444;
+            background: #f3f4f6;
             transform: translateY(-2px) translateX(-50%) scale(1.05);
-            box-shadow: 0 4px 14px rgba(31,38,135,0.08);
+            box-shadow: 0 4px 14px rgba(60,60,60,0.08);
         }
         @keyframes bounce {
             0%,20%,50%,80%,100% { transform: translateY(0) translateX(-50%);}
@@ -132,36 +132,36 @@
             .timeline-container { overflow-x: auto; }
         }
         .publication-card h5 {
-            background: linear-gradient(90deg,#11f6ff,#7168fa);
+            background: linear-gradient(90deg,#222,#6b7280);
             -webkit-background-clip: text; background-clip: text; color: transparent;
             transition: background-image 0.3s;
         }
         .publication-body p, .publication-body small,
         #education .card p, #education .card span, #education .card h4,
-        #research .card p, footer p { color: #ddd !important; }
+        #research .card p, footer p { color: #374151 !important; }
         @keyframes cardFloat { 0% {transform: translateY(0);} 100% {transform: translateY(-6px);} }
         .search-container { margin-bottom: 1rem; }
         .search-input {
             width: 100%; padding: 1rem 1.5rem; border-radius: 1.5rem;
-            border: 1px solid rgba(194,224,255,0.15);
-            background: rgba(255,255,255,0.05);
-            color: #fff; font-size: 1rem;
+            border: 1px solid #e0e7ef;
+            background: #f1f5f9;
+            color: #222; font-size: 1rem;
             transition: border-color 0.3s, background-color 0.3s, box-shadow 0.3s;
-            box-shadow: 0 2px 8px rgba(31,38,135,0.05);
+            box-shadow: 0 2px 8px rgba(60,60,60,0.05);
         }
         .search-input:focus {
             outline: none;
-            border-color: rgba(194,224,255,0.2);
-            background: rgba(255,255,255,0.08);
-            box-shadow: 0 4px 14px rgba(31,38,135,0.08);
+            border-color: #d1d5db;
+            background: #f3f4f6;
+            box-shadow: 0 4px 14px rgba(60,60,60,0.08);
         }
-        .search-input::placeholder { color: rgba(255,255,255,0.5); }
+        .search-input::placeholder { color: #a3a3a3; }
         .abstract-toggle {
             background: none; border: none; border-radius: 1rem;
-            padding: 0.5rem 1rem; color: #ddd; font-size: 0.875rem;
+            padding: 0.5rem 1rem; color: #222; font-size: 0.875rem;
             cursor: pointer; margin-top: 1rem;
         }
-        .abstract-toggle:hover { background: rgba(194,224,255,0.1); color: #fff; }
+        .abstract-toggle:hover { background: #f3f4f6; color: #111; }
         .abstract-content {
             max-height: 0; overflow: hidden; transition: max-height 0.3s;
             margin-top: 0.5rem; padding: 0 1rem;
@@ -170,37 +170,37 @@
             max-height: 600px; transition: max-height 0.5s; padding: 0 1rem 1rem;
         }
         .project-link {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(194,224,255,0.15);
-            color: #ddd; padding: 0.5rem 1.2rem; border-radius: 9999px;
+            background: #f1f5f9;
+            border: 1px solid #e0e7ef;
+            color: #222; padding: 0.5rem 1.2rem; border-radius: 9999px;
             font-size: 0.875rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;
-            box-shadow: 0 2px 8px rgba(31,38,135,0.05);
+            box-shadow: 0 2px 8px rgba(60,60,60,0.05);
         }
         .project-link:hover {
-            background: rgba(194,224,255,0.1);
-            border-color: rgba(194,224,255,0.2);
-            transform: translateY(-1px); color: #fff;
-            box-shadow: 0 4px 14px rgba(31,38,135,0.08);
+            background: #f3f4f6;
+            border-color: #d1d5db;
+            transform: translateY(-1px); color: #111;
+            box-shadow: 0 4px 14px rgba(60,60,60,0.08);
         }
         .timeline-container {
             overflow-x: auto; padding: 1rem 0;
-            scrollbar-width: thin; scrollbar-color: #444 #222;
+            scrollbar-width: thin; scrollbar-color: #e0e7ef #f1f5f9;
         }
         .timeline-container::-webkit-scrollbar { width: 8px; height: 8px; }
-        .timeline-container::-webkit-scrollbar-track { background: #222; }
-        .timeline-container::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
-        .timeline-container::-webkit-scrollbar-thumb:hover { background: #555; }
+        .timeline-container::-webkit-scrollbar-track { background: #f1f5f9; }
+        .timeline-container::-webkit-scrollbar-thumb { background: #e0e7ef; border-radius: 4px; }
+        .timeline-container::-webkit-scrollbar-thumb:hover { background: #d1d5db; }
         .timeline { display: flex; gap: 2rem; width: fit-content; padding: 1rem 0; }
         .timeline-item {
             border-radius: 1rem; padding: 1.5rem; min-width: 300px; flex: none; position: relative;
         }
         .timeline-item h4 { margin-bottom: 0.5rem; }
-        .timeline-item p { color: #ddd; }
-        .timeline-item .time-range { font-size: 0.875rem; color: #aaa; }
+        .timeline-item p { color: #374151; }
+        .timeline-item .time-range { font-size: 0.875rem; color: #64748b; }
         .timeline-item::before {
             content: "…"; font-size: 2rem; position: absolute; right: calc(-1.7rem); top: 50%;
             transform: translateY(-50%);
-            background: linear-gradient(90deg,#11f6ff,#7168fa);
+            background: linear-gradient(90deg,#222,#6b7280);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             z-index: 1; pointer-events: none;
         }
@@ -219,9 +219,9 @@
                                 <img src="media/profile.png" alt="Profile Picture" class="profile-image mb-3 mx-auto d-block" loading="lazy" width="160" height="160">
                                 <h1 class="text-4xl font-bold mb-2 d-none d-md-block">Ashkan Mirzaei</h1>
                                 <h1 class="text-2xl font-bold mb-2 d-block d-md-none">Ashkan Mirzaei</h1>
-                                <h3 class="text-sm text-gray-300 mb-2">Research Scientist</h3>
-                                <p class="text-sm text-gray-200 mb-1">Creative Vision Team</p>
-                                <p class="text-sm text-gray-200">Snap Inc.</p>
+                                <h3 class="text-sm text-gray-500 mb-2">Research Scientist</h3>
+                                <p class="text-sm text-gray-600 mb-1">Creative Vision Team</p>
+                                <p class="text-sm text-gray-600">Snap Inc.</p>
                             </div>
                             <div class="social-links">
                                 <a href="mailto:ashkan.m10@gmail.com" class="social-link" title="Email me" target="_blank"><i class="fas fa-envelope"></i></a>
@@ -231,16 +231,16 @@
                                 <a href="https://bsky.app/profile/ashmrz.bsky.social" class="social-link" title="Follow me on Bluesky" target="_blank"><img src="icons/bluesky.svg" alt="Bluesky Icon"></a>
                             </div>
                             <div class="text-center mt-4">
-                                <p class="text-sm text-gray-300 mb-2">When I'm not coding:</p>
+                                <p class="text-sm text-gray-500 mb-2">When I'm not coding:</p>
                                 <div class="d-flex gap-4 justify-content-center">
-                                    <div class="text-center"><span class="text-gray-200 hover:text-blue-500 transition-colors text-xs font-light">skateboarding</span></div>
-                                    <div class="text-center"><span class="text-gray-200 hover:text-blue-500 transition-colors text-xs font-light">cooking</span></div>
-                                    <div class="text-center"><span class="text-gray-200 hover:text-blue-500 transition-colors text-xs font-light">movies</span></div>
-                                    <div class="text-center"><span class="text-gray-200 hover:text-blue-500 transition-colors text-xs font-light">music</span></div>
+                                    <div class="text-center"><span class="text-gray-600 hover:text-blue-500 transition-colors text-xs font-light">skateboarding</span></div>
+                                    <div class="text-center"><span class="text-gray-600 hover:text-blue-500 transition-colors text-xs font-light">cooking</span></div>
+                                    <div class="text-center"><span class="text-gray-600 hover:text-blue-500 transition-colors text-xs font-light">movies</span></div>
+                                    <div class="text-center"><span class="text-gray-600 hover:text-blue-500 transition-colors text-xs font-light">music</span></div>
                                 </div>
                             </div>
                             <div class="text-center mt-4">
-                                <p class="text-sm text-gray-200"></p>
+                                <p class="text-sm text-gray-600"></p>
                                     If you have a strong background in 3D or 4D and are interested in doing an internship with our team at Snap, feel free to reach out!
                                 </p>
                             </div>
@@ -368,6 +368,24 @@
                             }
                         }
                     `;
+
+                    // Default visual for missing media (SVG with icon and color)
+                    let mediaContent = "";
+                    if (paper.media && paper.media.trim() !== "") {
+                        mediaContent = paper.media.match(/\.(mp4|webm|mov|avi|mkv)$/)
+                            ? `<video src="${paper.media}" class="publication-media" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;object-position:center center;aspect-ratio:16/9;display:block;" onerror="this.style.display='none'"></video>`
+                            : `<img src="${paper.media}" alt="${paper.title} Preview" class="publication-media" style="width:100%;height:100%;object-fit:cover;object-position:center center;aspect-ratio:16/9;display:block;" onerror="this.style.display='none'" loading="lazy">`;
+                    } else {
+                        // Modern default: SVG with icon and subtle background
+                        mediaContent = `
+                            <div class="publication-media d-flex align-items-center justify-content-center" style="width:100%;height:100%;background:linear-gradient(135deg,#e0e7ef 60%,#f1f5f9 100%);display:flex;flex-direction:column;gap:0.5rem;">
+                                <div style="width:48px;height:48px;border-radius:12px;background:#e5e7eb;display:flex;align-items:center;justify-content:center;">
+                                    <i class="fas fa-image" style="color:#94a3b8;font-size:24px;" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                        `;
+                    }
+
                     container.innerHTML += `
                     <style>${mediaBorderRadiusMobile}</style>
                     <div class="col-md-12" data-aos="fade-up" data-aos-delay="${delay}">
@@ -376,12 +394,8 @@
                             style="cursor: ${paper.abstract ? "pointer" : "default"}; padding:0;">
                             <div class="row g-0 align-items-stretch" style="min-height:0;">
                                 <div class="col-md-3 d-flex align-items-stretch justify-content-center" style="padding:0;">
-                                    <div class="media-container" style="width:100%; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; overflow:hidden; ${mediaBorderRadius} background:#111; min-height:100%;">
-                                    ${
-                                        paper.media.match(/\.(mp4|webm|mov|avi|mkv)$/)
-                                        ? `<video src="${paper.media}" class="publication-media" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;object-position:center center;aspect-ratio:16/9;display:block;" onerror="this.style.display='none'"></video>`
-                                        : `<img src="${paper.media}" alt="${paper.title} Preview" class="publication-media" style="width:100%;height:100%;object-fit:cover;object-position:center center;aspect-ratio:16/9;display:block;" onerror="this.style.display='none'" loading="lazy">`
-                                    }
+                                    <div class="media-container" style="width:100%; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; overflow:hidden; ${mediaBorderRadius} background:#f1f5f9; min-height:100%;">
+                                    ${mediaContent}
                                     </div>
                                 </div>
                                 <div class="col-md-9 d-flex align-items-center" style="padding:0;">
