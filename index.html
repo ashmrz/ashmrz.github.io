@@ -352,16 +352,16 @@
                 container.innerHTML = "";
                 papers.forEach((paper, index) => {
                     const delay = Math.min((index + 1) * 50, 500);
-                    // Responsive border radius for media: rounded only on left for desktop, top only for mobile
+
+                    // Consistent border radius for all corners, both desktop and mobile
                     const mediaBorderRadius = `
-                        border-radius:
-                            0.75rem 0 0 0.75rem; /* desktop: left only */
+                        border-radius: 1.5rem 0 0 1.5rem;
                     `;
                     const mediaBorderRadiusMobile = `
                         @media (max-width: 768px) {
                             #publication-${index} .publication-media,
                             #publication-${index} .media-container {
-                                border-radius: 0.75rem 0.75rem 0 0 !important; /* mobile: top only */
+                                border-radius: 1.5rem 1.5rem 0 0 !important;
                             }
                         }
                     `;
@@ -370,12 +370,11 @@
                     let mediaContent = "";
                     if (paper.media && paper.media.trim() !== "") {
                         mediaContent = paper.media.match(/\.(mp4|webm|mov|avi|mkv)$/)
-                            ? `<video src="${paper.media}" class="publication-media" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;object-position:center center;aspect-ratio:16/9;display:block;" onerror="this.style.display='none'"></video>`
-                            : `<img src="${paper.media}" alt="${paper.title} Preview" class="publication-media" style="width:100%;height:100%;object-fit:cover;object-position:center center;aspect-ratio:16/9;display:block;" onerror="this.style.display='none'" loading="lazy">`;
+                            ? `<video src="${paper.media}" class="publication-media" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;object-position:center center;aspect-ratio:16/9;display:block;border-radius:inherit;" onerror="this.style.display='none'"></video>`
+                            : `<img src="${paper.media}" alt="${paper.title} Preview" class="publication-media" style="width:100%;height:100%;object-fit:cover;object-position:center center;aspect-ratio:16/9;display:block;border-radius:inherit;" onerror="this.style.display='none'" loading="lazy">`;
                     } else {
-                        // Modern default: SVG with icon and subtle background
                         mediaContent = `
-                            <div class="publication-media d-flex align-items-center justify-content-center" style="width:100%;height:100%;background:linear-gradient(135deg,#e0e7ef 60%,#f1f5f9 100%);display:flex;flex-direction:column;gap:0.5rem;">
+                            <div class="publication-media d-flex align-items-center justify-content-center" style="width:100%;height:100%;background:linear-gradient(135deg,#e0e7ef 60%,#f1f5f9 100%);display:flex;flex-direction:column;gap:0.5rem;border-radius:inherit;">
                                 <div style="width:48px;height:48px;border-radius:12px;background:#e5e7eb;display:flex;align-items:center;justify-content:center;">
                                     <i class="fas fa-image" style="color:#94a3b8;font-size:24px;" aria-hidden="true"></i>
                                 </div>
@@ -388,15 +387,15 @@
                     <div class="col-md-12" data-aos="fade-up" data-aos-delay="${delay}">
                         <div class="card publication-card shadow-sm" id="publication-${index}"
                             onclick="event.preventDefault(); ${paper.abstract ? `toggleAbstract(${index})` : ""}"
-                            style="cursor: ${paper.abstract ? "pointer" : "default"}; padding:0;">
+                            style="cursor: ${paper.abstract ? "pointer" : "default"}; padding:0; border-radius:1.5rem;">
                             <div class="row g-0 align-items-stretch" style="min-height:0;">
                                 <div class="col-md-3 d-flex align-items-stretch justify-content-center" style="padding:0;">
-                                    <div class="media-container" style="width:100%; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; overflow:hidden; ${mediaBorderRadius} background:#f1f5f9; min-height:100%;">
+                                    <div class="media-container" style="width:100%; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; overflow:hidden; ${mediaBorderRadius} background:#f1f5f9; min-height:100%; border-radius:1.5rem 0 0 1.5rem;">
                                     ${mediaContent}
                                     </div>
                                 </div>
                                 <div class="col-md-9 d-flex align-items-center" style="padding:0;">
-                                    <div class="publication-body p-4 w-100">
+                                    <div class="publication-body p-4 w-100" style="border-radius:0 1.5rem 1.5rem 0;">
                                         <span class="venue-badge">${paper.venue}</span>
                                         <h5 class="mb-1">${paper.title}</h5>
                                         <p class="mb-0 small">${paper.authors.replace("Ashkan Mirzaei", "<strong>Ashkan Mirzaei</strong>")}</p>
