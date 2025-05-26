@@ -28,11 +28,6 @@
             transition: background 0.3s;
         }
         .container { max-width: 1200px; padding: 0 1rem; }
-        .fullscreen-section {
-            min-height: 100vh;
-            display: flex; align-items: center;
-            position: relative; padding: 2rem 0; margin: 0;
-        }
         .publication-card, .profile-card, .timeline-item {
             background: rgba(255,255,255,0.85);
             backdrop-filter: blur(8px);
@@ -105,25 +100,7 @@
             font-weight: 600;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.04);
         }
-        .scroll-indicator {
-            position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
-            animation: bounce 2s infinite; color: #a3a3a3;
-            cursor: pointer; padding: 0.7rem; border-radius: 50%;
-            background: #f1f5f9;
-            border: 1px solid #e0e7ef;
-            box-shadow: 0 2px 8px rgba(60,60,60,0.05);
-        }
-        .scroll-indicator:hover {
-            color: #444;
-            background: #f3f4f6;
-            transform: translateY(-2px) translateX(-50%) scale(1.05);
-            box-shadow: 0 4px 14px rgba(60,60,60,0.08);
-        }
-        @keyframes bounce {
-            0%,20%,50%,80%,100% { transform: translateY(0) translateX(-50%);}
-            40% { transform: translateY(-6px) translateX(-50%);}
-            60% { transform: translateY(-3px) translateX(-50%);}
-        }
+        /* .scroll-indicator and its hover/animation styles removed */
         @media (max-width: 768px) {
             .publication-card .row { flex-direction: column; }
             .publication-media { height: auto; aspect-ratio: 16/9; }
@@ -210,49 +187,45 @@
 <body class="min-h-screen">
     <div class="container">
         <!-- Home Section -->
-        <section id="home" class="fullscreen-section" data-aos="fade-up">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-md-12">
-                        <div class="profile-card" data-aos="fade-up" data-aos-delay="100">
-                            <div class="text-center mb-3">
-                                <img src="media/profile.png" alt="Profile Picture" class="profile-image mb-3 mx-auto d-block" loading="lazy" width="160" height="160">
-                                <h1 class="text-4xl font-bold mb-2 d-none d-md-block">Ashkan Mirzaei</h1>
-                                <h1 class="text-2xl font-bold mb-2 d-block d-md-none">Ashkan Mirzaei</h1>
-                                <h3 class="text-sm text-gray-500 mb-2">Research Scientist</h3>
-                                <p class="text-sm text-gray-600 mb-1">Creative Vision Team</p>
-                                <p class="text-sm text-gray-600">Snap Inc.</p>
+        <section id="home" class="mt-5" data-aos="fade-up">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <div class="profile-card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="text-center mb-3">
+                            <img src="media/profile.png" alt="Profile Picture" class="profile-image mb-3 mx-auto d-block" loading="lazy" width="160" height="160">
+                            <h1 class="text-4xl font-bold mb-2 d-none d-md-block">Ashkan Mirzaei</h1>
+                            <h1 class="text-2xl font-bold mb-2 d-block d-md-none">Ashkan Mirzaei</h1>
+                            <h3 class="text-sm text-gray-500 mb-2">Research Scientist</h3>
+                            <p class="text-sm text-gray-600 mb-1">Creative Vision Team</p>
+                            <p class="text-sm text-gray-600">Snap Inc.</p>
+                        </div>
+                        <div class="social-links">
+                            <a href="mailto:ashkan.m10@gmail.com" class="social-link" title="Email me" target="_blank"><i class="fas fa-envelope"></i></a>
+                            <a href="https://www.linkedin.com/in/ashkan-mirzaei-6b9651145/" class="social-link" title="Connect on LinkedIn" target="_blank"><i class="fab fa-linkedin"></i></a>
+                            <a href="https://scholar.google.com/citations?user=z8GwuTgAAAAJ&hl=en" class="social-link" title="Google Scholar Profile" target="_blank"><i class="fas fa-graduation-cap"></i></a>
+                            <a href="https://twitter.com/ashmrz10" class="social-link" title="Follow me on Twitter" target="_blank"><i class="fab fa-twitter"></i></a>
+                            <a href="https://bsky.app/profile/ashmrz.bsky.social" class="social-link" title="Follow me on Bluesky" target="_blank">
+                                <img src="icons/bluesky.svg" alt="Bluesky Icon" style="filter: brightness(2) grayscale(60%) opacity(0.55);">
+                            </a>
+                        </div>
+                        <div class="text-center mt-4">
+                            <p class="text-sm text-gray-500 mb-2">When I'm not coding:</p>
+                            <div class="d-flex gap-4 justify-content-center">
+                                <div class="text-center"><span class="text-gray-600 hover:text-blue-500 transition-colors text-xs font-light">skateboarding</span></div>
+                                <div class="text-center"><span class="text-gray-600 hover:text-blue-500 transition-colors text-xs font-light">cooking</span></div>
+                                <div class="text-center"><span class="text-gray-600 hover:text-blue-500 transition-colors text-xs font-light">movies</span></div>
+                                <div class="text-center"><span class="text-gray-600 hover:text-blue-500 transition-colors text-xs font-light">music</span></div>
                             </div>
-                            <div class="social-links">
-                                <a href="mailto:ashkan.m10@gmail.com" class="social-link" title="Email me" target="_blank"><i class="fas fa-envelope"></i></a>
-                                <a href="https://www.linkedin.com/in/ashkan-mirzaei-6b9651145/" class="social-link" title="Connect on LinkedIn" target="_blank"><i class="fab fa-linkedin"></i></a>
-                                <a href="https://scholar.google.com/citations?user=z8GwuTgAAAAJ&hl=en" class="social-link" title="Google Scholar Profile" target="_blank"><i class="fas fa-graduation-cap"></i></a>
-                                <a href="https://twitter.com/ashmrz10" class="social-link" title="Follow me on Twitter" target="_blank"><i class="fab fa-twitter"></i></a>
-                                <a href="https://bsky.app/profile/ashmrz.bsky.social" class="social-link" title="Follow me on Bluesky" target="_blank">
-                                    <img src="icons/bluesky.svg" alt="Bluesky Icon" style="filter: brightness(2) grayscale(60%) opacity(0.55);">
-                                </a>
-                            </div>
-                            <div class="text-center mt-4">
-                                <p class="text-sm text-gray-500 mb-2">When I'm not coding:</p>
-                                <div class="d-flex gap-4 justify-content-center">
-                                    <div class="text-center"><span class="text-gray-600 hover:text-blue-500 transition-colors text-xs font-light">skateboarding</span></div>
-                                    <div class="text-center"><span class="text-gray-600 hover:text-blue-500 transition-colors text-xs font-light">cooking</span></div>
-                                    <div class="text-center"><span class="text-gray-600 hover:text-blue-500 transition-colors text-xs font-light">movies</span></div>
-                                    <div class="text-center"><span class="text-gray-600 hover:text-blue-500 transition-colors text-xs font-light">music</span></div>
-                                </div>
-                            </div>
-                            <div class="text-center mt-4">
-                                <p class="text-sm text-gray-600"></p>
-                                    If you have a strong background in 3D or 4D and are interested in doing an internship with our team at Snap, feel free to reach out!
-                                </p>
-                            </div>
+                        </div>
+                        <div class="text-center mt-4">
+                            <p class="text-sm text-gray-600"></p>
+                                <span class="d-inline-block align-middle me-1"><i class="fas fa-lightbulb text-yellow-400"></i></span>
+                                If you have a strong background in 3D or 4D and are interested in doing an internship with our team at Snap, feel free to reach out!
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
-            <a href="#post-profile" class="scroll-indicator" style="bottom: 1rem;">
-                <i class="fas fa-chevron-down fa-2x"></i>
-            </a>
         </section>
         <section id="post-profile"></section>
         <!-- Research Section -->
@@ -319,10 +292,7 @@
         <script>
             document.addEventListener("DOMContentLoaded", function () {
                 AOS.init({ duration: 600, once: true, offset: 60, easing: "ease-out-quad" });
-                document.querySelector(".scroll-indicator").addEventListener("click", function (e) {
-                    e.preventDefault();
-                    document.getElementById("post-profile").scrollIntoView({ behavior: "smooth" });
-                });
+                // Scroll indicator event listener removed
                 loadAndDisplayExperience();
                 loadAndDisplayPublications();
             });
