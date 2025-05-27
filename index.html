@@ -200,18 +200,27 @@
                             <p class="text-sm text-gray-600">Snap Inc.</p>
                         </div>
                         <div class="social-links">
-                            <a href="mailto:ashkan.m10@gmail.com" class="social-link" title="Email me" target="_blank"><i class="fas fa-envelope"></i></a>
-                            <a href="https://www.linkedin.com/in/ashkan-mirzaei-6b9651145/" class="social-link" title="Connect on LinkedIn" target="_blank"><i class="fab fa-linkedin"></i></a>
-                            <a href="https://scholar.google.com/citations?user=z8GwuTgAAAAJ&hl=en" class="social-link" title="Google Scholar Profile" target="_blank"><i class="fas fa-graduation-cap"></i></a>
-                            <a href="https://twitter.com/ashmrz10" class="social-link" title="Follow me on Twitter" target="_blank"><i class="fab fa-twitter"></i></a>
-                            <a href="https://bsky.app/profile/ashmrz.bsky.social" class="social-link" title="Follow me on Bluesky" target="_blank">
+                            <a href="mailto:ashkan.m10@gmail.com" class="social-link" title="Email me: ashkan.m10@gmail.com" target="" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Email"><i class="fas fa-envelope"></i></a>
+                            <a href="https://www.linkedin.com/in/ashkan-mirzaei-6b9651145/" class="social-link" title="LinkedIn: Ashkan Mirzaei" target="_blank" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                            <a href="https://scholar.google.com/citations?user=z8GwuTgAAAAJ&hl=en" class="social-link" title="Google Scholar Profile" target="_blank" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Google Scholar"><i class="fas fa-graduation-cap"></i></a>
+                            <a href="https://twitter.com/ashmrz10" class="social-link" title="Twitter: @ashmrz10" target="_blank" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Twitter"><i class="fab fa-twitter"></i></a>
+                            <a href="https://bsky.app/profile/ashmrz.bsky.social" class="social-link" title="Bluesky: ashmrz.bsky.social" target="_blank" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Bluesky">
                                 <img src="icons/bluesky.svg" alt="Bluesky Icon" style="filter: brightness(2) grayscale(60%) opacity(0.55);">
                             </a>
                         </div>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function () {
+                                var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                                tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+                                    new bootstrap.Tooltip(tooltipTriggerEl);
+                                });
+                            });
+                        </script>
                         <div class="text-center mt-4">
                             <p class="text-sm text-gray-500 mb-2">When I'm not coding:</p>
-                            <div class="d-flex gap-4 justify-content-center">
+                            <div class="d-flex gap-3 justify-content-center">
                                 <div class="text-center"><span class="text-gray-600 hover:text-blue-500 transition-colors text-xs font-light">skateboarding</span></div>
+                                <div class="text-center"><span class="text-gray-600 hover:text-blue-500 transition-colors text-xs font-light">hiking</span></div>
                                 <div class="text-center"><span class="text-gray-600 hover:text-blue-500 transition-colors text-xs font-light">cooking</span></div>
                                 <div class="text-center"><span class="text-gray-600 hover:text-blue-500 transition-colors text-xs font-light">movies</span></div>
                                 <div class="text-center"><span class="text-gray-600 hover:text-blue-500 transition-colors text-xs font-light">music</span></div>
@@ -219,7 +228,7 @@
                         </div>
                         <div class="text-center mt-4">
                             <p class="text-sm text-gray-600"></p>
-                                <span class="d-inline-block align-middle me-1"><i class="fas fa-lightbulb text-yellow-400"></i></span>
+                                <i class="fas fa-lightbulb text-yellow-400"></i>
                                 If you have a strong background in 3D or 4D and are interested in doing an internship with our team at Snap, feel free to reach out!
                             </p>
                         </div>
