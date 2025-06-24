@@ -1,6 +1,14 @@
 {
   "papers": [
     {
+      "title": "4Real-Video-V2: Fused View-Time Attention and Feedforward Reconstruction for 4D Scene Generation",
+      "authors": "Chaoyang Wang*, Ashkan Mirzaei*, Vidit Goel, Willi Menapace, Aliaksandr Siarohin, Avalon Vinella, Michael Vasilkovsky, Ivan Skorokhodov, Vladislav Shakhrai, Sergey Korolev, Sergey Tulyakov, Peter Wonka",
+      "venue": "2025",
+      "url": "https://snap-research.github.io/4Real-Video-V2/",
+      "abstract": "We propose the first framework capable of computing a 4D spatio-temporal grid of video frames and 3D Gaussian particles for each time step using a feed-forward architecture. Our architecture has two main components, a 4D video model and a 4D reconstruction model. In the first part, we analyze current 4D video diffusion architectures that perform spatial and temporal attention either sequentially or in parallel within a two-stream design. We highlight the limitations of existing approaches and introduce a novel fused architecture that performs spatial and temporal attention within a single layer. The key to our method is a sparse attention pattern, where tokens attend to others in the same frame, at the same timestamp, or from the same viewpoint. In the second part, we extend existing 3D reconstruction algorithms by introducing a Gaussian head, a camera token replacement algorithm, and additional dynamic layers and training. Overall, we establish a new state of the art for 4D generation, improving both visual quality and reconstruction capability.",
+      "media": "media/paper_videos/reduced_quality/4real-video-v2.mp4"
+    },
+    {
       "title": "DenseDPO: Fine-Grained Temporal Preference Optimization for Video Diffusion Models",
       "authors": "Ziyi Wu, Anil Kag, Ivan Skorokhodov, Willi Menapace, Ashkan Mirzaei, Igor Gilitschenski, Sergey Tulyakov, Aliaksandr Siarohin",
       "venue": "2025",
