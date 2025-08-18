@@ -1,6 +1,14 @@
 {
   "papers": [
     {
+      "title": "DELTAv2: Accelerating Dense 3D Tracking",
+      "authors": "Tuan Duc Ngo, Ashkan Mirzaei, Guocheng Qian, Hanwen Liang, Chuang Gan, Evangelos Kalogerakis, Peter Wonka, Chaoyang Wang",
+      "venue": "2025",
+      "url": "https://snap-research.github.io/DELTAv2/",
+      "media": "media/paper_videos/reduced_quality/deltav2.mp4",
+      "abstract": "We propose a novel algorithm for accelerating dense long-term 3D point tracking in videos. Through analysis of existing state-of-the-art methods, we identify two major computational bottlenecks. First, transformer-based iterative tracking becomes expensive when handling a large number of trajectories. To address this, we introduce a coarse-to-fine strategy that begins tracking with a small subset of points and progressively expands the set of tracked trajectories. The newly added trajectories are initialized using a learnable interpolation module, which is trained end-to-end alongside the tracking network. Second, we propose an optimization that significantly reduces the cost of correlation feature computation, another key bottleneck in prior methods. Together, these improvements lead to a 5-100x speedup over existing approaches while maintaining state-of-the-art tracking accuracy."
+    },
+    {
       "title": "4Real-Video-V2: Fused View-Time Attention and Feedforward Reconstruction for 4D Scene Generation",
       "authors": "Chaoyang Wang*, Ashkan Mirzaei*, Vidit Goel, Willi Menapace, Aliaksandr Siarohin, Avalon Vinella, Michael Vasilkovsky, Ivan Skorokhodov, Vladislav Shakhrai, Sergey Korolev, Sergey Tulyakov, Peter Wonka",
       "venue": "2025",
