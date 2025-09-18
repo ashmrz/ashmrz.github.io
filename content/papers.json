@@ -11,7 +11,7 @@
     {
       "title": "4Real-Video-V2: Fused View-Time Attention and Feedforward Reconstruction for 4D Scene Generation",
       "authors": "Chaoyang Wang*, Ashkan Mirzaei*, Vidit Goel, Willi Menapace, Aliaksandr Siarohin, Avalon Vinella, Michael Vasilkovsky, Ivan Skorokhodov, Vladislav Shakhrai, Sergey Korolev, Sergey Tulyakov, Peter Wonka",
-      "venue": "2025",
+      "venue": "NeurIPS 2025",
       "url": "https://snap-research.github.io/4Real-Video-V2/",
       "abstract": "We propose the first framework capable of computing a 4D spatio-temporal grid of video frames and 3D Gaussian particles for each time step using a feed-forward architecture. Our architecture has two main components, a 4D video model and a 4D reconstruction model. In the first part, we analyze current 4D video diffusion architectures that perform spatial and temporal attention either sequentially or in parallel within a two-stream design. We highlight the limitations of existing approaches and introduce a novel fused architecture that performs spatial and temporal attention within a single layer. The key to our method is a sparse attention pattern, where tokens attend to others in the same frame, at the same timestamp, or from the same viewpoint. In the second part, we extend existing 3D reconstruction algorithms by introducing a Gaussian head, a camera token replacement algorithm, and additional dynamic layers and training. Overall, we establish a new state of the art for 4D generation, improving both visual quality and reconstruction capability.",
       "media": "media/paper_videos/reduced_quality/4real-video-v2.mp4"
@@ -19,10 +19,18 @@
     {
       "title": "DenseDPO: Fine-Grained Temporal Preference Optimization for Video Diffusion Models",
       "authors": "Ziyi Wu, Anil Kag, Ivan Skorokhodov, Willi Menapace, Ashkan Mirzaei, Igor Gilitschenski, Sergey Tulyakov, Aliaksandr Siarohin",
-      "venue": "2025",
+      "venue": "NeurIPS 2025 (Spotlight)",
       "url": "https://snap-research.github.io/DenseDPO/",
       "media": "media/paper_videos/original_quality/DenseDPO.mp4",
       "abstract": "Direct Preference Optimization (DPO) has recently been applied as a post-training technique for text-to-video diffusion models. To obtain training data, annotators are asked to provide preferences between two videos generated from independent noise. However, this approach prohibits fine-grained comparisons, and we point out that it biases the annotators towards low-motion clips as they often contain fewer visual artifacts. In this work, we introduce DenseDPO, a method that addresses these shortcomings by making three contributions. First, we create each video pair for DPO by denoising corrupted copies of a ground truth video. This results in aligned pairs with similar motion structures while differing in local details, effectively neutralizing the motion bias. Second, we leverage the resulting temporal alignment to label preferences on short segments rather than entire clips, yielding a denser and more precise learning signal. With only one-third of the labeled data, DenseDPO greatly improves motion generation over vanilla DPO, while matching it in text alignment, visual quality, and temporal consistency. Finally, we show that DenseDPO unlocks automatic preference annotation using off-the-shelf Vision Language Models (VLMs): GPT accurately predicts segment-level preferences similar to task-specifically fine-tuned video reward models, and DenseDPO trained on these labels achieves performance close to using human labels."
+    },
+    {
+      "title": "Feed-Forward Bullet-Time Reconstruction of Dynamic Scenes from Monocular Videos",
+      "authors": "Ashkan Mirzaei*, Hanxue Liang*, Jiawei Ren*, Antonio Torralba, Ziwei Liu, Igor Gilitschenski, Sanja Fidler, Cengiz Oztireli, Huan Ling, Zan Gojcic, Jiahui Huang",
+      "venue": "NeurIPS 2025",
+      "url": "https://research.nvidia.com/labs/toronto-ai/bullet-timer/",
+      "media": "media/paper_videos/reduced_quality/robot-video-game_vid.mp4",
+      "abstract": "Recent advancements in static feed-forward scene reconstruction have demonstrated significant progress in high-quality novel view synthesis. However, these models often struggle with generalizability across diverse environments and fail to effectively handle dynamic content. We present BTimer (short for BulletTimer), the first motion-aware feed-forward model for real-time reconstruction and novel view synthesis of dynamic scenes. Our approach reconstructs the full scene in a 3D Gaussian Splatting representation at a given target ('bullet') timestamp by aggregating information from all the context frames. Such a formulation allows BTimer to gain scalability and generalization by leveraging both static and dynamic scene datasets. Given a casual monocular dynamic video, BTimer reconstructs a bullet-time scene within 150ms while reaching state-of-the-art performance on both static and dynamic scene datasets, even compared with optimization-based approaches."
     },
     {
       "title": "3DGUT: Enabling Distorted Cameras and Secondary Rays in Gaussian Splatting",
@@ -38,14 +46,6 @@
       "venue": "CVPR 2025",
       "url": "https://arxiv.org/abs/2412.07293",
       "abstract": "We introduce a method for using event camera data in novel view synthesis via Gaussian Splatting. Event cameras offer exceptional temporal resolution and a high dynamic range. Leveraging these capabilities allows us to effectively address the novel view synthesis challenge in the presence of fast camera motion. For initialization of the optimization process, our approach uses prior knowledge encoded in an event-to-video model. We also use spline interpolation for obtaining high quality poses along the event camera trajectory. This enhances the reconstruction quality from fast-moving cameras while overcoming the computational limitations traditionally associated with event-based Neural Radiance Field (NeRF) methods. Our experimental evaluation demonstrates that our results achieve higher visual fidelity and better performance than existing event-based NeRF approaches while being an order of magnitude faster to render."
-    },
-    {
-      "title": "Feed-Forward Bullet-Time Reconstruction of Dynamic Scenes from Monocular Videos",
-      "authors": "Ashkan Mirzaei*, Hanxue Liang*, Jiawei Ren*, Antonio Torralba, Ziwei Liu, Igor Gilitschenski, Sanja Fidler, Cengiz Oztireli, Huan Ling, Zan Gojcic, Jiahui Huang",
-      "venue": "2025",
-      "url": "https://research.nvidia.com/labs/toronto-ai/bullet-timer/",
-      "media": "media/paper_videos/reduced_quality/robot-video-game_vid.mp4",
-      "abstract": "Recent advancements in static feed-forward scene reconstruction have demonstrated significant progress in high-quality novel view synthesis. However, these models often struggle with generalizability across diverse environments and fail to effectively handle dynamic content. We present BTimer (short for BulletTimer), the first motion-aware feed-forward model for real-time reconstruction and novel view synthesis of dynamic scenes. Our approach reconstructs the full scene in a 3D Gaussian Splatting representation at a given target ('bullet') timestamp by aggregating information from all the context frames. Such a formulation allows BTimer to gain scalability and generalization by leveraging both static and dynamic scene datasets. Given a casual monocular dynamic video, BTimer reconstructs a bullet-time scene within 150ms while reaching state-of-the-art performance on both static and dynamic scene datasets, even compared with optimization-based approaches."
     },
     {
       "title": "3D Gaussian Ray Tracing: Fast Tracing of Particle Scenes",
