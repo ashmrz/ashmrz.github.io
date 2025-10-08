@@ -1,6 +1,14 @@
 {
   "papers": [
     {
+      "title": "ShapeGen4D: Towards High Quality 4D Shape Generation from Videos",
+      "authors": "Jiraphon Yenphraphai, Ashkan Mirzaei, Jianqi Chen, Jiaxu Zou, Sergey Tulyakov, Raymond A. Yeh, Peter Wonka, Chaoyang Wang",
+      "venue": "2025",
+      "url": "https://shapegen4d.github.io/",
+      "abstract": "Video-conditioned 4D shape generation aims to recover time-varying 3D geometry and view-consistent appearance directly from an input video. In this work, we introduce a native video-to-4D shape generation framework that synthesizes a single dynamic 3D representation end-to-end from the video. Our framework introduces three key components based on large-scale pre-trained 3D models: (i) a temporal attention that conditions generation on all frames while producing a time-indexed dynamic representation; (ii) a time-aware point sampling and 4D latent anchoring that promote temporally consistent geometry and texture; and (iii) noise sharing across frames to enhance temporal stability. Our method accurately captures non-rigid motion, volume changes, and even topological transitions without per-frame optimization. Across diverse in-the-wild videos, our method improves robustness and perceptual fidelity and reduces failure modes compared with the baselines.",
+      "media": "media/paper_videos/reduced_quality/teaser5.mp4"
+    },
+    {
       "title": "DELTAv2: Accelerating Dense 3D Tracking",
       "authors": "Tuan Duc Ngo, Ashkan Mirzaei, Guocheng Qian, Hanwen Liang, Chuang Gan, Evangelos Kalogerakis, Peter Wonka, Chaoyang Wang",
       "venue": "2025",
