@@ -65,7 +65,7 @@ function displayPublications(papers) {
         colDiv.className = 'col-md-12';
         colDiv.innerHTML = `
         <style>${mediaBorderRadiusMobile}</style>
-        <div class="card publication-card shadow-sm" id="publication-${index}"
+        <div class="card publication-card" id="publication-${index}"
             onclick="event.preventDefault(); ${paper.abstract ? `toggleAbstract(${index})` : ""}"
             style="cursor: ${paper.abstract ? "pointer" : "default"}; padding:0; border-radius:1.5rem;">
             <div class="row g-0 align-items-stretch" style="min-height:0;">
