@@ -1,3 +1,8 @@
+        :root {
+            --bs-body-font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
+            --bs-headings-font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
+        }
+
         html { 
             scroll-behavior: smooth;
         }
@@ -16,7 +21,7 @@
             background: linear-gradient(to bottom, #f5f7fa 0%, #e8edf2 100%);
             color: #1d1d1f;
             min-height: 100vh;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
             line-height: 1.6;
             margin: 0; 
             padding: 0;
@@ -137,22 +142,16 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
         
-        .social-links .social-link img[alt="Bluesky Icon"] {
-            width: 18px; 
-            height: 18px; 
-            vertical-align: middle;
-            filter: grayscale(20%) brightness(95%) opacity(85%);
-            transition: filter 0.3s;
-        }
         
-        .social-link:hover img[alt="Bluesky Icon"] {
-            filter: grayscale(0%) brightness(100%) opacity(100%);
-        }
-        
-        h1, h2, h3, h4 {
+        h1, h2, h3, h4, h5, h6 {
             color: #1d1d1f;
+            font-family: var(--bs-headings-font-family);
             font-weight: 700;
             letter-spacing: -0.02em;
+        }
+        
+        input, button, select, textarea {
+            font-family: inherit;
         }
         
         h2 {

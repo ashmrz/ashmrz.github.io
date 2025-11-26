@@ -5,10 +5,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ashkan Mirzaei</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
@@ -33,9 +48,9 @@
                             <a href="https://www.linkedin.com/in/ashkan-mirzaei-6b9651145/" class="social-link" title="LinkedIn: Ashkan Mirzaei" target="_blank" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="LinkedIn"><i class="fab fa-linkedin"></i></a>
                             <a href="https://scholar.google.com/citations?user=z8GwuTgAAAAJ&hl=en" class="social-link" title="Google Scholar Profile" target="_blank" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Google Scholar"><i class="fas fa-graduation-cap"></i></a>
                             <a href="https://twitter.com/ashmrz10" class="social-link" title="Twitter: @ashmrz10" target="_blank" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Twitter"><i class="fab fa-twitter"></i></a>
-                            <a href="https://bsky.app/profile/ashmrz.bsky.social" class="social-link" title="Bluesky: ashmrz.bsky.social" target="_blank" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Bluesky">
-                                <img src="icons/bluesky.svg" alt="Bluesky Icon" style="filter: brightness(2) grayscale(60%) opacity(0.55);">
-                            </a>
+                        <a href="https://bsky.app/profile/ashmrz.bsky.social" class="social-link" title="Bluesky: ashmrz.bsky.social" target="_blank" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Bluesky">
+                            <svg class="bluesky-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565C.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479c.815 2.736 3.713 3.66 6.383 3.364c.136-.02.275-.039.415-.056c-.138.022-.276.04-.415.056c-3.912.58-7.387 2.005-2.83 7.078c5.013 5.19 6.87-1.113 7.823-4.308c.953 3.195 2.05 9.271 7.733 4.308c4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056c2.67.297 5.568-.628 6.383-3.364c.246-.828.624-5.79.624-6.478c0-.69-.139-1.861-.902-2.206c-.659-.298-1.664-.62-4.3 1.24C16.046 4.748 13.087 8.687 12 10.8"/></svg>
+                        </a>
                         </div>
                         <div class="text-center mt-3">
                             <p class="text-sm mb-2" style="color: #86868b; font-weight: 500;">When I'm not coding:</p>
