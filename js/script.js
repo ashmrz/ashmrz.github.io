@@ -143,6 +143,49 @@ function initLazyLoading() {
     });
 }
 
+function adjustLogoBackground(img) {
+    if (!img.complete || img.naturalWidth === 0) return;
+
+    try {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
+        let totalLuminance = 0;
+        let pixelCount = 0;
+
+        // Sample every 10th pixel to save performance
+        for (let i = 0; i < data.length; i += 40) {
+            const r = data[i];
+            const g = data[i + 1];
+            const b = data[i + 2];
+            const a = data[i + 3];
+
+            // Consider only pixels that are opaque enough
+            if (a > 20) {
+                // Perceived luminance: 0.299R + 0.587G + 0.114B
+                const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
+                totalLuminance += luminance;
+                pixelCount++;
+            }
+        }
+
+        if (pixelCount > 0) {
+            const avgLuminance = totalLuminance / pixelCount;
+            // Threshold: if average luminance > 200 (mostly white/light), switch to dark bg
+            if (avgLuminance > 200) {
+                img.parentElement.style.backgroundColor = '#1d1d1f';
+            }
+        }
+    } catch (e) {
+        console.warn('Could not analyze image for background adjustment:', e);
+    }
+}
+
 function loadAndDisplayExperience() {
     fetch("content/experience.json?" + new Date().getTime())
         .then((response) => response.json())
@@ -159,10 +202,21 @@ function displayExperience(experience) {
         const item = experience[i];
         const div = document.createElement('div');
         div.className = 'timeline-item';
+        
+        const bgStyle = item.logo_bg ? `style="background-color: ${item.logo_bg}"` : '';
+        const onloadAttr = item.logo_bg ? '' : 'onload="adjustLogoBackground(this)"';
+
         div.innerHTML = `
-            <h4>${item.company}</h4>
-            <p>${item.title}</p>
-            <p class="time-range">${item.time}</p>
+            <div class="d-flex align-items-center w-100">
+                <div class="experience-logo-container me-3" ${bgStyle}>
+                    <img src="${item.logo}" alt="${item.company}" class="experience-logo" crossorigin="anonymous" ${onloadAttr}>
+                </div>
+                <div>
+                    <h4 class="mb-1">${item.company}</h4>
+                    <p class="mb-1 text-dark">${item.title}</p>
+                    <p class="time-range mb-0">${item.time}</p>
+                </div>
+            </div>
         `;
         fragment.insertBefore(div, fragment.firstChild);
     }
@@ -175,4 +229,3 @@ function displayExperience(experience) {
         }
     });
 }
-

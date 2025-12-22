@@ -3,27 +3,37 @@
     {
       "title": "Math Olympiad Instructor",
       "company": "Allameh Helli Highschool",
-      "time": "Sep 2016 - July 2020"
+      "time": "Sep 2016 - July 2020",
+      "logo": "media/logos/helli.png",
+      "logo_bg": "#000000"
     },
     {
       "title": "Research Assistant",
       "company": "University of Toronto (TISL)",
-      "time": "Sep 2021 - May 2025"
+      "time": "Sep 2021 - May 2025", 
+      "logo": "media/logos/uoft.png",
+      "logo_bg": "#FFFFFF"
     },
     {
       "title": "Research Intern (MITACS)",
       "company": "Samsung",
-      "time": "Jul 2022 - Sep 2023"
+      "time": "Jul 2022 - Sep 2023",
+      "logo": "media/logos/samsung.svg",
+      "logo_bg": "#FFFFFF"
     },
     {
       "title": "Research Intern",
       "company": "Nvidia",
-      "time": "Sep 2023 - Nov 2024"
+      "time": "Sep 2023 - Nov 2024",
+      "logo": "media/logos/nvidia.png",
+      "logo_bg": "#FFFFFF"
     }, 
     {
       "title": "Research Scientist",
       "company": "Snap Inc.",
-      "time": "Feb 2025 - Present"
+      "time": "Feb 2025 - Present",
+      "logo": "media/logos/snap.webp",
+      "logo_bg": "#FFFFFF"
     }
   ]
 }
