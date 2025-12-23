@@ -30,7 +30,7 @@
       "venue": "NeurIPS 2025",
       "url": "https://zsh2000.github.io/track-inpaint-resplat.github.io/",
       "abstract": "Current 3D/4D generation methods are usually optimized for photorealism, efficiency, and aesthetics. However, they often fail to preserve the semantic identity of the subject across different viewpoints. Adapting generation methods with one or few images of a specific subject (also known as Personalization or Subject-driven generation) allows generating visual content that align with the identity of the subject. However, personalized 3D/4D generation is still largely underexplored. In this work, we introduce TIRE (Track, Inpaint, REsplat), a novel method for subject-driven 3D/4D generation. It takes an initial 3D asset produced by an existing 3D generative model as input and uses video tracking to identify the regions that need to be modified. Then, we adopt a subject-driven 2D inpainting model for progressively infilling the identified regions. Finally, we resplat the modified 2D multi-view observations back to 3D while still maintaining consistency. Extensive experiments demonstrate that our approach significantly improves identity preservation in 3D/4D generation compared to state-of-the-art methods.",
-      "media": "media/paper_videos/reduced_quality/tire_teaser.png"
+      "media": "media/paper_videos/reduced_quality/TIRE.mp4"
     },
     {
       "title": "ShapeGen4D: Towards High Quality 4D Shape Generation from Videos",
@@ -99,9 +99,9 @@
       "title": "GaussianCut: Fast Interactive Segmentation via Graph Cut for 3D Gaussian Splatting",
       "authors": "Umangi Jain, Ashkan Mirzaei, Igor Gilitschenski",
       "venue": "NeurIPS 2024",
-      "url": "https://openreview.net/forum?id=Ns0LQokxa5",
+      "url": "https://umangi-jain.github.io/gaussiancut/",
       "abstract": "We introduce GaussianCut, a new method for interactive multiview segmentation of scenes represented as 3D Gaussians. Our approach allows for selecting the objects to be segmented by interacting with a single view. It accepts intuitive user input, such as point clicks, coarse scribbles, or text. Using 3D Gaussian Splatting (3DGS) as the underlying scene representation simplifies the extraction of objects of interest which are considered to be a subset of the scene's Gaussians. Our key idea is to represent the scene as a graph and use the graph-cut algorithm to minimize an energy function to effectively partition the Gaussians into foreground and background. To achieve this, we construct a graph based on scene Gaussians and devise a segmentation-aligned energy function on the graph to combine user inputs with scene properties. To obtain an initial coarse segmentation, we leverage 2D image/video segmentation models and further refine these coarse estimates using our graph construction. Our empirical evaluations show the adaptability of GaussianCut across a diverse set of scenes. GaussianCut achieves competitive performance with state-of-the-art approaches for 3D segmentation without requiring any additional segmentation-aware training.",
-      "media": "media/gaussiancut.png"
+      "media": "media/paper_videos/reduced_quality/gaussian_cut.mp4"
     },
     {
       "title": "Large 4D Gaussian Reconstruction Model",
@@ -139,6 +139,7 @@
       "title": "Exploring Reconstructive Latent-Space Neural Radiance Fields",
       "authors": "Ashkan Mirzaei*, Tristan Aumentado-Armstrong*, Marcus A. Brubaker, Jonathan Kelly, Alex Levinshtein, Konstantinos G. Derpanis, Igor Gilitschenski",
       "venue": "ICCV NeRF4ADR 2023",
+      "url": "https://arxiv.org/abs/2310.17880", 
       "abstract": "Neural Radiance Fields (NeRFs) have proven to be powerful 3D representations, capable of high quality novel view synthesis of complex scenes. While NeRFs have been applied to graphics, vision, and robotics, problems with slow rendering speed and characteristic visual artifacts prevent adoption in many use cases. In this work, we investigate combining an autoencoder (AE) with a NeRF, in which latent features (instead of colours) are rendered and then convolutionally decoded. The resulting latent-space NeRF can produce novel views with higher quality than standard colour-space NeRFs, as the AE can correct certain visual artifacts, while rendering over three times faster. Our work is orthogonal to other techniques for improving NeRF efficiency. Further, we can control the tradeoff between efficiency and image quality by shrinking the AE architecture, achieving over 13 times faster rendering with only a small drop in performance. We hope that our approach can form the basis of an efficient, yet high-fidelity, 3D scene representation for downstream tasks, especially when retaining differentiability is useful, as in many robotics scenarios requiring continual learning."
     },
     {
@@ -153,6 +154,8 @@
       "title": "CAMM: Building Category-Agnostic and Animatable 3D Models from Monocular Videos",
       "authors": "Tiahshu Kuai, Akash Karthikeyan, Yash Kant, Ashkan Mirzaei, Igor Gilitschenski",
       "venue": "CVPR DynaVis 2023",
+      "media": "media/paper_videos/reduced_quality/camm.mp4",
+      "url": "https://camm3d.github.io/",
       "abstract": "Animating an object in 3D often requires an articulated structure, e.g. a kinematic chain or skeleton of the manipulated object with proper skinning weights, to obtain smooth movements and surface deformations. However, existing models that allow direct pose manipulations are either limited to specific object categories or built with specialized equipment. To reduce the work needed for creating animatable 3D models, we propose a novel reconstruction method that learns an animatable kinematic chain for any articulated object. Our method operates on monocular videos without prior knowledge of the object's shape or underlying structure. Our approach is on par with state-of-the-art 3D surface reconstruction methods on various articulated object categories while enabling direct pose manipulations by re-posing the learned kinematic chain."
     },
     {
