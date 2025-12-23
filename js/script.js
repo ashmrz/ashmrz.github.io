@@ -1,11 +1,22 @@
-document.addEventListener("DOMContentLoaded", function () {
+"use strict";
+
+document.addEventListener("DOMContentLoaded", () => {
     // Initialize Bootstrap tooltips
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.forEach((tooltipTriggerEl) => {
         new bootstrap.Tooltip(tooltipTriggerEl);
     });
 
-    // Theme Toggle Logic
+    initTheme();
+    loadAndDisplayExperience();
+    loadAndDisplayPublications();
+    initSectionNav();
+});
+
+/**
+ * Theme Management
+ */
+function initTheme() {
     const themeToggle = document.getElementById('theme-toggle');
     const html = document.documentElement;
     const icon = themeToggle.querySelector('i');
@@ -32,13 +43,13 @@ document.addEventListener("DOMContentLoaded", function () {
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
         setTheme(newTheme);
     });
+}
 
-    loadAndDisplayExperience();
-    loadAndDisplayPublications();
-    initSectionNav();
-});
-
-let publications = [], debounceTimer;
+/**
+ * Publications Logic
+ */
+let publications = [];
+let debounceTimer;
 
 function loadAndDisplayPublications() {
     fetch("content/papers.json?" + new Date().getTime())
@@ -53,11 +64,37 @@ function loadAndDisplayPublications() {
 function toggleAbstract(index) {
     const card = document.getElementById(`publication-${index}`);
     const abstractContent = document.getElementById(`abstract-${index}`);
+    
+    if (!card || !abstractContent) return;
+
     const isExpanded = card.classList.contains("expanded");
     card.classList.toggle("expanded");
+    
+    // Animate height
     abstractContent.style.maxHeight = isExpanded ? "0" : `${abstractContent.scrollHeight}px`;
+    
     const chevronIcon = card.querySelector(".fa-chevron-down");
     if (chevronIcon) chevronIcon.classList.toggle("rotate-180");
+}
+
+function createMediaElement(paper) {
+    if (paper.media && paper.media.trim() !== "") {
+        const isVideo = paper.media.match(/\.(mp4|webm|mov|avi|mkv)$/);
+        const className = isVideo ? "video-media lazy-video" : "image-media lazy-image";
+        const tag = isVideo ? "video" : "img";
+        const extraAttrs = isVideo ? 'muted playsinline loop preload="none"' : '';
+        const alt = isVideo ? '' : `alt="${paper.title} Preview"`;
+
+        return `<${tag} class="${className}" data-src="${paper.media}" ${extraAttrs} ${alt} onerror="this.style.display='none'"></${tag}>`;
+    }
+
+    return `
+        <div class="media-placeholder">
+            <div class="media-placeholder-icon-container">
+                <i class="fas fa-image media-icon" aria-hidden="true"></i>
+            </div>
+        </div>
+    `;
 }
 
 function displayPublications(papers) {
@@ -66,69 +103,69 @@ function displayPublications(papers) {
     const fragment = document.createDocumentFragment();
     
     papers.forEach((paper, index) => {
-        const mediaBorderRadius = `border-radius: 1.5rem 0 0 1.5rem;`;
-        const mediaBorderRadiusMobile = `
-            @media (max-width: 768px) {
-                #publication-${index} .publication-media,
-                #publication-${index} .media-container {
-                    border-radius: 1.5rem 1.5rem 0 0 !important;
-                }
-            }
-        `;
-        let mediaContent = "";
-        if (paper.media && paper.media.trim() !== "") {
-            mediaContent = paper.media.match(/\.(mp4|webm|mov|avi|mkv)$/)
-                ? `<video class="publication-media lazy-video" data-src="${paper.media}" muted playsinline loop preload="none" style="width:100%;height:100%;object-fit:cover;object-position:center center;aspect-ratio:16/9;display:block;border-radius:inherit;" onerror="this.style.display='none'"></video>`
-                : `<img data-src="${paper.media}" alt="${paper.title} Preview" class="publication-media lazy-image" style="width:100%;height:100%;object-fit:cover;object-position:center center;aspect-ratio:16/9;display:block;border-radius:inherit;" onerror="this.style.display='none'">`;
-        } else {
-            mediaContent = `
-                <div class="publication-media d-flex align-items-center justify-content-center" style="width:100%;height:100%;background:linear-gradient(135deg,var(--bg-gradient-start) 60%,var(--bg-gradient-end) 100%);display:flex;flex-direction:column;gap:0.5rem;border-radius:inherit;">
-                    <div style="width:48px;height:48px;border-radius:12px;background:var(--input-bg);display:flex;align-items:center;justify-content:center;">
-                        <i class="fas fa-image" style="color:var(--text-tertiary);font-size:24px;" aria-hidden="true"></i>
-                    </div>
-                </div>
-            `;
-        }
-
+        const mediaContent = createMediaElement(paper);
+        const authorsHtml = paper.authors.replace("Ashkan Mirzaei", "<strong>Ashkan Mirzaei</strong>");
+        
         const colDiv = document.createElement('div');
         colDiv.className = 'col-md-12';
+        
+        // Use separate logic for onclick to avoid inline event handler string mess
+        // But for simplicity with existing pattern, we'll keep the structure but clean it up.
+        // Better yet, we attach the event listener after creation if possible, 
+        // but here we are building string HTML.
+        
+        const cardClass = `card publication-card publication-card-custom ${paper.abstract ? "pointer" : ""}`;
+        const onClickAttr = paper.abstract ? `onclick="toggleAbstract(${index})"` : "";
+        
+        const projectLink = paper.url 
+            ? `<div class="mt-3">
+                 <a href="${paper.url}" target="_blank" class="project-link" onclick="event.stopPropagation()">
+                   <i class="fas fa-external-link-alt"></i>Project Page
+                 </a>
+               </div>` 
+            : "";
+            
+        const abstractSection = paper.abstract
+            ? `<div class="abstract-content" id="abstract-${index}">
+                 <p class="mt-2 small">${paper.abstract}</p>
+               </div>
+               <div class="text-center mt-2 abstract-toggle">
+                 <i class="fas fa-chevron-down text-gray-400 transition-transform duration-300"></i>
+               </div>`
+            : "";
+
         colDiv.innerHTML = `
-        <style>${mediaBorderRadiusMobile}</style>
-        <div class="card publication-card" id="publication-${index}"
-            onclick="event.preventDefault(); ${paper.abstract ? `toggleAbstract(${index})` : ""}"
-            style="cursor: ${paper.abstract ? "pointer" : "default"}; padding:0; border-radius:1.5rem;">
+        <div class="${cardClass}" id="publication-${index}" ${onClickAttr}>
             <div class="row g-0 align-items-stretch" style="min-height:0;">
                 <div class="col-md-3 d-flex align-items-stretch justify-content-center" style="padding:0;">
-                    <div class="media-container" style="width:100%; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; overflow:hidden; ${mediaBorderRadius} background:var(--bg-gradient-end); min-height:100%; border-radius:1.5rem 0 0 1.5rem;">
-                    ${mediaContent}
+                    <div class="media-container-custom">
+                        ${mediaContent}
                     </div>
                 </div>
                 <div class="col-md-9 d-flex align-items-center" style="padding:0;">
-                    <div class="publication-body p-4 w-100" style="border-radius:0 1.5rem 1.5rem 0;">
+                    <div class="publication-body-custom">
                         <span class="venue-badge">${paper.venue}</span>
                         <h5 class="mb-1">${paper.title}</h5>
-                        <p class="mb-0 small">${paper.authors.replace("Ashkan Mirzaei", "<strong>Ashkan Mirzaei</strong>")}</p>
-                        ${paper.url
-                            ? `<div class="mt-3"><a href="${paper.url}" target="_blank" class="project-link" onclick="event.stopPropagation()"><i class="fas fa-external-link-alt"></i>Project Page</a></div>`
-                            : ""
-                        }
-                        ${paper.abstract
-                            ? `<div class="abstract-content" id="abstract-${index}"><p class="mt-2 small">${paper.abstract}</p></div>
-                               <div class="text-center mt-2 abstract-toggle"><i class="fas fa-chevron-down text-gray-400 transition-transform duration-300"></i></div>`
-                            : ""
-                        }
+                        <p class="mb-0 small">${authorsHtml}</p>
+                        ${projectLink}
+                        ${abstractSection}
                     </div>
                 </div>
             </div>
         </div>`;
+        
         fragment.appendChild(colDiv);
     });
+    
     container.appendChild(fragment);
     initLazyLoading();
 }
 
 function filterPublications() {
-    const searchTerm = document.getElementById("publicationSearch").value.toLowerCase();
+    const searchInput = document.getElementById("publicationSearch");
+    if (!searchInput) return;
+    
+    const searchTerm = searchInput.value.toLowerCase();
     const filteredPapers = publications.filter((paper) =>
         paper.title.toLowerCase().includes(searchTerm) ||
         paper.authors.toLowerCase().includes(searchTerm) ||
@@ -138,12 +175,18 @@ function filterPublications() {
     displayPublications(filteredPapers);
 }
 
-function debouncedFilterPublications() {
+// Make accessible globally for the input oninput
+window.debouncedFilterPublications = function() {
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(filterPublications, 300);
-}
+};
 
-// Lazy loading implementation using Intersection Observer
+// Make accessible globally for onclick
+window.toggleAbstract = toggleAbstract;
+
+/**
+ * Lazy Loading
+ */
 function initLazyLoading() {
     const imageObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
@@ -172,49 +215,9 @@ function initLazyLoading() {
     });
 }
 
-function adjustLogoBackground(img) {
-    if (!img.complete || img.naturalWidth === 0) return;
-
-    try {
-        const canvas = document.createElement('canvas');
-        canvas.width = img.naturalWidth;
-        canvas.height = img.naturalHeight;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0);
-        
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        const data = imageData.data;
-        let totalLuminance = 0;
-        let pixelCount = 0;
-
-        // Sample every 10th pixel to save performance
-        for (let i = 0; i < data.length; i += 40) {
-            const r = data[i];
-            const g = data[i + 1];
-            const b = data[i + 2];
-            const a = data[i + 3];
-
-            // Consider only pixels that are opaque enough
-            if (a > 20) {
-                // Perceived luminance: 0.299R + 0.587G + 0.114B
-                const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
-                totalLuminance += luminance;
-                pixelCount++;
-            }
-        }
-
-        if (pixelCount > 0) {
-            const avgLuminance = totalLuminance / pixelCount;
-            // Threshold: if average luminance > 200 (mostly white/light), switch to dark bg
-            if (avgLuminance > 200) {
-                img.parentElement.style.backgroundColor = '#1d1d1f';
-            }
-        }
-    } catch (e) {
-        console.warn('Could not analyze image for background adjustment:', e);
-    }
-}
-
+/**
+ * Experience Section Logic
+ */
 function loadAndDisplayExperience() {
     fetch("content/experience.json?" + new Date().getTime())
         .then((response) => response.json())
@@ -251,6 +254,7 @@ function displayExperience(experience) {
     }
     timeline.appendChild(fragment);
     
+    // Scroll to end of timeline
     requestAnimationFrame(() => {
         const container = document.querySelector(".timeline-container");
         if (container) {
@@ -259,6 +263,53 @@ function displayExperience(experience) {
     });
 }
 
+// Global exposure for onload attribute
+window.adjustLogoBackground = function(img) {
+    if (!img.complete || img.naturalWidth === 0) return;
+
+    try {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
+        let totalLuminance = 0;
+        let pixelCount = 0;
+
+        // Sample every 40th pixel to save performance
+        for (let i = 0; i < data.length; i += 40) {
+            const r = data[i];
+            const g = data[i + 1];
+            const b = data[i + 2];
+            const a = data[i + 3];
+
+            // Consider only pixels that are opaque enough
+            if (a > 20) {
+                // Perceived luminance: 0.299R + 0.587G + 0.114B
+                const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
+                totalLuminance += luminance;
+                pixelCount++;
+            }
+        }
+
+        if (pixelCount > 0) {
+            const avgLuminance = totalLuminance / pixelCount;
+            // Threshold: if average luminance > 200 (mostly white/light), switch to dark bg
+            if (avgLuminance > 200) {
+                img.parentElement.style.backgroundColor = '#1d1d1f';
+            }
+        }
+    } catch (e) {
+        console.warn('Could not analyze image for background adjustment:', e);
+    }
+};
+
+/**
+ * Section Navigation Logic
+ */
 function initSectionNav() {
     const navCurrent = document.getElementById('nav-current');
     const navList = document.getElementById('nav-list');
