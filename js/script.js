@@ -35,6 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     loadAndDisplayExperience();
     loadAndDisplayPublications();
+    initSectionNav();
 });
 
 let publications = [], debounceTimer;
@@ -256,4 +257,106 @@ function displayExperience(experience) {
             container.scrollLeft = container.scrollWidth;
         }
     });
+}
+
+function initSectionNav() {
+    const navCurrent = document.getElementById('nav-current');
+    const navList = document.getElementById('nav-list');
+    const currentSectionName = document.getElementById('current-section-name');
+    const sections = document.querySelectorAll('section');
+    
+    if (!navCurrent || !navList || !currentSectionName || sections.length === 0) return;
+
+    // Populate list
+    sections.forEach(section => {
+        const id = section.id;
+        // Use h1 for Home section if no h2, or default to ID
+        let name = '';
+        const h2 = section.querySelector('h2');
+        if (h2) {
+            name = h2.innerText;
+        } else if (id === 'home') {
+            name = 'Home';
+        } else {
+            name = id.charAt(0).toUpperCase() + id.slice(1);
+        }
+        
+        const li = document.createElement('li');
+        li.className = 'nav-item';
+        li.innerText = name;
+        li.dataset.target = id;
+        
+        li.addEventListener('click', () => {
+            const target = document.getElementById(id);
+            if (target) {
+                // Offset for fixed header if any (minimal here)
+                const offset = 20; 
+                const elementPosition = target.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - offset;
+                
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+            navList.classList.remove('show');
+            navCurrent.classList.remove('active');
+        });
+        
+        navList.appendChild(li);
+    });
+    
+    // Toggle menu
+    navCurrent.addEventListener('click', (e) => {
+        e.stopPropagation();
+        navList.classList.toggle('show');
+        navCurrent.classList.toggle('active');
+    });
+    
+    // Close when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!navCurrent.contains(e.target) && !navList.contains(e.target)) {
+            navList.classList.remove('show');
+            navCurrent.classList.remove('active');
+        }
+    });
+    
+    // Scroll spy
+    const observerOptions = {
+        root: null,
+        // Trigger when section touches the top part of the screen (15% from top)
+        rootMargin: '-15% 0px -85% 0px',
+        threshold: 0
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.id;
+                // Update text
+                let name = '';
+                const h2 = entry.target.querySelector('h2');
+                if (h2) {
+                    name = h2.innerText;
+                } else if (id === 'home') {
+                    name = 'Home';
+                } else {
+                    name = id.charAt(0).toUpperCase() + id.slice(1);
+                }
+                
+                currentSectionName.innerText = name;
+                
+                // Update list active state
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    if (item.dataset.target === id) {
+                        item.classList.add('active');
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+            }
+        });
+    }, observerOptions);
+    
+    sections.forEach(section => observer.observe(section));
 }
