@@ -29,6 +29,9 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="min-h-screen">
+    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+        <i class="fas fa-moon"></i>
+    </button>
     <div class="container">
         <!-- Home Section -->
         <section id="home" class="mt-5">
@@ -53,7 +56,7 @@
                         </a>
                         </div>
                         <div class="text-center mt-3">
-                            <p class="text-sm mb-2" style="color: #86868b; font-weight: 500;">When I'm not coding:</p>
+                            <p class="text-sm mb-2" style="color: var(--text-tertiary); font-weight: 500;">When I'm not coding:</p>
                             <div class="d-flex gap-2 justify-content-center flex-wrap">
                                 <span class="hobby-tag">skateboarding</span>
                                 <span class="hobby-tag">hiking</span>
@@ -64,7 +67,7 @@
                         </div>
                         <div class="text-center mt-3">
                             <div class="info-box">
-                                <p class="text-sm mb-0" style="color: #424245 !important; line-height: 1.6;">
+                                <p class="text-sm mb-0" style="color: var(--text-secondary) !important; line-height: 1.6;">
                                     <i class="fas fa-lightbulb" style="color: #f59e0b; margin-right: 0.5rem;"></i>
                                     If you are a PhD student with a strong background in computer vision and generative modeling, and are looking for internship opportunities, feel free to reach out!
                                 </p>

@@ -5,6 +5,34 @@ document.addEventListener("DOMContentLoaded", function () {
         new bootstrap.Tooltip(tooltipTriggerEl);
     });
 
+    // Theme Toggle Logic
+    const themeToggle = document.getElementById('theme-toggle');
+    const html = document.documentElement;
+    const icon = themeToggle.querySelector('i');
+
+    function setTheme(theme) {
+        html.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+        if (theme === 'dark') {
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-sun');
+        } else {
+            icon.classList.remove('fa-sun');
+            icon.classList.add('fa-moon');
+        }
+    }
+
+    // Check for saved theme or system preference
+    const savedTheme = localStorage.getItem('theme');
+    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    setTheme(savedTheme || systemTheme);
+
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = html.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        setTheme(newTheme);
+    });
+
     loadAndDisplayExperience();
     loadAndDisplayPublications();
 });
@@ -53,9 +81,9 @@ function displayPublications(papers) {
                 : `<img data-src="${paper.media}" alt="${paper.title} Preview" class="publication-media lazy-image" style="width:100%;height:100%;object-fit:cover;object-position:center center;aspect-ratio:16/9;display:block;border-radius:inherit;" onerror="this.style.display='none'">`;
         } else {
             mediaContent = `
-                <div class="publication-media d-flex align-items-center justify-content-center" style="width:100%;height:100%;background:linear-gradient(135deg,#e0e7ef 60%,#f1f5f9 100%);display:flex;flex-direction:column;gap:0.5rem;border-radius:inherit;">
-                    <div style="width:48px;height:48px;border-radius:12px;background:#e5e7eb;display:flex;align-items:center;justify-content:center;">
-                        <i class="fas fa-image" style="color:#94a3b8;font-size:24px;" aria-hidden="true"></i>
+                <div class="publication-media d-flex align-items-center justify-content-center" style="width:100%;height:100%;background:linear-gradient(135deg,var(--bg-gradient-start) 60%,var(--bg-gradient-end) 100%);display:flex;flex-direction:column;gap:0.5rem;border-radius:inherit;">
+                    <div style="width:48px;height:48px;border-radius:12px;background:var(--input-bg);display:flex;align-items:center;justify-content:center;">
+                        <i class="fas fa-image" style="color:var(--text-tertiary);font-size:24px;" aria-hidden="true"></i>
                     </div>
                 </div>
             `;
@@ -70,7 +98,7 @@ function displayPublications(papers) {
             style="cursor: ${paper.abstract ? "pointer" : "default"}; padding:0; border-radius:1.5rem;">
             <div class="row g-0 align-items-stretch" style="min-height:0;">
                 <div class="col-md-3 d-flex align-items-stretch justify-content-center" style="padding:0;">
-                    <div class="media-container" style="width:100%; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; overflow:hidden; ${mediaBorderRadius} background:#f1f5f9; min-height:100%; border-radius:1.5rem 0 0 1.5rem;">
+                    <div class="media-container" style="width:100%; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; overflow:hidden; ${mediaBorderRadius} background:var(--bg-gradient-end); min-height:100%; border-radius:1.5rem 0 0 1.5rem;">
                     ${mediaContent}
                     </div>
                 </div>
@@ -213,7 +241,7 @@ function displayExperience(experience) {
                 </div>
                 <div>
                     <h4 class="mb-1">${item.company}</h4>
-                    <p class="mb-1 text-dark">${item.title}</p>
+                    <p class="mb-1">${item.title}</p>
                     <p class="time-range mb-0">${item.time}</p>
                 </div>
             </div>
