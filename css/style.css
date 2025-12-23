@@ -19,8 +19,8 @@
     --scroll-thumb: rgba(0, 0, 0, 0.1);
     --scroll-thumb-hover: rgba(0, 0, 0, 0.15);
     --timeline-dot: rgba(0, 0, 0, 0.1);
-    --bs-body-font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
-    --bs-headings-font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
+    --bs-body-font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
+    --bs-headings-font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
 }
 
 [data-theme="dark"] {
