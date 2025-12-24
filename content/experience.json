@@ -12,28 +12,28 @@
       "company": "University of Toronto (TISL)",
       "time": "Sep 2021 - May 2025", 
       "logo": "media/logos/uoft.png",
-      "logo_bg": "#FFFFFF"
+      "logo_bg": "transparent"
     },
     {
       "title": "Research Intern (MITACS)",
       "company": "Samsung",
       "time": "Jul 2022 - Sep 2023",
       "logo": "media/logos/samsung.svg",
-      "logo_bg": "#FFFFFF"
+      "logo_bg": "transparent"
     },
     {
       "title": "Research Intern",
       "company": "Nvidia",
       "time": "Sep 2023 - Nov 2024",
-      "logo": "media/logos/nvidia.png",
-      "logo_bg": "#FFFFFF"
+      "logo": "media/logos/nvidia_small.png",
+      "logo_bg": "transparent"
     }, 
     {
       "title": "Research Scientist",
       "company": "Snap Inc.",
       "time": "Feb 2025 - Present",
       "logo": "media/logos/snap.png",
-      "logo_bg": "#FFFFFF"
+      "logo_bg": "transparent"
     }
   ]
 }
