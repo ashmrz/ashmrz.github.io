@@ -257,12 +257,12 @@ body {
 .venue-badge {
     background: var(--badge-bg);
     color: var(--text-primary); 
-    padding: 0.6rem 1.4rem; 
+    padding: 0.35rem 1rem; 
     border-radius: 100px;
     font-size: 0.875rem; 
     font-weight: 600; 
     display: inline-block;
-    margin-bottom: 1rem; 
+    margin-bottom: 0.5rem; 
     border: 0.5px solid var(--border-color);
     box-shadow: 0 2px 8px var(--shadow-sm);
     letter-spacing: -0.01em;
@@ -434,7 +434,7 @@ h2 {
     background: var(--badge-bg);
     border: 0.5px solid var(--border-color);
     color: var(--text-primary); 
-    padding: 0.65rem 1.4rem; 
+    padding: 0.5rem 1.2rem; 
     border-radius: 100px;
     font-size: 0.875rem; 
     font-weight: 600; 
@@ -708,7 +708,7 @@ img, video {
 }
 
 .publication-body-custom {
-    padding: 2rem;
+    padding: 1.25rem;
     width: 100%;
     border-radius: 0 1.5rem 1.5rem 0;
 }

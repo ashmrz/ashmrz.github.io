@@ -118,7 +118,7 @@ function displayPublications(papers) {
         const onClickAttr = paper.abstract ? `onclick="toggleAbstract(${index})"` : "";
         
         const projectLink = paper.url 
-            ? `<div class="mt-3">
+            ? `<div class="mt-2">
                  <a href="${paper.url}" target="_blank" class="project-link" onclick="event.stopPropagation()">
                    <i class="fas fa-external-link-alt"></i>Project Page
                  </a>
