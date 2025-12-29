@@ -24,6 +24,16 @@ function initTheme() {
     function setTheme(theme) {
         html.setAttribute('data-theme', theme);
         localStorage.setItem('theme', theme);
+        
+        const profileImage = document.querySelector('.profile-image');
+        if (profileImage) {
+            if (theme === 'dark') {
+                profileImage.src = 'media/profile_dark.png';
+            } else {
+                profileImage.src = 'media/profile.png';
+            }
+        }
+
         if (theme === 'dark') {
             icon.classList.remove('fa-moon');
             icon.classList.add('fa-sun');
