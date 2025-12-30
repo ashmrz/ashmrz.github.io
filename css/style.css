@@ -1,5 +1,6 @@
 :root {
     /* Light Mode Variables */
+    --glass-border: linear-gradient(to bottom, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.08));
     --bg-gradient-start: #f5f7fa;
     --bg-gradient-end: #e8edf2;
     --text-primary: #1d1d1f;
@@ -21,9 +22,9 @@
     --scroll-thumb: rgba(0, 0, 0, 0.1);
     --scroll-thumb-hover: rgba(0, 0, 0, 0.15);
     --timeline-dot: rgba(0, 0, 0, 0.1);
-    --glass-blur-lg: 30px;
-    --glass-blur-md: 20px;
-    --glass-blur-sm: 12px;
+    --glass-blur-lg: 16px;
+    --glass-blur-md: 12px;
+    --glass-blur-sm: 8px;
     --glass-saturate: 180%;
     --bs-body-font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
     --bs-headings-font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
@@ -31,6 +32,7 @@
 
 [data-theme="dark"] {
     /* Dark Mode Variables */
+    --glass-border: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.3));
     --bg-gradient-start: #050505;
     --bg-gradient-end: #0a0a0a;
     --text-primary: #ffffff;
@@ -100,14 +102,30 @@ body {
     backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
     -webkit-backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px var(--shadow-sm);
+    box-shadow: 0 6px 16px var(--shadow-md);
     border: none;
+    isolation: isolate;
+}
+
+.theme-toggle::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    padding: 1px;
+    background: var(--glass-border);
+    -webkit-mask: 
+        linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
 }
 
 .theme-toggle:hover {
     transform: translateY(-2px);
     background: var(--hover-bg);
-    box-shadow: 0 8px 24px var(--shadow-md);
+    box-shadow: 0 12px 28px var(--shadow-lg);
 }
 
 .theme-toggle i {
@@ -146,16 +164,33 @@ body {
     backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
     -webkit-backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px var(--shadow-sm);
+    box-shadow: 0 6px 16px var(--shadow-md);
     font-weight: 600;
     font-size: 0.95rem;
     user-select: none;
+    position: relative;
+    isolation: isolate;
+}
+
+.nav-current::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 100px;
+    padding: 1px;
+    background: var(--glass-border);
+    -webkit-mask: 
+        linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
 }
 
 .nav-current:hover {
     transform: translateY(-2px);
     background: var(--hover-bg);
-    box-shadow: 0 8px 24px var(--shadow-md);
+    box-shadow: 0 12px 28px var(--shadow-lg);
 }
 
 .nav-current:active {
