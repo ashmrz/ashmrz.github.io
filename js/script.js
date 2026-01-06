@@ -24,6 +24,16 @@ function initTheme() {
     function setTheme(theme) {
         html.setAttribute('data-theme', theme);
         localStorage.setItem('theme', theme);
+        
+        const profileImage = document.querySelector('.profile-image');
+        if (profileImage) {
+            if (theme === 'dark') {
+                profileImage.src = 'media/profile_dark.png';
+            } else {
+                profileImage.src = 'media/profile.png';
+            }
+        }
+
         if (theme === 'dark') {
             icon.classList.remove('fa-moon');
             icon.classList.add('fa-sun');
@@ -118,7 +128,7 @@ function displayPublications(papers) {
         const onClickAttr = paper.abstract ? `onclick="toggleAbstract(${index})"` : "";
         
         const projectLink = paper.url 
-            ? `<div class="mt-3">
+            ? `<div class="mt-2">
                  <a href="${paper.url}" target="_blank" class="project-link" onclick="event.stopPropagation()">
                    <i class="fas fa-external-link-alt"></i>Project Page
                  </a>
