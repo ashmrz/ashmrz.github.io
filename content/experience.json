@@ -31,8 +31,15 @@
     {
       "title": "Research Scientist, Gen AI",
       "company": "Snap Inc.",
-      "time": "Feb 2025 - Present",
+      "time": "Feb 2025 - Jan 2026",
       "logo": "media/logos/snap.png",
+      "logo_bg": "transparent"
+    }, 
+    {
+      "title": "Senior Gen AI Researcher",
+      "company": "Nvidia",
+      "time": "Jan 2026 - Present",
+      "logo": "media/logos/nvidia_small.png",
       "logo_bg": "transparent"
     }
   ]
