@@ -107,6 +107,42 @@ function createMediaElement(paper) {
     `;
 }
 
+function isPaperUrl(url) {
+    return /^https?:\/\/(www\.)?arxiv\.org\//i.test(url) || /\.pdf(?:[?#].*)?$/i.test(url);
+}
+
+function createPublicationLinks(publication) {
+    const links = [];
+    const paperUrl = publication.paper;
+
+    if (publication.url) {
+        const isPaper = isPaperUrl(publication.url);
+        links.push({
+            href: publication.url,
+            icon: isPaper ? "fas fa-file-alt" : "fas fa-external-link-alt",
+            label: isPaper ? "Paper" : "Project Page"
+        });
+    }
+
+    if (paperUrl && paperUrl !== publication.url) {
+        links.push({
+            href: paperUrl,
+            icon: "fas fa-file-alt",
+            label: "Paper"
+        });
+    }
+
+    if (links.length === 0) return "";
+
+    const linksHtml = links.map((link) => `
+        <a href="${link.href}" target="_blank" class="project-link" onclick="event.stopPropagation()">
+            <i class="${link.icon}"></i>${link.label}
+        </a>
+    `).join("");
+
+    return `<div class="mt-2 publication-links">${linksHtml}</div>`;
+}
+
 function displayPublications(papers) {
     const container = document.getElementById("publications-container");
     container.innerHTML = "";
@@ -126,14 +162,7 @@ function displayPublications(papers) {
         
         const cardClass = `card publication-card publication-card-custom ${paper.abstract ? "pointer" : ""}`;
         const onClickAttr = paper.abstract ? `onclick="toggleAbstract(${index})"` : "";
-        
-        const projectLink = paper.url 
-            ? `<div class="mt-2">
-                 <a href="${paper.url}" target="_blank" class="project-link" onclick="event.stopPropagation()">
-                   <i class="fas fa-external-link-alt"></i>Project Page
-                 </a>
-               </div>` 
-            : "";
+        const publicationLinks = createPublicationLinks(paper);
             
         const abstractSection = paper.abstract
             ? `<div class="abstract-content" id="abstract-${index}">
@@ -157,7 +186,7 @@ function displayPublications(papers) {
                         <span class="venue-badge">${paper.venue}</span>
                         <h5 class="mb-1">${paper.title}</h5>
                         <p class="mb-0 small">${authorsHtml}</p>
-                        ${projectLink}
+                        ${publicationLinks}
                         ${abstractSection}
                     </div>
                 </div>
@@ -180,6 +209,7 @@ function filterPublications() {
         paper.title.toLowerCase().includes(searchTerm) ||
         paper.authors.toLowerCase().includes(searchTerm) ||
         paper.venue.toLowerCase().includes(searchTerm) ||
+        (paper.paper && paper.paper.toLowerCase().includes(searchTerm)) ||
         (paper.abstract && paper.abstract.toLowerCase().includes(searchTerm))
     );
     displayPublications(filteredPapers);
