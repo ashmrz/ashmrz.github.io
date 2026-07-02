@@ -33,7 +33,7 @@ jobs:
 
       - name: Restore referenced original-quality video
         run: |
-          install -D -m 0644 \
+          sudo install -D -m 0644 \
             media/paper_videos/original_quality/DenseDPO.mp4 \
             _site/media/paper_videos/original_quality/DenseDPO.mp4
 
