@@ -6,17 +6,14 @@ on:
       - main
   workflow_dispatch:
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -43,12 +40,118 @@ jobs:
           path: ./_site
 
   deploy:
+    permissions:
+      actions: read
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: build
+    timeout-minutes: 65
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v5
+        uses: actions/github-script@v9
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            const artifactName = "github-pages";
+            const { data } = await github.rest.actions.listWorkflowRunArtifacts({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: context.runId,
+              name: artifactName,
+              per_page: 100,
+            });
+
+            const artifacts = data.artifacts.filter(
+              (artifact) => artifact.name === artifactName,
+            );
+            if (artifacts.length !== 1) {
+              throw new Error(
+                `Expected one ${artifactName} artifact, found ${artifacts.length}.`,
+              );
+            }
+
+            const idToken = await core.getIDToken();
+            const { data: deployment } = await github.request(
+              "POST /repos/{owner}/{repo}/pages/deployments",
+              {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                artifact_id: artifacts[0].id,
+                pages_build_version: context.sha,
+                oidc_token: idToken,
+              },
+            );
+
+            const deploymentId = deployment.id || context.sha;
+            const pageUrl = deployment.page_url || "https://ashmrz.github.io/";
+            core.setOutput(
+              "page_url",
+              pageUrl.startsWith("http") ? pageUrl : `https://${pageUrl}`,
+            );
+            core.info(`Created Pages deployment ${deploymentId}.`);
+
+            const finalErrors = new Set([
+              "deployment_failed",
+              "deployment_content_failed",
+              "deployment_cancelled",
+              "deployment_lost",
+            ]);
+            const delay = (milliseconds) =>
+              new Promise((resolve) => setTimeout(resolve, milliseconds));
+            const deadline = Date.now() + 60 * 60 * 1000;
+            let consecutiveErrors = 0;
+            const cancelDeployment = async () => {
+              core.info(`Canceling Pages deployment ${deploymentId}.`);
+              await github.request(
+                "POST /repos/{owner}/{repo}/pages/deployments/{deploymentId}/cancel",
+                {
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  deploymentId,
+                },
+              );
+            };
+
+            while (Date.now() < deadline) {
+              await delay(10000);
+              let status;
+              try {
+                const response = await github.request(
+                  "GET /repos/{owner}/{repo}/pages/deployments/{deploymentId}",
+                  {
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    deploymentId,
+                  },
+                );
+                status = response.data;
+                consecutiveErrors = 0;
+              } catch (error) {
+                consecutiveErrors += 1;
+                if (consecutiveErrors >= 10) {
+                  await cancelDeployment();
+                  throw error;
+                }
+                core.warning(`Status check failed; retrying: ${error.message}`);
+                continue;
+              }
+
+              core.info(`Current status: ${status.status}`);
+              if (status.status === "succeed") {
+                core.info("Pages deployment succeeded.");
+                return;
+              }
+              if (finalErrors.has(status.status)) {
+                throw new Error(`Pages deployment ended with ${status.status}.`);
+              }
+            }
+
+            await cancelDeployment();
+            throw new Error(
+              "Pages deployment remained pending for 60 minutes and was canceled.",
+            );
