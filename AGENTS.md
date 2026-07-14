@@ -54,6 +54,13 @@ node --check js/script.js
 
 For user-facing changes, manually check desktop and mobile layouts, light and dark themes, publication search, abstract expansion, media loading, external links, and the browser console/network panel for fetch or asset errors. A network connection is needed to load the CDN dependencies.
 
+## Required review and release workflow
+
+- After every change to the website, serve the repository locally with `python -m http.server <port_number>` from the repository root.
+- Ask Ashkan to test the locally deployed website and confirm that it looks and behaves correctly.
+- Do not commit or push the website change until Ashkan has provided that confirmation. After confirmation, commit and push the approved change.
+- Keep the website a static HTML site that remains deployable through GitHub Pages. Do not introduce a server-side runtime or a build requirement that is incompatible with GitHub Pages.
+
 ## GitHub Pages deployment
 
 - This website is deployed on GitHub Pages. Pushes to `main` and manual workflow dispatches run `.github/workflows/pages.yml`.
