@@ -87,15 +87,40 @@ function toggleAbstract(index) {
     if (chevronIcon) chevronIcon.classList.toggle("rotate-180");
 }
 
-function createMediaElement(paper) {
-    if (paper.media && paper.media.trim() !== "") {
-        const isVideo = paper.media.match(/\.(mp4|webm|mov|avi|mkv)$/);
+function createMediaTag(source, paperTitle) {
+    if (source && source.trim() !== "") {
+        const isVideo = source.match(/\.(mp4|webm|mov|avi|mkv)$/);
         const className = isVideo ? "video-media lazy-video" : "image-media lazy-image";
         const tag = isVideo ? "video" : "img";
         const extraAttrs = isVideo ? 'muted playsinline loop preload="none"' : '';
-        const alt = isVideo ? '' : `alt="${paper.title} Preview"`;
+        const alt = isVideo ? '' : `alt="${paperTitle} Preview"`;
 
-        return `<${tag} class="${className}" data-src="${paper.media}" ${extraAttrs} ${alt} onerror="this.style.display='none'"></${tag}>`;
+        return `<${tag} class="${className}" data-src="${source}" ${extraAttrs} ${alt} onerror="this.style.display='none'"></${tag}>`;
+    }
+
+    return "";
+}
+
+function createMediaElement(paper) {
+    if (typeof paper.media === "string" && paper.media.trim() !== "") {
+        const mediaTag = createMediaTag(paper.media, paper.title);
+
+        if (Array.isArray(paper.media_labels) && paper.media_labels.length === 4) {
+            const labels = paper.media_labels.map((label) => `
+                <div class="media-composite-label-cell">
+                    <span>${label}</span>
+                </div>
+            `).join("");
+
+            return `
+                <div class="media-composite">
+                    ${mediaTag}
+                    <div class="media-composite-label-grid" aria-hidden="true">${labels}</div>
+                </div>
+            `;
+        }
+
+        return mediaTag;
     }
 
     return `
