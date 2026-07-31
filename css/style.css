@@ -22,6 +22,7 @@
     --scroll-thumb: rgba(0, 0, 0, 0.1);
     --scroll-thumb-hover: rgba(0, 0, 0, 0.15);
     --timeline-dot: rgba(0, 0, 0, 0.1);
+    --monochrome-logo-filter: invert(1);
     --glass-blur-lg: 16px;
     --glass-blur-md: 12px;
     --glass-blur-sm: 8px;
@@ -54,6 +55,7 @@
     --scroll-thumb: rgba(255, 255, 255, 0.2);
     --scroll-thumb-hover: rgba(255, 255, 255, 0.3);
     --timeline-dot: rgba(255, 255, 255, 0.2);
+    --monochrome-logo-filter: none;
 }
 
 html { 
@@ -578,6 +580,15 @@ h2 {
     justify-content: center;
     padding: 8px;
     box-shadow: none;
+}
+
+.experience-logo-container--monochrome {
+    background: transparent;
+}
+
+.experience-logo-container--monochrome .experience-logo {
+    filter: var(--monochrome-logo-filter);
+    transition: filter 0.3s ease;
 }
 
 .experience-logo {

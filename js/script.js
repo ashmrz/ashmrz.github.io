@@ -299,13 +299,15 @@ function displayExperience(experience) {
         const item = experience[i];
         const div = document.createElement('div');
         div.className = 'timeline-item';
-        
+
+        const isMonochromeLogo = item.logo_theme === 'monochrome';
+        const logoThemeClass = isMonochromeLogo ? ' experience-logo-container--monochrome' : '';
         const bgStyle = item.logo_bg ? `style="background-color: ${item.logo_bg}"` : '';
-        const onloadAttr = item.logo_bg ? '' : 'onload="adjustLogoBackground(this)"';
+        const onloadAttr = item.logo_bg || isMonochromeLogo ? '' : 'onload="adjustLogoBackground(this)"';
 
         div.innerHTML = `
             <div class="d-flex align-items-center w-100">
-                <div class="experience-logo-container me-3" ${bgStyle}>
+                <div class="experience-logo-container${logoThemeClass} me-3" ${bgStyle}>
                     <img src="${item.logo}" alt="${item.company}" class="experience-logo" crossorigin="anonymous" ${onloadAttr}>
                 </div>
                 <div>
