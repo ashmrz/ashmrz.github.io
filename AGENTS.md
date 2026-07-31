@@ -22,7 +22,7 @@
 
 - Keep `content/papers.json` ordered newest first. Every paper should provide `title`, `authors`, and `venue`; `abstract`, `media`, `url` (project page), and `paper` are optional.
 - Keep `content/experience.json` chronological from oldest to newest. Entries use `title`, `company`, `time`, and `logo`; `logo_bg` is optional.
-- Use repository-relative asset paths. Put organization logos in `media/logos/` and prefer publication previews in `media/paper_videos/reduced_quality/` to limit page weight.
+- Use repository-relative asset paths. Put organization logos in `media/logos/`, publication videos in `media/paper_videos/web_optimized/`, and matching WebP poster frames in `media/paper_posters/` to limit page weight.
 - Edit biography, education, profile links, and section structure directly in `index.html`.
 - Section navigation is generated from each `<section>` element's `id` and heading. Keep section IDs unique and stable.
 
@@ -65,6 +65,6 @@ For user-facing changes, manually check desktop and mobile layouts, light and da
 
 - This website is deployed on GitHub Pages. Pushes to `main` and manual workflow dispatches run `.github/workflows/pages.yml`.
 - The workflow builds the repository root with Jekyll into `_site`, uploads the Pages artifact, and deploys it to the `github-pages` environment.
-- `_config.yml` excludes all of `media/paper_videos/original_quality/` from the normal Pages build. The workflow explicitly restores only `DenseDPO.mp4`, which is currently referenced by `content/papers.json`.
-- Do not reference another file under `original_quality/` without deliberately updating the Pages build/deployment handling. Prefer a reduced-quality asset instead.
+- `_config.yml` excludes `media/paper_videos/original_quality/` and `media/paper_videos/reduced_quality/` from the Pages build. Deployed publication videos come from `media/paper_videos/web_optimized/`.
+- Do not reference files under either excluded directory without deliberately updating the Pages build/deployment handling. Prefer a fast-start H.264 asset in `web_optimized/` with a matching WebP poster.
 - Changes merged or pushed to `main` can affect the live site, so treat `_config.yml` and `.github/workflows/pages.yml` as production configuration.

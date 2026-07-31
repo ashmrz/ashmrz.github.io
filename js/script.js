@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     initTheme();
+    initAnimatedEmojis();
     loadAndDisplayExperience();
     loadAndDisplayPublications();
     initSectionNav();
@@ -28,9 +29,9 @@ function initTheme() {
         const profileImage = document.querySelector('.profile-image');
         if (profileImage) {
             if (theme === 'dark') {
-                profileImage.src = 'media/profile_dark.png';
+                profileImage.src = 'media/profile_dark.webp';
             } else {
-                profileImage.src = 'media/profile.png';
+                profileImage.src = 'media/profile.webp';
             }
         }
 
@@ -52,6 +53,18 @@ function initTheme() {
         const currentTheme = html.getAttribute('data-theme');
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
         setTheme(newTheme);
+    });
+}
+
+function initAnimatedEmojis() {
+    document.querySelectorAll('.emoji-wrapper').forEach(wrapper => {
+        wrapper.addEventListener('pointerenter', () => {
+            const source = wrapper.querySelector('source[data-srcset]');
+            const image = wrapper.querySelector('img[data-src]');
+
+            if (source) source.srcset = source.dataset.srcset;
+            if (image) image.src = image.dataset.src;
+        }, { once: true });
     });
 }
 
@@ -87,15 +100,22 @@ function toggleAbstract(index) {
     if (chevronIcon) chevronIcon.classList.toggle("rotate-180");
 }
 
+function getVideoPoster(source) {
+    const match = source.match(/^media\/paper_videos\/web_optimized\/(.+)\.mp4$/i);
+    return match ? `media/paper_posters/${match[1]}.webp` : "";
+}
+
 function createMediaTag(source, paperTitle) {
     if (source && source.trim() !== "") {
         const isVideo = source.match(/\.(mp4|webm|mov|avi|mkv)$/);
-        const className = isVideo ? "video-media lazy-video" : "image-media lazy-image";
-        const tag = isVideo ? "video" : "img";
-        const extraAttrs = isVideo ? 'muted playsinline loop preload="none"' : '';
-        const alt = isVideo ? '' : `alt="${paperTitle} Preview"`;
 
-        return `<${tag} class="${className}" data-src="${source}" ${extraAttrs} ${alt} onerror="this.style.display='none'"></${tag}>`;
+        if (isVideo) {
+            const posterSource = getVideoPoster(source);
+            const posterAttr = posterSource ? `data-poster="${posterSource}"` : '';
+            return `<video class="video-media lazy-video" data-src="${source}" ${posterAttr} muted playsinline loop preload="none" aria-label="${paperTitle} preview" onerror="this.style.display='none'"></video>`;
+        }
+
+        return `<img class="image-media lazy-image" data-src="${source}" alt="${paperTitle} Preview" loading="lazy" decoding="async" fetchpriority="low" onerror="this.style.display='none'">`;
     }
 
     return "";
@@ -253,6 +273,34 @@ window.toggleAbstract = toggleAbstract;
  * Lazy Loading
  */
 function initLazyLoading() {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const playbackObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            const video = entry.target;
+
+            if (entry.intersectionRatio >= 0.15 && !prefersReducedMotion) {
+                video.play().catch(() => {});
+            } else {
+                video.pause();
+            }
+        });
+    }, {
+        threshold: 0.15
+    });
+
+    const posterObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const video = entry.target;
+                video.poster = video.dataset.poster;
+                observer.unobserve(video);
+            }
+        });
+    }, {
+        rootMargin: '500px 0px',
+        threshold: 0.01
+    });
+
     const imageObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -262,9 +310,9 @@ function initLazyLoading() {
                     element.classList.remove('lazy-image');
                 } else if (element.tagName === 'VIDEO') {
                     element.src = element.dataset.src;
+                    element.controls = prefersReducedMotion;
                     element.load();
-                    // Only autoplay videos that are in viewport
-                    element.play().catch(() => {});
+                    playbackObserver.observe(element);
                     element.classList.remove('lazy-video');
                 }
                 observer.unobserve(element);
@@ -277,6 +325,10 @@ function initLazyLoading() {
 
     document.querySelectorAll('.lazy-image, .lazy-video').forEach(element => {
         imageObserver.observe(element);
+    });
+
+    document.querySelectorAll('.lazy-video[data-poster]').forEach(video => {
+        posterObserver.observe(video);
     });
 }
 
@@ -308,7 +360,7 @@ function displayExperience(experience) {
         div.innerHTML = `
             <div class="d-flex align-items-center w-100">
                 <div class="experience-logo-container${logoThemeClass} me-3" ${bgStyle}>
-                    <img src="${item.logo}" alt="${item.company}" class="experience-logo" crossorigin="anonymous" ${onloadAttr}>
+                    <img src="${item.logo}" alt="${item.company}" class="experience-logo" width="90" height="90" loading="lazy" decoding="async" fetchpriority="low" crossorigin="anonymous" ${onloadAttr}>
                 </div>
                 <div>
                     <h4 class="mb-1">${item.company}</h4>

@@ -1,2 +1,3 @@
 exclude:
   - media/paper_videos/original_quality
+  - media/paper_videos/reduced_quality
