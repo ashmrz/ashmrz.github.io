@@ -47,6 +47,9 @@
     --glass-saturate: 160%;
     --bs-body-font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
     --bs-headings-font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
+    --type-profile: clamp(1.75rem, 1.45rem + 1.5vw, 2.5rem);
+    --type-section-title: clamp(1.85rem, 1.6rem + 1.1vw, 2.5rem);
+    --type-card-title: clamp(1.05rem, 1rem + 0.2vw, 1.2rem);
 }
 
 [data-theme="dark"] {
@@ -113,7 +116,8 @@ body {
     color: var(--text-primary);
     min-height: 100vh;
     font-family: var(--bs-body-font-family);
-    line-height: 1.6;
+    font-size: clamp(1rem, 0.98rem + 0.1vw, 1.025rem);
+    line-height: 1.65;
     margin: 0; 
     padding: 0;
     overflow-x: hidden;
@@ -470,16 +474,42 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--text-primary);
     font-family: var(--bs-headings-font-family);
     font-weight: 700;
+    line-height: 1.2;
     letter-spacing: -0.02em;
+    text-wrap: balance;
 }
 
 input, button, select, textarea {
     font-family: inherit;
 }
 
-h2 {
-    font-size: 2.5rem;
+.profile-name {
+    font-size: var(--type-profile);
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+}
+
+.profile-focus {
+    font-size: clamp(0.875rem, 0.84rem + 0.12vw, 0.95rem);
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.profile-company {
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+.section-title {
+    font-size: var(--type-section-title);
+    line-height: 1.12;
     margin-bottom: 1.5rem;
+}
+
+.research-copy {
+    line-height: 1.75;
+    text-align: left;
+    text-wrap: pretty;
 }
 
 a:not(.social-link):not(.project-link) {
@@ -510,7 +540,6 @@ a:not(.social-link):not(.project-link):hover {
     .timeline-container { overflow-x: auto; }
     .profile-card { padding: 1.75rem 1.5rem; }
     .profile-image { width: 120px; height: 120px; }
-    h2 { font-size: 2rem; }
     .container { padding: 0 1rem; }
     .social-links { gap: 0.65rem; margin-top: 1rem; }
     .social-link { width: 40px; height: 40px; }
@@ -523,8 +552,11 @@ a:not(.social-link):not(.project-link):hover {
 
 .publication-card h5 {
     color: var(--text-primary);
+    font-size: var(--type-card-title);
     font-weight: 600;
+    line-height: 1.35;
     letter-spacing: -0.01em;
+    text-wrap: balance;
     transition: color 0.3s;
 }
 
@@ -592,6 +624,12 @@ footer p {
     transition: max-height 0.3s ease;
     margin-top: 0.5rem; 
     padding: 0 1rem;
+}
+
+.abstract-content p {
+    line-height: 1.7;
+    text-align: left;
+    text-wrap: pretty;
 }
 
 .abstract-content.expanded {
