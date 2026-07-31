@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     initTheme();
-    initAnimatedEmojis();
     loadAndDisplayExperience();
     loadAndDisplayPublications();
     initSectionNav();
@@ -53,18 +52,6 @@ function initTheme() {
         const currentTheme = html.getAttribute('data-theme');
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
         setTheme(newTheme);
-    });
-}
-
-function initAnimatedEmojis() {
-    document.querySelectorAll('.emoji-wrapper').forEach(wrapper => {
-        wrapper.addEventListener('pointerenter', () => {
-            const source = wrapper.querySelector('source[data-srcset]');
-            const image = wrapper.querySelector('img[data-src]');
-
-            if (source) source.srcset = source.dataset.srcset;
-            if (image) image.src = image.dataset.src;
-        }, { once: true });
     });
 }
 
