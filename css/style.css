@@ -1,12 +1,14 @@
 :root {
     /* Light Mode Variables */
     color-scheme: light;
-    --specular-rim: conic-gradient(from 250deg at 50% 50%, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.92) 12%, rgba(255, 255, 255, 0.34) 22%, rgba(255, 255, 255, 0.06) 36%, rgba(60, 60, 67, 0.11) 50%, rgba(60, 60, 67, 0.03) 64%, rgba(255, 255, 255, 0.44) 78%, rgba(255, 255, 255, 0.1) 100%);
-    --specular-bloom: rgba(255, 255, 255, 0.28);
-    --specular-inset: rgba(255, 255, 255, 0.62);
+    --specular-rim: conic-gradient(from 250deg at 50% 50%, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0.36) 12%, rgba(255, 255, 255, 0.12) 22%, rgba(255, 255, 255, 0.02) 36%, rgba(60, 60, 67, 0.1) 50%, rgba(60, 60, 67, 0.04) 64%, rgba(255, 255, 255, 0.18) 78%, rgba(255, 255, 255, 0.02) 100%);
+    --specular-bloom: rgba(255, 255, 255, 0.04);
+    --specular-inset: rgba(255, 255, 255, 0.24);
     --specular-shade: rgba(60, 60, 67, 0.08);
-    --specular-opacity: 0.84;
-    --specular-content-opacity: 0.49;
+    --specular-opacity: 0.48;
+    --specular-content-opacity: 0.16;
+    --specular-hover-opacity: 0.64;
+    --specular-content-hover-opacity: 0.32;
     --bg-gradient-start: #f7f8fb;
     --bg-gradient-end: #eceff4;
     --ambient-gradient: radial-gradient(ellipse 36rem 28rem at 8% 4%, rgba(0, 122, 255, 0.065), transparent 72%), radial-gradient(ellipse 32rem 25rem at 92% 14%, rgba(175, 82, 222, 0.04), transparent 74%);
@@ -23,12 +25,12 @@
     --input-bg: rgba(255, 255, 255, 0.62);
     --input-focus-bg: rgba(255, 255, 255, 0.82);
     --hover-bg: rgba(255, 255, 255, 0.78);
-    --card-border: rgba(255, 255, 255, 0.82);
+    --card-border: rgba(60, 60, 67, 0.09);
     --control-border: rgba(60, 60, 67, 0.14);
     --border-color: rgba(60, 60, 67, 0.16);
     --input-border: rgba(60, 60, 67, 0.2);
     --input-focus-border: var(--accent);
-    --surface-highlight: rgba(255, 255, 255, 0.72);
+    --surface-highlight: rgba(255, 255, 255, 0.24);
     --solid-card-bg: #ffffff;
     --solid-nav-bg: #f7f8fb;
     --solid-control-bg: #ffffff;
@@ -56,6 +58,8 @@
     --specular-shade: rgba(0, 0, 0, 0.28);
     --specular-opacity: 0.76;
     --specular-content-opacity: 0.44;
+    --specular-hover-opacity: 1;
+    --specular-content-hover-opacity: 1;
     --bg-gradient-start: #08080a;
     --bg-gradient-end: #121216;
     --ambient-gradient: radial-gradient(ellipse 36rem 28rem at 8% 4%, rgba(10, 132, 255, 0.095), transparent 72%), radial-gradient(ellipse 32rem 25rem at 92% 14%, rgba(191, 90, 242, 0.055), transparent 74%);
@@ -341,11 +345,14 @@ button:focus-visible {
 .theme-toggle:hover::before,
 .nav-current:hover::before,
 .social-link:hover::before,
-.project-link:hover::before,
+.project-link:hover::before {
+    opacity: var(--specular-hover-opacity);
+}
+
 .publication-card-custom:hover::after,
 .profile-card:hover::after,
 .timeline-item:hover::after {
-    opacity: 1;
+    opacity: var(--specular-content-hover-opacity);
 }
 
 .venue-badge,
@@ -995,8 +1002,10 @@ img, video {
 @media (prefers-reduced-transparency: reduce) {
     :root,
     [data-theme="dark"] {
-        --specular-opacity: 0.4;
-        --specular-content-opacity: 0.26;
+        --specular-opacity: 0.24;
+        --specular-content-opacity: 0.1;
+        --specular-hover-opacity: 0.32;
+        --specular-content-hover-opacity: 0.18;
     }
 
     .theme-toggle,
