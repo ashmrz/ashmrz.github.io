@@ -100,6 +100,39 @@ html {
     scroll-behavior: smooth;
 }
 
+/*
+ * Preserve border-radius as the cross-browser fallback, then progressively
+ * enhance rounded rectangles with native superellipse geometry. Applying the
+ * shape to pseudo-elements keeps specular rims and clipped media aligned.
+ */
+@supports (corner-shape: squircle) {
+    *,
+    *::before,
+    *::after {
+        corner-shape: squircle;
+    }
+
+    .theme-toggle,
+    .theme-toggle::before,
+    .nav-current,
+    .nav-current::before,
+    .venue-badge,
+    .venue-badge::before,
+    .profile-image,
+    .social-link,
+    .social-link::before,
+    .project-link,
+    .project-link::before,
+    .timeline-item::before,
+    .media-composite-label-cell span {
+        corner-shape: round;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        corner-shape: round;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     html {
         scroll-behavior: auto;
