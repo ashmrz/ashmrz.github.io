@@ -45,8 +45,7 @@
     --glass-blur-md: 24px;
     --glass-blur-sm: 14px;
     --glass-saturate: 160%;
-    --bs-body-font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
-    --bs-headings-font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
+    --font-family-sans: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
     --type-profile: clamp(1.75rem, 1.45rem + 1.5vw, 2.5rem);
     --type-section-title: clamp(1.85rem, 1.6rem + 1.1vw, 2.5rem);
     --type-card-title: clamp(1.05rem, 1rem + 0.2vw, 1.2rem);
@@ -115,7 +114,7 @@ body {
     background: var(--bg-gradient-end);
     color: var(--text-primary);
     min-height: 100vh;
-    font-family: var(--bs-body-font-family);
+    font-family: var(--font-family-sans);
     font-size: clamp(1rem, 0.98rem + 0.1vw, 1.025rem);
     line-height: 1.65;
     margin: 0; 
@@ -291,7 +290,9 @@ button:focus-visible {
 }
 
 .container { 
+    width: 100%;
     max-width: 1200px; 
+    margin-inline: auto;
     padding: 0 1.5rem; 
     position: relative;
     z-index: 1;
@@ -472,7 +473,7 @@ button:focus-visible {
 
 h1, h2, h3, h4, h5, h6 {
     color: var(--text-primary);
-    font-family: var(--bs-headings-font-family);
+    font-family: var(--font-family-sans);
     font-weight: 700;
     line-height: 1.2;
     letter-spacing: -0.02em;
@@ -533,7 +534,6 @@ a:not(.social-link):not(.project-link):hover {
         --ambient-gradient: radial-gradient(ellipse 24rem 20rem at -8% 0%, rgba(10, 132, 255, 0.08), transparent 74%), radial-gradient(ellipse 22rem 18rem at 108% 22%, rgba(191, 90, 242, 0.045), transparent 76%);
     }
 
-    .publication-card .row { flex-direction: column; }
     .publication-media { height: auto; aspect-ratio: 16/9; }
     #publications-container { padding-bottom: 2rem; }
     footer { position: relative; bottom: 0; width: 100%; margin-top: 2rem; }
@@ -562,8 +562,8 @@ a:not(.social-link):not(.project-link):hover {
 
 .publication-body p, .publication-body small,
 .publication-body-custom p, .publication-body-custom small,
-#education .card p, #education .card span, #education .card h4,
-#research .card p, footer p { 
+.education-card p, .education-card span, .education-card h4,
+#research .publication-card p, footer p {
     color: var(--text-secondary) !important; 
 }
 
@@ -796,6 +796,13 @@ footer p {
     justify-content: center;
     padding: 8px;
     box-shadow: none;
+    margin-right: 1rem;
+}
+
+.experience-item-layout {
+    display: flex;
+    align-items: center;
+    width: 100%;
 }
 
 .experience-logo-container--monochrome {
@@ -1023,6 +1030,26 @@ img, video {
     border-radius: 1.5rem 0 0 1.5rem;
 }
 
+.publication-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+    align-items: stretch;
+    min-height: 0;
+}
+
+.publication-media-column {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    min-width: 0;
+}
+
+.publication-content-column {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+}
+
 .publication-body-custom {
     padding: 1.25rem;
     width: 100%;
@@ -1037,6 +1064,12 @@ img, video {
 
 .publication-card-custom.pointer {
     cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .publication-layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
 }
 
 @media (prefers-contrast: more) {

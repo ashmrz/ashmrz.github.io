@@ -1,12 +1,6 @@
 "use strict";
 
 document.addEventListener("DOMContentLoaded", () => {
-    // Initialize Bootstrap tooltips
-    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    tooltipTriggerList.forEach((tooltipTriggerEl) => {
-        new bootstrap.Tooltip(tooltipTriggerEl);
-    });
-
     initTheme();
     loadAndDisplayExperience();
     loadAndDisplayPublications();
@@ -214,20 +208,20 @@ function displayPublications(papers) {
         const authorsHtml = paper.authors.replace("Ashkan Mirzaei", "<strong>Ashkan Mirzaei</strong>");
         
         const colDiv = document.createElement('div');
-        colDiv.className = 'col-md-12';
+        colDiv.className = 'w-full';
         
         // Use separate logic for onclick to avoid inline event handler string mess
         // But for simplicity with existing pattern, we'll keep the structure but clean it up.
         // Better yet, we attach the event listener after creation if possible, 
         // but here we are building string HTML.
         
-        const cardClass = `card publication-card publication-card-custom ${paper.abstract ? "pointer" : ""}`;
+        const cardClass = `publication-card publication-card-custom ${paper.abstract ? "pointer" : ""}`;
         const onClickAttr = paper.abstract ? `onclick="toggleAbstract(${index})"` : "";
         const publicationLinks = createPublicationLinks(paper);
             
         const abstractSection = paper.abstract
             ? `<div class="abstract-content" id="abstract-${index}">
-                 <p class="mt-2 small">${paper.abstract}</p>
+                 <p class="mt-2 text-sm">${paper.abstract}</p>
                </div>
                <div class="text-center mt-2 abstract-toggle">
                  <i class="fas fa-chevron-down text-gray-400 transition-transform duration-300"></i>
@@ -236,17 +230,17 @@ function displayPublications(papers) {
 
         colDiv.innerHTML = `
         <div class="${cardClass}" id="publication-${index}" ${onClickAttr}>
-            <div class="row g-0 align-items-stretch" style="min-height:0;">
-                <div class="col-md-3 d-flex align-items-stretch justify-content-center" style="padding:0;">
+            <div class="publication-layout">
+                <div class="publication-media-column">
                     <div class="media-container-custom">
                         ${mediaContent}
                     </div>
                 </div>
-                <div class="col-md-9 d-flex align-items-center" style="padding:0;">
+                <div class="publication-content-column">
                     <div class="publication-body-custom">
                         <span class="venue-badge">${paper.venue}</span>
                         <h5 class="mb-1">${paper.title}</h5>
-                        <p class="mb-0 small">${authorsHtml}</p>
+                        <p class="mb-0 text-sm">${authorsHtml}</p>
                         ${publicationLinks}
                         ${abstractSection}
                     </div>
@@ -374,8 +368,8 @@ function displayExperience(experience) {
         const onloadAttr = item.logo_bg || isMonochromeLogo ? '' : 'onload="adjustLogoBackground(this)"';
 
         div.innerHTML = `
-            <div class="d-flex align-items-center w-100">
-                <div class="experience-logo-container${logoThemeClass} me-3" ${bgStyle}>
+            <div class="experience-item-layout">
+                <div class="experience-logo-container${logoThemeClass}" ${bgStyle}>
                     <img src="${item.logo}" alt="${item.company}" class="experience-logo" width="90" height="90" loading="lazy" decoding="async" fetchpriority="low" crossorigin="anonymous" ${onloadAttr}>
                 </div>
                 <div>
