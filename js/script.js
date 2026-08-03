@@ -20,7 +20,7 @@ function initTheme() {
         try {
             const savedTheme = localStorage.getItem('theme');
             return savedTheme === 'light' || savedTheme === 'dark' ? savedTheme : null;
-        } catch (error) {
+        } catch {
             return null;
         }
     }
@@ -28,7 +28,7 @@ function initTheme() {
     function saveTheme(theme) {
         try {
             localStorage.setItem('theme', theme);
-        } catch (error) {
+        } catch {
             // The selected theme still applies for this page when storage is unavailable.
         }
     }
@@ -39,7 +39,7 @@ function initTheme() {
 
         const profileImage = document.querySelector('.profile-image');
         if (profileImage) {
-            const profileSource = theme === 'dark' ? 'media/profile_dark.webp' : 'media/profile.webp';
+            const profileSource = theme === 'dark' ? '/media/profile_dark.webp' : '/media/profile.webp';
             if (profileImage.getAttribute('src') !== profileSource) profileImage.src = profileSource;
         }
 
@@ -85,7 +85,7 @@ let publications = [];
 let debounceTimer;
 
 function loadAndDisplayPublications() {
-    fetch("content/papers.json?" + new Date().getTime())
+    fetch(`${import.meta.env.BASE_URL}content/papers.json?${Date.now()}`)
         .then((response) => response.json())
         .then((data) => {
             publications = data.papers;
@@ -111,8 +111,8 @@ function toggleAbstract(index) {
 }
 
 function getVideoPoster(source) {
-    const match = source.match(/^media\/paper_videos\/web_optimized\/(.+)\.mp4$/i);
-    return match ? `media/paper_posters/${match[1]}.webp` : "";
+    const match = source.match(/^\/media\/paper_videos\/web_optimized\/(.+)\.mp4$/i);
+    return match ? `/media/paper_posters/${match[1]}.webp` : "";
 }
 
 function createMediaTag(source, paperTitle) {
@@ -346,7 +346,7 @@ function initLazyLoading() {
  * Experience Section Logic
  */
 function loadAndDisplayExperience() {
-    fetch("content/experience.json?" + new Date().getTime())
+    fetch(`${import.meta.env.BASE_URL}content/experience.json?${Date.now()}`)
         .then((response) => response.json())
         .then((data) => displayExperience(data.experience))
         .catch((error) => console.error("Error loading experience data:", error));
@@ -495,19 +495,17 @@ function initSectionNav() {
     
     if (!navCurrent || !navList || !currentSectionName || sections.length === 0) return;
 
+    function getSectionName(section) {
+        const heading = section.querySelector('h2');
+        if (heading) return heading.innerText;
+        if (section.id === 'home') return 'Home';
+        return section.id.charAt(0).toUpperCase() + section.id.slice(1);
+    }
+
     // Populate list
     sections.forEach(section => {
         const id = section.id;
-        // Use h1 for Home section if no h2, or default to ID
-        let name = '';
-        const h2 = section.querySelector('h2');
-        if (h2) {
-            name = h2.innerText;
-        } else if (id === 'home') {
-            name = 'Home';
-        } else {
-            name = id.charAt(0).toUpperCase() + id.slice(1);
-        }
+        const name = getSectionName(section);
         
         const li = document.createElement('li');
         li.className = 'nav-item';
@@ -561,18 +559,7 @@ function initSectionNav() {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const id = entry.target.id;
-                // Update text
-                let name = '';
-                const h2 = entry.target.querySelector('h2');
-                if (h2) {
-                    name = h2.innerText;
-                } else if (id === 'home') {
-                    name = 'Home';
-                } else {
-                    name = id.charAt(0).toUpperCase() + id.slice(1);
-                }
-                
-                currentSectionName.innerText = name;
+                currentSectionName.innerText = getSectionName(entry.target);
                 
                 // Update list active state
                 document.querySelectorAll('.nav-item').forEach(item => {

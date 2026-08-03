@@ -1,9 +1,29 @@
-# Academic personal website template
+# Ashkan Mirzaei's website
 
-Feel free to use this template for your own website, but please reference this repo (by Ashkan Mirzaei) in your page. 
+Static academic and personal website, built with Vite and Tailwind CSS and deployed to GitHub Pages.
 
-# Locally hosting the website for test
+## Local development
 
+```sh
+npm ci
+npm run dev
 ```
-python3 -m http.server 8000
+
+Use the local URL printed by Vite. To test the exact production output:
+
+```sh
+npm run build
+npm run preview
 ```
+
+## Validation
+
+```sh
+npm run check
+```
+
+This validates publication and experience content, lints the JavaScript, builds the site, and verifies that the GitHub Pages artifact contains all referenced production assets without source-quality videos.
+
+## Deployment
+
+Pushes to `main` run `.github/workflows/pages.yml`, which builds the site with Node.js and deploys the generated `dist/` directory to GitHub Pages.

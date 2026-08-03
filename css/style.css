@@ -322,11 +322,12 @@ button:focus-visible {
     background: var(--accent-soft);
 }
 
-.container { 
+.site-container {
+    box-sizing: border-box;
     width: 100%;
-    max-width: 1200px; 
+    max-width: 1536px;
     margin-inline: auto;
-    padding: 0 1.5rem; 
+    padding-inline: 1.5rem;
     position: relative;
     z-index: 1;
 }
@@ -573,7 +574,7 @@ a:not(.social-link):not(.project-link):hover {
     .timeline-container { overflow-x: auto; }
     .profile-card { padding: 1.75rem 1.5rem; }
     .profile-image { width: 120px; height: 120px; }
-    .container { padding: 0 1rem; }
+    .site-container { padding-inline: 1rem; }
     .social-links { gap: 0.65rem; margin-top: 1rem; }
     .social-link { width: 40px; height: 40px; }
     

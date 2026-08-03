@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const repositoryRoot = path.resolve(scriptDirectory, "..");
+const publicRoot = path.join(repositoryRoot, "public");
 const problems = [];
 
 function readJson(relativePath) {
@@ -30,25 +31,26 @@ function validateHttpsUrl(value, location) {
     try {
         const url = new URL(value);
         if (url.protocol !== "https:") problems.push(`${location}: URL must use HTTPS`);
-    } catch (error) {
+    } catch {
         problems.push(`${location}: URL is invalid`);
     }
 }
 
 function validateAsset(value, location) {
     if (value === undefined) return;
-    if (typeof value !== "string" || value.includes("\\") || value.split("/").includes("..") || !/^(media|icons)\//.test(value)) {
-        problems.push(`${location}: asset path must be repository-relative under media/ or icons/`);
+    if (typeof value !== "string" || value.includes("\\") || value.split("/").includes("..") || !/^\/(media|icons)\//.test(value)) {
+        problems.push(`${location}: asset path must be root-relative under /media/ or /icons/`);
         return;
     }
 
-    if (!fs.existsSync(path.join(repositoryRoot, value))) {
+    const assetRoot = value.startsWith("/media/") ? repositoryRoot : publicRoot;
+    if (!fs.existsSync(path.join(assetRoot, value.slice(1)))) {
         problems.push(`${location}: referenced asset does not exist (${value})`);
     }
 }
 
-const papersDocument = readJson("content/papers.json");
-const experienceDocument = readJson("content/experience.json");
+const papersDocument = readJson("public/content/papers.json");
+const experienceDocument = readJson("public/content/experience.json");
 const papers = papersDocument.papers;
 const experience = experienceDocument.experience;
 
@@ -76,11 +78,12 @@ if (Array.isArray(papers)) {
         validateHttpsUrl(paper.paper, `${location} paper`);
 
         if (typeof paper.media === "string" && /\.(mp4|webm|mov)$/i.test(paper.media) && !paper.poster) {
-            problems.push(`${location}: video media requires a poster`);
+            const posterName = `${path.basename(paper.media, path.extname(paper.media))}.webp`;
+            validateAsset(`/media/paper_posters/${posterName}`, `${location} derived poster`);
         }
 
-        if (typeof paper.media === "string" && /\.mp4$/i.test(paper.media) && !paper.media.startsWith("media/paper_videos/web_optimized/")) {
-            problems.push(`${location}: MP4 previews must use media/paper_videos/web_optimized/`);
+        if (typeof paper.media === "string" && /\.mp4$/i.test(paper.media) && !paper.media.startsWith("/media/paper_videos/web_optimized/")) {
+            problems.push(`${location}: MP4 previews must use /media/paper_videos/web_optimized/`);
         }
 
         const yearMatch = typeof paper.venue === "string" ? paper.venue.match(/20\d{2}/) : null;
@@ -112,10 +115,10 @@ if (Array.isArray(experience)) {
 }
 
 [
-    "media/profile.webp",
-    "media/profile_280.png",
-    "media/profile_dark.webp",
-    "media/profile_dark_280.png"
+    "/media/profile.webp",
+    "/media/profile_280.png",
+    "/media/profile_dark.webp",
+    "/media/profile_dark_280.png"
 ].forEach((asset) => validateAsset(asset, "index.html profile asset"));
 
 if (problems.length > 0) {

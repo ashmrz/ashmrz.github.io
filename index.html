@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="icon" href="icons/laptop.png" type="image/png">
+    <link rel="icon" href="/icons/laptop.png" type="image/png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ashkan Mirzaei</title>
@@ -70,26 +70,7 @@
             document.documentElement.setAttribute('data-theme', theme);
         })();
     </script>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Poppins', 'sans-serif'],
-                    },
-                }
-            }
-        }
-    </script>
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/src/styles.css">
 </head>
 <body class="min-h-screen">
     <button id="theme-toggle" class="theme-toggle" aria-label="Toggle color theme">
@@ -107,14 +88,14 @@
         </ul>
     </nav>
 
-    <div class="container">
+    <div class="site-container">
         <!-- Home Section -->
         <section id="home" class="mt-5">
             <div class="flex justify-center">
                 <div class="w-full">
                     <div class="profile-card">
                         <div class="text-center">
-                            <img src="media/profile.webp" alt="Profile Picture" class="profile-image mb-3 mx-auto block" width="140" height="140" decoding="async" fetchpriority="high">
+                            <img src="/media/profile.webp" alt="Profile Picture" class="profile-image mb-3 mx-auto block" width="140" height="140" decoding="async" fetchpriority="high">
                             <h1 class="profile-name mb-1">Ashkan Mirzaei</h1>
                             <p class="profile-focus text-gray-500 mb-1 mt-1">Building World Foundation Models (Cosmos)</p>
                             <p class="profile-company text-gray-600 mt-0.5">Nvidia</p>
@@ -212,7 +193,7 @@
             </div>
         </footer>
         <!-- Scripts -->
-        <script src="js/script.js"></script>
+        <script type="module" src="/js/script.js"></script>
     </div>
 </body>
 </html>
