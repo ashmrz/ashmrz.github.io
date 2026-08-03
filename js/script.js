@@ -20,38 +20,67 @@ function initTheme() {
     const themeToggle = document.getElementById('theme-toggle');
     const html = document.documentElement;
     const icon = themeToggle.querySelector('i');
+    const systemThemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
-    function setTheme(theme) {
-        html.setAttribute('data-theme', theme);
-        localStorage.setItem('theme', theme);
-        
-        const profileImage = document.querySelector('.profile-image');
-        if (profileImage) {
-            if (theme === 'dark') {
-                profileImage.src = 'media/profile_dark.webp';
-            } else {
-                profileImage.src = 'media/profile.webp';
-            }
-        }
-
-        if (theme === 'dark') {
-            icon.classList.remove('fa-moon');
-            icon.classList.add('fa-sun');
-        } else {
-            icon.classList.remove('fa-sun');
-            icon.classList.add('fa-moon');
+    function getSavedTheme() {
+        try {
+            const savedTheme = localStorage.getItem('theme');
+            return savedTheme === 'light' || savedTheme === 'dark' ? savedTheme : null;
+        } catch (error) {
+            return null;
         }
     }
 
-    // Check for saved theme or system preference
-    const savedTheme = localStorage.getItem('theme');
-    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    setTheme(savedTheme || systemTheme);
+    function saveTheme(theme) {
+        try {
+            localStorage.setItem('theme', theme);
+        } catch (error) {
+            // The selected theme still applies for this page when storage is unavailable.
+        }
+    }
+
+    function setTheme(theme, persist = false) {
+        html.setAttribute('data-theme', theme);
+        if (persist) saveTheme(theme);
+
+        const profileImage = document.querySelector('.profile-image');
+        if (profileImage) {
+            const profileSource = theme === 'dark' ? 'media/profile_dark.webp' : 'media/profile.webp';
+            if (profileImage.getAttribute('src') !== profileSource) profileImage.src = profileSource;
+        }
+
+        const isDark = theme === 'dark';
+        const toggleLabel = isDark ? 'Switch to light mode' : 'Switch to dark mode';
+        icon.classList.toggle('fa-sun', isDark);
+        icon.classList.toggle('fa-moon', !isDark);
+        themeToggle.setAttribute('aria-label', toggleLabel);
+        themeToggle.setAttribute('title', toggleLabel);
+    }
+
+    const savedTheme = getSavedTheme();
+    const initialTheme = savedTheme || (systemThemeQuery.matches ? 'dark' : 'light');
+    setTheme(initialTheme);
 
     themeToggle.addEventListener('click', () => {
         const currentTheme = html.getAttribute('data-theme');
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        setTheme(newTheme);
+        setTheme(newTheme, true);
+    });
+
+    function handleSystemThemeChange(event) {
+        if (!getSavedTheme()) setTheme(event.matches ? 'dark' : 'light');
+    }
+
+    if (typeof systemThemeQuery.addEventListener === 'function') {
+        systemThemeQuery.addEventListener('change', handleSystemThemeChange);
+    } else {
+        systemThemeQuery.addListener(handleSystemThemeChange);
+    }
+
+    window.addEventListener('storage', (event) => {
+        if (event.key !== 'theme') return;
+        const storedTheme = getSavedTheme();
+        setTheme(storedTheme || (systemThemeQuery.matches ? 'dark' : 'light'));
     });
 }
 
@@ -167,8 +196,8 @@ function createPublicationLinks(publication) {
     if (links.length === 0) return "";
 
     const linksHtml = links.map((link) => `
-        <a href="${link.href}" target="_blank" class="project-link" onclick="event.stopPropagation()">
-            <i class="${link.icon}"></i>${link.label}
+        <a href="${link.href}" target="_blank" rel="noopener noreferrer" class="project-link" aria-label="${link.label} (opens in a new tab)" onclick="event.stopPropagation()">
+            <i class="${link.icon}" aria-hidden="true"></i>${link.label}
         </a>
     `).join("");
 
@@ -359,13 +388,61 @@ function displayExperience(experience) {
         fragment.insertBefore(div, fragment.firstChild);
     }
     timeline.appendChild(fragment);
-    
-    // Scroll to end of timeline
-    requestAnimationFrame(() => {
-        const container = document.querySelector(".timeline-container");
-        if (container) {
-            container.scrollLeft = container.scrollWidth;
-        }
+
+    initTimelineNavigation();
+}
+
+function initTimelineNavigation() {
+    const shell = document.getElementById('timeline-shell');
+    const container = shell?.querySelector('.timeline-container');
+    const timeline = document.getElementById('timeline');
+
+    if (!shell || !container || !timeline) return;
+
+    const edgeThreshold = 2;
+
+    function updateTimelineNavigation() {
+        const maxScrollLeft = Math.max(0, container.scrollWidth - container.clientWidth);
+        const canScrollLeft = container.scrollLeft > edgeThreshold;
+        const canScrollRight = container.scrollLeft < maxScrollLeft - edgeThreshold;
+
+        shell.classList.toggle('can-scroll-left', canScrollLeft);
+        shell.classList.toggle('can-scroll-right', canScrollRight);
+    }
+
+    function alignToNewestRole() {
+        const maxScrollLeft = Math.max(0, container.scrollWidth - container.clientWidth);
+        container.scrollLeft = maxScrollLeft;
+        updateTimelineNavigation();
+    }
+
+    container.addEventListener('scroll', updateTimelineNavigation, { passive: true });
+
+    if ('ResizeObserver' in window) {
+        const resizeObserver = new ResizeObserver(updateTimelineNavigation);
+        resizeObserver.observe(container);
+        resizeObserver.observe(timeline);
+    } else {
+        window.addEventListener('resize', updateTimelineNavigation);
+    }
+
+    shell.classList.add('is-positioning');
+    alignToNewestRole();
+
+    const pageReady = document.readyState === 'complete'
+        ? Promise.resolve()
+        : new Promise((resolve) => window.addEventListener('load', resolve, { once: true }));
+    const fontsReady = document.fonts?.ready || Promise.resolve();
+
+    Promise.all([pageReady, fontsReady]).then(() => {
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                alignToNewestRole();
+                shell.classList.remove('is-positioning');
+                shell.classList.remove('is-loading');
+                container.setAttribute('aria-busy', 'false');
+            });
+        });
     });
 }
 
