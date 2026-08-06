@@ -66,6 +66,32 @@ if (fs.existsSync(builtHtmlPath)) {
     ].forEach((host) => {
         if (builtHtml.includes(host)) problems.push(`Runtime build dependency remains in HTML: ${host}`);
     });
+
+    const stylesheetPaths = [...builtHtml.matchAll(/<link[^>]+href="([^"]+\.css)"/g)]
+        .map((match) => match[1].replace(/^\//, ""));
+
+    stylesheetPaths.forEach((stylesheetPath) => {
+        const absolutePath = path.join(distRoot, stylesheetPath);
+        if (!fs.existsSync(absolutePath)) return;
+
+        const builtCss = fs.readFileSync(absolutePath, "utf8");
+        const navGlassRule = [...builtCss.matchAll(/\.nav-list\s*\{([^}]*)\}/g)]
+            .map((match) => match[1])
+            .find((rule) => rule.includes("--nav-menu-bg"));
+
+        if (!navGlassRule) {
+            problems.push("Production navigation glass rule is missing");
+            return;
+        }
+
+        if (!/(?:^|;)\s*backdrop-filter\s*:\s*blur/.test(navGlassRule)) {
+            problems.push("Production navigation glass is missing the standard backdrop-filter");
+        }
+
+        if (!/(?:^|;)\s*-webkit-backdrop-filter\s*:\s*blur/.test(navGlassRule)) {
+            problems.push("Production navigation glass is missing the WebKit backdrop-filter");
+        }
+    });
 }
 
 if (problems.length > 0) {

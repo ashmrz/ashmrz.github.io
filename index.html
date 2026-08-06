@@ -90,7 +90,7 @@
 
     <div class="site-container">
         <!-- Home Section -->
-        <section id="home" class="mt-5">
+        <section id="home">
             <div class="flex justify-center">
                 <div class="w-full">
                     <div class="profile-card">
@@ -132,17 +132,17 @@
             </div>
         </section>
         <!-- Research Section -->
-        <section id="research" class="mt-5">
-            <h2 class="section-title mb-4">Research</h2>
-            <div class="publication-card p-4">
+        <section id="research">
+            <h2 class="section-title">Research</h2>
+            <div class="publication-card section-card">
                 <p class="research-copy text-gray-600 mb-0">
                     My focus is on making it easier to generate, reconstruct, and edit videos and 3D/4D scenes. I did my PhD at the University of Toronto with advisors <a href="https://www.gilitschenski.org/igor/" target="_blank" rel="noopener noreferrer">Igor Gilitschenski</a> and <a href="https://starslab.ca/people/prof-jonathan-kelly/" target="_blank" rel="noopener noreferrer">Jonathan Kelly</a>.
                 </p>
             </div>
         </section>
         <!-- Experience Section -->
-        <section id="experience" class="mt-5">
-            <h2 class="section-title mb-0">Experience</h2>
+        <section id="experience">
+            <h2 class="section-title">Experience</h2>
             <div class="timeline-shell is-loading" id="timeline-shell">
                 <div class="timeline-container" tabindex="0" role="region" aria-label="Experience timeline. Scroll horizontally to view earlier roles." aria-busy="true">
                     <div class="timeline" id="timeline"></div>
@@ -150,11 +150,11 @@
             </div>
         </section>
         <!-- Education Section -->
-        <section id="education" class="mt-5">
-            <h2 class="section-title mb-4">Education</h2>
+        <section id="education">
+            <h2 class="section-title">Education</h2>
             <div class="grid gap-2">
                 <div class="w-full">
-                    <div class="education-card publication-card p-3">
+                    <div class="education-card publication-card section-card">
                         <div class="flex flex-col">
                             <div class="flex flex-col items-start justify-between min-[576px]:flex-row min-[576px]:items-center">
                                 <h4 class="mb-1 min-[576px]:mb-0">University of Toronto</h4>
@@ -165,7 +165,7 @@
                     </div>
                 </div>
                 <div class="w-full">
-                    <div class="education-card publication-card p-3">
+                    <div class="education-card publication-card section-card">
                         <div class="flex flex-col">
                             <div class="flex flex-col items-start justify-between min-[576px]:flex-row min-[576px]:items-center">
                                 <h4 class="mb-1 min-[576px]:mb-0">Sharif University of Technology</h4>
@@ -178,11 +178,14 @@
             </div>
         </section>
         <!-- Publications Section -->
-        <section id="publications" class="mt-5">
-            <h2 class="section-title mb-4">Publications</h2>
+        <section id="publications">
+            <h2 class="section-title">Publications</h2>
             <div class="search-container">
                 <label for="publicationSearch" class="sr-only">Search publications</label>
-                <input type="text" id="publicationSearch" class="search-input" placeholder="Search publications by title, authors, venue, or abstract..." oninput="debouncedFilterPublications()">
+                <div class="search-field">
+                    <i class="fas fa-search search-icon" aria-hidden="true"></i>
+                    <input type="text" id="publicationSearch" class="search-input" placeholder="Search publications" oninput="debouncedFilterPublications()">
+                </div>
             </div>
             <div class="grid gap-3" id="publications-container"></div>
         </section>
