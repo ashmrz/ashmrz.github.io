@@ -1,5 +1,5 @@
 :root {
-    /* Light Mode Variables */
+    /* Design tokens */
     color-scheme: light;
     --specular-rim: conic-gradient(from 250deg at 50% 50%, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0.36) 12%, rgba(255, 255, 255, 0.12) 22%, rgba(255, 255, 255, 0.02) 36%, rgba(60, 60, 67, 0.1) 50%, rgba(60, 60, 67, 0.04) 64%, rgba(255, 255, 255, 0.18) 78%, rgba(255, 255, 255, 0.02) 100%);
     --specular-bloom: rgba(255, 255, 255, 0.04);
@@ -41,7 +41,6 @@
     --scroll-thumb: rgba(60, 60, 67, 0.22);
     --scroll-thumb-hover: rgba(60, 60, 67, 0.34);
     --timeline-dot: rgba(60, 60, 67, 0.26);
-    --monochrome-logo-filter: invert(1);
     --glass-blur-lg: 32px;
     --glass-blur-md: 32px;
     --glass-blur-sm: 20px;
@@ -54,52 +53,6 @@
     --space-heading-content: 1.5rem;
     --space-surface-block: 1rem;
     --space-surface-inline: clamp(1rem, 0.75rem + 0.75vw, 1.5rem);
-}
-
-[data-theme="dark"] {
-    /* Dark Mode Variables */
-    color-scheme: dark;
-    --specular-rim: conic-gradient(from 250deg at 50% 50%, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.62) 12%, rgba(255, 255, 255, 0.2) 22%, rgba(255, 255, 255, 0.04) 36%, rgba(0, 0, 0, 0.18) 50%, rgba(0, 0, 0, 0.04) 64%, rgba(255, 255, 255, 0.28) 78%, rgba(255, 255, 255, 0.04) 100%);
-    --specular-bloom: rgba(255, 255, 255, 0.18);
-    --specular-inset: rgba(255, 255, 255, 0.18);
-    --specular-shade: rgba(0, 0, 0, 0.28);
-    --specular-opacity: 0.76;
-    --specular-content-opacity: 0.44;
-    --specular-hover-opacity: 1;
-    --specular-content-hover-opacity: 1;
-    --bg-gradient-start: #08080a;
-    --bg-gradient-end: #121216;
-    --ambient-gradient: radial-gradient(ellipse 36rem 28rem at 8% 4%, rgba(10, 132, 255, 0.095), transparent 72%), radial-gradient(ellipse 32rem 25rem at 92% 14%, rgba(191, 90, 242, 0.055), transparent 74%);
-    --text-primary: #f5f5f7;
-    --text-secondary: #d1d1d6;
-    --text-tertiary: #a1a1a6;
-    --accent: #64a8ff;
-    --accent-soft: rgba(100, 168, 255, 0.16);
-    --system-orange: #ff9f0a;
-    --focus-ring: rgba(100, 168, 255, 0.36);
-    --card-bg: rgba(28, 28, 30, 0.8);
-    --nav-bg: rgba(44, 44, 46, 0.74);
-    --nav-menu-bg: rgba(36, 36, 38, 0.86);
-    --badge-bg: rgba(58, 58, 60, 0.7);
-    --input-bg: rgba(44, 44, 46, 0.74);
-    --input-focus-bg: rgba(58, 58, 60, 0.86);
-    --hover-bg: rgba(72, 72, 74, 0.8);
-    --card-border: rgba(255, 255, 255, 0.12);
-    --control-border: rgba(255, 255, 255, 0.13);
-    --border-color: rgba(255, 255, 255, 0.13);
-    --input-border: rgba(255, 255, 255, 0.16);
-    --input-focus-border: var(--accent);
-    --surface-highlight: rgba(255, 255, 255, 0.08);
-    --solid-card-bg: #1c1c1e;
-    --solid-nav-bg: #2c2c2e;
-    --solid-control-bg: #3a3a3c;
-    --shadow-sm: rgba(0, 0, 0, 0.24);
-    --shadow-md: rgba(0, 0, 0, 0.38);
-    --shadow-lg: rgba(0, 0, 0, 0.52);
-    --scroll-thumb: rgba(255, 255, 255, 0.2);
-    --scroll-thumb-hover: rgba(255, 255, 255, 0.3);
-    --timeline-dot: rgba(255, 255, 255, 0.2);
-    --monochrome-logo-filter: none;
 }
 
 html { 
@@ -118,8 +71,6 @@ html {
         corner-shape: squircle;
     }
 
-    .theme-toggle,
-    .theme-toggle::before,
     .nav-current,
     .nav-current::before,
     .search-input,
@@ -161,7 +112,6 @@ body {
     padding: 0;
     overflow-x: hidden;
     position: relative;
-    transition: background 0.3s ease, color 0.3s ease;
 }
 
 body::before {
@@ -184,52 +134,11 @@ button:focus-visible {
     outline-offset: 3px;
 }
 
-/* Theme Toggle Button */
-.theme-toggle {
-    position: fixed;
-    top: 1.5rem;
-    right: 1.5rem;
-    z-index: 1000;
-    background: var(--nav-bg);
-    color: var(--text-primary);
-    width: 44px;
-    height: 44px;
-    padding: 0;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    -webkit-backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
-    backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
-    transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.25s ease, box-shadow 0.25s ease;
-    box-shadow: inset 0 1px 0 var(--surface-highlight), 0 8px 24px var(--shadow-md);
-    border: none;
-    isolation: isolate;
-}
-
-.theme-toggle:hover {
-    transform: translateY(-2px);
-    background: var(--hover-bg);
-    box-shadow: inset 0 1px 0 var(--surface-highlight), 0 14px 32px var(--shadow-lg);
-}
-
-.theme-toggle i {
-    font-size: 1.2rem;
-    line-height: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
-}
-
-.theme-toggle:active {
-    transform: translateY(0) scale(0.96);
-}
-
-.theme-toggle:focus-visible {
-    outline: 3px solid var(--focus-ring);
-    outline-offset: 3px;
+/* Inline SVG icons (scripts/icons.mjs): sized by the surrounding font size, colored by the text color */
+.icon {
+    display: inline-block;
+    vertical-align: -0.125em;
+    overflow: visible;
 }
 
 /* Section Navigation */
@@ -273,11 +182,11 @@ button:focus-visible {
     transform: translateY(0) scale(0.98);
 }
 
-.nav-current i {
+.nav-current .icon {
     transition: transform 0.3s ease;
 }
 
-.nav-current.active i {
+.nav-current.active .icon {
     transform: rotate(180deg);
 }
 
@@ -295,7 +204,9 @@ button:focus-visible {
     opacity: 0;
     transform: translateY(-10px);
     pointer-events: none;
-    transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+    /* Hidden from keyboard and assistive technology once the fade-out has finished. */
+    visibility: hidden;
+    transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0s linear 0.25s;
     min-width: 160px;
     transform-origin: top left;
     position: relative;
@@ -306,16 +217,24 @@ button:focus-visible {
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
+    visibility: visible;
+    transition-delay: 0s;
 }
 
 .nav-item {
+    display: block;
+    width: 100%;
     padding: 0.75rem 1.25rem;
     cursor: pointer;
     color: var(--text-secondary);
     transition: color 0.2s ease, background-color 0.2s ease;
     font-size: 0.9rem;
     font-weight: 500;
-    border-bottom: none;
+    text-align: left;
+}
+
+.nav-item:focus-visible {
+    outline-offset: -3px;
 }
 
 .nav-item:hover {
@@ -339,11 +258,16 @@ button:focus-visible {
     z-index: 1;
 }
 
-.site-container > section:first-of-type {
+.site-main > section {
+    /* Offset used when the section navigation scrolls a section into view. */
+    scroll-margin-top: 20px;
+}
+
+.site-main > section:first-of-type {
     margin-top: 1.25rem;
 }
 
-.site-container > section + section {
+.site-main > section + section {
     margin-top: var(--space-section);
 }
 
@@ -363,7 +287,6 @@ button:focus-visible {
     border: 1px solid var(--card-border);
 }
 
-.theme-toggle::before,
 .nav-current::before,
 .nav-list::before,
 .venue-badge::before,
@@ -396,7 +319,6 @@ button:focus-visible {
     filter: none;
 }
 
-.theme-toggle:hover::before,
 .nav-current:hover::before,
 .social-link:hover::before,
 .project-link:hover::before {
@@ -435,17 +357,6 @@ button:focus-visible {
         0 6px 16px -10px var(--shadow-md);
 }
 
-.publication-media {
-    width: 100%; 
-    object-fit: cover;
-    aspect-ratio: 16/9;
-}
-
-.publication-body { 
-    padding: 2rem; 
-    background: transparent;
-}
-
 .venue-badge {
     background: var(--badge-bg);
     color: var(--text-primary); 
@@ -470,7 +381,7 @@ button:focus-visible {
 }
 
 .profile-image {
-    width: 140px; 
+    width: 140px;
     height: 140px; 
     border-radius: 50%; 
     object-fit: cover;
@@ -584,11 +495,6 @@ a:not(.social-link):not(.project-link):hover {
         --ambient-gradient: radial-gradient(ellipse 24rem 20rem at -8% 0%, rgba(0, 122, 255, 0.055), transparent 74%), radial-gradient(ellipse 22rem 18rem at 108% 22%, rgba(175, 82, 222, 0.032), transparent 76%);
     }
 
-    [data-theme="dark"] {
-        --ambient-gradient: radial-gradient(ellipse 24rem 20rem at -8% 0%, rgba(10, 132, 255, 0.08), transparent 74%), radial-gradient(ellipse 22rem 18rem at 108% 22%, rgba(191, 90, 242, 0.045), transparent 76%);
-    }
-
-    .publication-media { height: auto; aspect-ratio: 16/9; }
     #publications-container { padding-bottom: 2rem; }
     footer { position: relative; bottom: 0; width: 100%; margin-top: 2rem; }
     .timeline-container { overflow-x: auto; }
@@ -604,7 +510,7 @@ a:not(.social-link):not(.project-link):hover {
     }
 }
 
-.publication-card h5 {
+.publication-title {
     color: var(--text-primary);
     font-size: var(--type-card-title);
     font-weight: 600;
@@ -614,9 +520,8 @@ a:not(.social-link):not(.project-link):hover {
     transition: color 0.3s;
 }
 
-.publication-body p, .publication-body small,
 .publication-body-custom p, .publication-body-custom small,
-.education-card p, .education-card span, .education-card h4,
+.education-card p, .education-card span, .education-card h3,
 #research .publication-card p, footer p {
     color: var(--text-secondary) !important; 
 }
@@ -677,39 +582,67 @@ footer p {
 }
 
 .abstract-toggle {
-    background: none; 
-    border: none; 
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
     border-radius: 12px;
-    padding: 0.6rem 1.2rem; 
-    color: var(--text-primary); 
+    padding: 0.6rem 1.2rem;
+    color: var(--text-primary);
     font-size: 0.875rem;
-    cursor: pointer; 
+    text-align: center;
+    cursor: pointer;
     margin-top: 1rem;
     transition: background 0.2s ease;
 }
 
-.abstract-toggle:hover { 
+.abstract-toggle:hover {
     background: var(--accent-soft);
     color: var(--accent);
 }
 
+.abstract-chevron {
+    color: var(--text-tertiary);
+    /* Sits on the text baseline exactly where the former icon-font glyph did at this size. */
+    vertical-align: -2px;
+    transition: rotate 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.publication-card.expanded .abstract-chevron {
+    rotate: 180deg;
+}
+
+/*
+ * The abstract expands by animating its grid row from 0fr to 1fr, which follows the
+ * content height without measuring it in JavaScript. While collapsed it is also
+ * hidden from assistive technology.
+ */
 .abstract-content {
-    max-height: 0; 
-    overflow: hidden; 
-    transition: max-height 0.3s ease;
-    margin-top: 0.5rem; 
+    display: grid;
+    grid-template-rows: 0fr;
+    visibility: hidden;
+    transition: grid-template-rows 0.3s ease, visibility 0s linear 0.3s;
+    margin-top: 0.5rem;
     padding: 0 1rem;
+}
+
+.publication-card.expanded .abstract-content {
+    grid-template-rows: 1fr;
+    visibility: visible;
+    transition-delay: 0s;
+}
+
+.abstract-inner {
+    min-height: 0;
+    overflow: hidden;
 }
 
 .abstract-content p {
     line-height: 1.7;
     text-align: left;
     text-wrap: pretty;
-}
-
-.abstract-content.expanded {
-    max-height: 600px; 
-    padding: 0 1rem 1rem;
+    /* Lets a long URL in an abstract wrap instead of running past the card edge. */
+    overflow-wrap: break-word;
 }
 
 .publication-links {
@@ -737,8 +670,10 @@ footer p {
     border: 1px solid var(--control-border);
 }
 
-.project-link i {
+.project-link .icon {
     color: var(--accent);
+    /* The button's letter-spacing also tightened the former icon-font glyph; keep the same width. */
+    margin-right: -0.01em;
 }
 
 .project-link:hover {
@@ -840,8 +775,8 @@ footer p {
     scroll-snap-align: start;
 }
 
-.timeline-item h4 { 
-    margin-bottom: 0.25rem; 
+.timeline-item h3 {
+    margin-bottom: 0.25rem;
     color: var(--text-primary);
     font-weight: 600;
     font-size: 1.1rem;
@@ -883,9 +818,9 @@ footer p {
     background: transparent;
 }
 
+/* A white single-color logo is drawn dark so it reads on the light page. */
 .experience-logo-container--monochrome .experience-logo {
-    filter: var(--monochrome-logo-filter);
-    transition: filter 0.3s ease;
+    filter: invert(1);
 }
 
 .experience-logo {
@@ -972,10 +907,6 @@ footer p {
     .info-box {
         padding: 0.875rem 1.25rem;
     }
-    .theme-toggle {
-        top: 1rem;
-        right: 1rem;
-    }
 }
 
 /* Performance optimizations */
@@ -993,8 +924,8 @@ img, video {
     contain: layout style paint;
 }
 
-/* Prevent layout shift */
-.lazy-image, .lazy-video {
+/* Placeholder tone for preview videos that have not loaded yet */
+.lazy-video {
     background: var(--bg-gradient-end);
 }
 
@@ -1004,7 +935,6 @@ img, video {
 .text-gray-400 { color: var(--text-tertiary) !important; }
 
 /* New Utility Classes */
-.leading-tight { line-height: 1.4 !important; }
 .leading-relaxed { line-height: 1.6 !important; }
 .icon-amber { color: var(--system-orange); margin-right: 0.5rem; }
 .fw-500 { font-weight: 500 !important; }
@@ -1154,26 +1084,16 @@ img, video {
         --control-border: rgba(60, 60, 67, 0.42);
         --input-border: rgba(60, 60, 67, 0.5);
     }
-
-    [data-theme="dark"] {
-        --text-secondary: #f0f0f3;
-        --text-tertiary: #c7c7cc;
-        --card-border: rgba(255, 255, 255, 0.3);
-        --control-border: rgba(255, 255, 255, 0.36);
-        --input-border: rgba(255, 255, 255, 0.42);
-    }
 }
 
 @media (prefers-reduced-transparency: reduce) {
-    :root,
-    [data-theme="dark"] {
+    :root {
         --specular-opacity: 0.24;
         --specular-content-opacity: 0.1;
         --specular-hover-opacity: 0.32;
         --specular-content-hover-opacity: 0.18;
     }
 
-    .theme-toggle,
     .nav-current,
     .nav-list {
         background: var(--solid-nav-bg);
@@ -1193,7 +1113,6 @@ img, video {
         background: var(--solid-control-bg);
     }
 
-    .theme-toggle,
     .nav-current,
     .nav-list,
     .publication-card,

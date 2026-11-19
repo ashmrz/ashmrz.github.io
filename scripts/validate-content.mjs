@@ -1,23 +1,18 @@
+/*
+ * Validates content/papers.json and content/experience.json before every build:
+ * required fields, asset paths, link protocols, and ordering.
+ */
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { PROFILE_ASSETS, getPosterPath, isVideo, loadContent, repositoryRoot } from "./site-content.mjs";
 
-const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
-const repositoryRoot = path.resolve(scriptDirectory, "..");
 const publicRoot = path.join(repositoryRoot, "public");
 const problems = [];
-
-function readJson(relativePath) {
-    const absolutePath = path.join(repositoryRoot, relativePath);
-    return JSON.parse(fs.readFileSync(absolutePath, "utf8"));
-}
 
 function requireNonEmptyString(record, field, location) {
     if (typeof record[field] !== "string" || record[field].trim() === "") {
         problems.push(`${location}: ${field} must be a non-empty string`);
-        return false;
     }
-    return true;
 }
 
 function validateOptionalString(record, field, location) {
@@ -28,43 +23,37 @@ function validateOptionalString(record, field, location) {
 
 function validateHttpsUrl(value, location) {
     if (value === undefined) return;
+
     try {
-        const url = new URL(value);
-        if (url.protocol !== "https:") problems.push(`${location}: URL must use HTTPS`);
+        if (new URL(value).protocol !== "https:") problems.push(`${location}: URL must use HTTPS`);
     } catch {
         problems.push(`${location}: URL is invalid`);
     }
 }
 
 function validateAsset(value, location) {
-    if (value === undefined) return;
+    if (value === undefined || value === null) return;
+
     if (typeof value !== "string" || value.includes("\\") || value.split("/").includes("..") || !/^\/(media|icons)\//.test(value)) {
         problems.push(`${location}: asset path must be root-relative under /media/ or /icons/`);
         return;
     }
 
+    // /media/ files live at the repository root; /icons/ files are served from public/.
     const assetRoot = value.startsWith("/media/") ? repositoryRoot : publicRoot;
     if (!fs.existsSync(path.join(assetRoot, value.slice(1)))) {
         problems.push(`${location}: referenced asset does not exist (${value})`);
     }
 }
 
-const papersDocument = readJson("public/content/papers.json");
-const experienceDocument = readJson("public/content/experience.json");
-const papers = papersDocument.papers;
-const experience = experienceDocument.experience;
-
-if (!Array.isArray(papers)) problems.push("content/papers.json: papers must be an array");
-if (!Array.isArray(experience)) problems.push("content/experience.json: experience must be an array");
-
-if (Array.isArray(papers)) {
+function validatePapers(papers) {
     const titles = new Set();
     let previousYear = Number.POSITIVE_INFINITY;
 
     papers.forEach((paper, index) => {
         const location = `content/papers.json paper ${index + 1}`;
         ["title", "authors", "venue"].forEach((field) => requireNonEmptyString(paper, field, location));
-        ["abstract", "media", "poster", "media_webp", "url", "paper"].forEach((field) => validateOptionalString(paper, field, location));
+        ["abstract", "media", "poster", "url", "paper"].forEach((field) => validateOptionalString(paper, field, location));
 
         if (typeof paper.title === "string") {
             if (titles.has(paper.title)) problems.push(`${location}: duplicate title (${paper.title})`);
@@ -72,18 +61,18 @@ if (Array.isArray(papers)) {
         }
 
         validateAsset(paper.media, `${location} media`);
-        validateAsset(paper.poster, `${location} poster`);
-        validateAsset(paper.media_webp, `${location} media_webp`);
+        validateAsset(getPosterPath(paper), `${location} poster`);
         validateHttpsUrl(paper.url, `${location} url`);
         validateHttpsUrl(paper.paper, `${location} paper`);
 
-        if (typeof paper.media === "string" && /\.(mp4|webm|mov)$/i.test(paper.media) && !paper.poster) {
-            const posterName = `${path.basename(paper.media, path.extname(paper.media))}.webp`;
-            validateAsset(`/media/paper_posters/${posterName}`, `${location} derived poster`);
+        if (isVideo(paper.media) && !paper.media.startsWith("/media/paper_videos/web_optimized/")) {
+            problems.push(`${location}: video previews must use /media/paper_videos/web_optimized/`);
         }
 
-        if (typeof paper.media === "string" && /\.mp4$/i.test(paper.media) && !paper.media.startsWith("/media/paper_videos/web_optimized/")) {
-            problems.push(`${location}: MP4 previews must use /media/paper_videos/web_optimized/`);
+        if (paper.media_labels !== undefined) {
+            const labels = paper.media_labels;
+            const isValid = Array.isArray(labels) && labels.length === 4 && labels.every((label) => typeof label === "string" && label.trim() !== "");
+            if (!isValid) problems.push(`${location}: media_labels must be four non-empty strings (one per quadrant)`);
         }
 
         const yearMatch = typeof paper.venue === "string" ? paper.venue.match(/20\d{2}/) : null;
@@ -95,15 +84,18 @@ if (Array.isArray(papers)) {
     });
 }
 
-if (Array.isArray(experience)) {
+function validateExperience(experience) {
     let previousStartYear = Number.NEGATIVE_INFINITY;
 
     experience.forEach((item, index) => {
         const location = `content/experience.json item ${index + 1}`;
         ["title", "company", "time", "logo"].forEach((field) => requireNonEmptyString(item, field, location));
-        ["logo_bg", "logo_webp"].forEach((field) => validateOptionalString(item, field, location));
+        validateOptionalString(item, "logo_bg", location);
         validateAsset(item.logo, `${location} logo`);
-        validateAsset(item.logo_webp, `${location} logo_webp`);
+
+        if (item.logo_theme !== undefined && item.logo_theme !== "monochrome") {
+            problems.push(`${location}: logo_theme must be "monochrome" when present`);
+        }
 
         const yearMatch = typeof item.time === "string" ? item.time.match(/20\d{2}/) : null;
         if (yearMatch) {
@@ -114,12 +106,21 @@ if (Array.isArray(experience)) {
     });
 }
 
-[
-    "/media/profile.webp",
-    "/media/profile_280.png",
-    "/media/profile_dark.webp",
-    "/media/profile_dark_280.png"
-].forEach((asset) => validateAsset(asset, "index.html profile asset"));
+const { papers, experience } = await loadContent();
+
+if (Array.isArray(papers)) {
+    validatePapers(papers);
+} else {
+    problems.push("content/papers.json: papers must be an array");
+}
+
+if (Array.isArray(experience)) {
+    validateExperience(experience);
+} else {
+    problems.push("content/experience.json: experience must be an array");
+}
+
+PROFILE_ASSETS.forEach((asset) => validateAsset(asset, "profile asset"));
 
 if (problems.length > 0) {
     problems.forEach((problem) => console.error(`- ${problem}`));

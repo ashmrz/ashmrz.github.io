@@ -1,51 +1,66 @@
-import { copyFile, mkdir, readFile } from "node:fs/promises";
+import { copyFile, mkdir } from "node:fs/promises";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 import tailwindcss from "@tailwindcss/vite";
+import { renderIcon } from "./scripts/icons.mjs";
+import { renderExperience, renderPublications } from "./scripts/render-content.mjs";
+import { collectProductionMedia, contentDirectory, loadContent, repositoryRoot } from "./scripts/site-content.mjs";
 
-const repositoryRoot = path.dirname(fileURLToPath(import.meta.url));
+/*
+ * index.html marks build-time content with comment slots:
+ *   <!--@publications-->   publication cards from content/papers.json
+ *   <!--@experience-->     timeline items from content/experience.json
+ *   <!--@year-->           the build year (the browser script keeps it current)
+ *   <!--@icon:name extra classes-->   an inline SVG icon from scripts/icons.mjs
+ */
+const SLOT_PATTERN = /<!--@([a-z]+)(?::([a-z0-9-]+))?((?:\s+[\w-]+)*)\s*-->/g;
 
-async function collectProductionMedia() {
-    const readContent = async (filename) => JSON.parse(await readFile(path.join(repositoryRoot, "public/content", filename), "utf8"));
-    const papers = (await readContent("papers.json")).papers;
-    const experience = (await readContent("experience.json")).experience;
-    const assets = new Set([
-        "/media/profile.webp",
-        "/media/profile_280.png",
-        "/media/profile_dark.webp",
-        "/media/profile_dark_280.png"
-    ]);
+async function renderSlots(html) {
+    const { papers, experience } = await loadContent();
+    const slots = {
+        publications: () => renderPublications(papers),
+        experience: () => renderExperience(experience),
+        year: () => String(new Date().getFullYear()),
+        icon: (name, className) => renderIcon(name, className)
+    };
 
-    papers.forEach((paper) => {
-        [paper.media, paper.poster, paper.media_webp].filter(Boolean).forEach((asset) => assets.add(asset));
-
-        if (typeof paper.media === "string" && /\.(mp4|webm|mov)$/i.test(paper.media) && !paper.poster) {
-            const posterName = `${path.basename(paper.media, path.extname(paper.media))}.webp`;
-            assets.add(`/media/paper_posters/${posterName}`);
-        }
+    return html.replace(SLOT_PATTERN, (slot, name, argument, classes) => {
+        if (!Object.hasOwn(slots, name)) throw new Error(`Unknown build slot in index.html: ${slot}`);
+        return slots[name](argument, classes.trim());
     });
-
-    experience.forEach((item) => {
-        [item.logo, item.logo_webp].filter(Boolean).forEach((asset) => assets.add(asset));
-    });
-
-    return [...assets];
 }
 
+/** Renders the content slots into index.html, in development and in the production build. */
+function renderSiteContent() {
+    return {
+        name: "render-site-content",
+        configureServer(server) {
+            // Content lives outside the module graph, so reload the page when it changes.
+            server.watcher.add(contentDirectory);
+            server.watcher.on("change", (file) => {
+                if (file.startsWith(contentDirectory)) server.ws.send({ type: "full-reload" });
+            });
+        },
+        // Runs after Vite's own HTML handling, so the root-relative /media URLs are left untouched.
+        transformIndexHtml(html) {
+            return renderSlots(html);
+        }
+    };
+}
+
+/** Copies only the media referenced by the content data (plus profile images) into dist/. */
 function copyProductionMedia() {
     return {
         name: "copy-production-media",
         apply: "build",
         async closeBundle() {
-            const assets = await collectProductionMedia();
+            const assets = collectProductionMedia(await loadContent());
 
             await Promise.all(assets.map(async (asset) => {
                 const relativePath = asset.replace(/^\//, "");
-                const sourcePath = path.join(repositoryRoot, relativePath);
                 const destinationPath = path.join(repositoryRoot, "dist", relativePath);
                 await mkdir(path.dirname(destinationPath), { recursive: true });
-                await copyFile(sourcePath, destinationPath);
+                await copyFile(path.join(repositoryRoot, relativePath), destinationPath);
             }));
         }
     };
@@ -53,7 +68,7 @@ function copyProductionMedia() {
 
 export default defineConfig({
     base: "/",
-    plugins: [tailwindcss(), copyProductionMedia()],
+    plugins: [tailwindcss(), renderSiteContent(), copyProductionMedia()],
     build: {
         outDir: "dist",
         sourcemap: false

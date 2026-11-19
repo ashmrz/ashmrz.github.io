@@ -1,9 +1,11 @@
+/*
+ * Verifies the production build in dist/: every referenced asset is present, the content
+ * was rendered into the page, and nothing source-only or CDN-hosted slipped in.
+ */
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { collectProductionMedia, loadContent, repositoryRoot } from "./site-content.mjs";
 
-const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
-const repositoryRoot = path.resolve(scriptDirectory, "..");
 const distRoot = path.join(repositoryRoot, "dist");
 const problems = [];
 
@@ -14,50 +16,30 @@ function requireFile(relativePath) {
     }
 }
 
-function readJson(relativePath) {
-    return JSON.parse(fs.readFileSync(path.join(distRoot, relativePath), "utf8"));
+function countOccurrences(text, pattern) {
+    return (text.match(pattern) ?? []).length;
 }
 
-[
-    "index.html",
-    "content/papers.json",
-    "content/experience.json",
-    "icons/laptop.png",
-    "media/profile.webp",
-    "media/profile_dark.webp"
-].forEach(requireFile);
+const content = await loadContent();
 
-if (problems.length === 0) {
-    const papers = readJson("content/papers.json").papers;
-    const experience = readJson("content/experience.json").experience;
-
-    papers.forEach((paper) => {
-        [paper.media, paper.poster, paper.media_webp].filter(Boolean).forEach(requireFile);
-
-        if (typeof paper.media === "string" && /\.mp4$/i.test(paper.media) && !paper.poster) {
-            const posterName = `${path.basename(paper.media, ".mp4")}.webp`;
-            requireFile(`/media/paper_posters/${posterName}`);
-        }
-    });
-
-    experience.forEach((item) => {
-        [item.logo, item.logo_webp].filter(Boolean).forEach(requireFile);
-    });
-}
+["index.html", "icons/laptop.png"].forEach(requireFile);
+collectProductionMedia(content).forEach(requireFile);
 
 [
+    "content",
     "media/paper_videos/original_quality",
     "media/paper_videos/reduced_quality",
     "source-media"
 ].forEach((relativePath) => {
     if (fs.existsSync(path.join(distRoot, relativePath))) {
-        problems.push(`Source-only media leaked into production: ${relativePath}`);
+        problems.push(`Source-only files leaked into production: ${relativePath}`);
     }
 });
 
 const builtHtmlPath = path.join(distRoot, "index.html");
 if (fs.existsSync(builtHtmlPath)) {
     const builtHtml = fs.readFileSync(builtHtmlPath, "utf8");
+
     [
         "cdn.tailwindcss.com",
         "cdnjs.cloudflare.com/ajax/libs/font-awesome",
@@ -67,6 +49,18 @@ if (fs.existsSync(builtHtmlPath)) {
         if (builtHtml.includes(host)) problems.push(`Runtime build dependency remains in HTML: ${host}`);
     });
 
+    if (builtHtml.includes("<!--@")) problems.push("An unrendered build slot remains in index.html");
+
+    const publicationCount = countOccurrences(builtHtml, /class="publication-card publication-card-custom/g);
+    if (publicationCount !== content.papers.length) {
+        problems.push(`Rendered ${publicationCount} publication cards for ${content.papers.length} papers`);
+    }
+
+    const experienceCount = countOccurrences(builtHtml, /class="timeline-item"/g);
+    if (experienceCount !== content.experience.length) {
+        problems.push(`Rendered ${experienceCount} timeline items for ${content.experience.length} experience entries`);
+    }
+
     const stylesheetPaths = [...builtHtml.matchAll(/<link[^>]+href="([^"]+\.css)"/g)]
         .map((match) => match[1].replace(/^\//, ""));
 
@@ -74,6 +68,7 @@ if (fs.existsSync(builtHtmlPath)) {
         const absolutePath = path.join(distRoot, stylesheetPath);
         if (!fs.existsSync(absolutePath)) return;
 
+        // Minifiers have dropped one of the two backdrop-filter declarations before; keep both.
         const builtCss = fs.readFileSync(absolutePath, "utf8");
         const navGlassRule = [...builtCss.matchAll(/\.nav-list\s*\{([^}]*)\}/g)]
             .map((match) => match[1])

@@ -1,577 +1,317 @@
-"use strict";
+/*
+ * Browser behavior for the site. The page content is rendered into index.html at build time
+ * (see vite.config.js and scripts/render-content.mjs); this module only adds interactivity.
+ */
+const SEARCH_DEBOUNCE_MS = 300;
 
-document.addEventListener("DOMContentLoaded", () => {
-    initTheme();
-    loadAndDisplayExperience();
-    loadAndDisplayPublications();
-    initSectionNav();
-});
+initSectionNav();
+initTimeline();
+initPublications();
+initFooterYear();
 
 /**
- * Theme Management
+ * Section navigation: a disclosure menu generated from each <section>'s id and heading,
+ * with a scroll spy that keeps the current section name up to date.
  */
-function initTheme() {
-    const themeToggle = document.getElementById('theme-toggle');
-    const html = document.documentElement;
-    const icon = themeToggle.querySelector('i');
-    const systemThemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+function initSectionNav() {
+    const toggle = document.getElementById("nav-current");
+    const list = document.getElementById("nav-list");
+    const currentSectionName = document.getElementById("current-section-name");
+    const sections = Array.from(document.querySelectorAll("section[id]"));
 
-    function getSavedTheme() {
-        try {
-            const savedTheme = localStorage.getItem('theme');
-            return savedTheme === 'light' || savedTheme === 'dark' ? savedTheme : null;
-        } catch {
-            return null;
-        }
+    if (!toggle || !list || !currentSectionName || sections.length === 0) return;
+
+    function getSectionName(section) {
+        const heading = section.querySelector("h2");
+        if (heading) return heading.textContent.trim();
+        return section.id.charAt(0).toUpperCase() + section.id.slice(1);
     }
 
-    function saveTheme(theme) {
-        try {
-            localStorage.setItem('theme', theme);
-        } catch {
-            // The selected theme still applies for this page when storage is unavailable.
-        }
+    function setMenuOpen(isOpen) {
+        list.classList.toggle("show", isOpen);
+        toggle.classList.toggle("active", isOpen);
+        toggle.setAttribute("aria-expanded", String(isOpen));
     }
 
-    function setTheme(theme, persist = false) {
-        html.setAttribute('data-theme', theme);
-        if (persist) saveTheme(theme);
+    const navButtons = new Map();
 
-        const profileImage = document.querySelector('.profile-image');
-        if (profileImage) {
-            const profileSource = theme === 'dark' ? '/media/profile_dark.webp' : '/media/profile.webp';
-            if (profileImage.getAttribute('src') !== profileSource) profileImage.src = profileSource;
-        }
-
-        const isDark = theme === 'dark';
-        const toggleLabel = isDark ? 'Switch to light mode' : 'Switch to dark mode';
-        icon.classList.toggle('fa-sun', isDark);
-        icon.classList.toggle('fa-moon', !isDark);
-        themeToggle.setAttribute('aria-label', toggleLabel);
-        themeToggle.setAttribute('title', toggleLabel);
-    }
-
-    const savedTheme = getSavedTheme();
-    const initialTheme = savedTheme || (systemThemeQuery.matches ? 'dark' : 'light');
-    setTheme(initialTheme);
-
-    themeToggle.addEventListener('click', () => {
-        const currentTheme = html.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        setTheme(newTheme, true);
-    });
-
-    function handleSystemThemeChange(event) {
-        if (!getSavedTheme()) setTheme(event.matches ? 'dark' : 'light');
-    }
-
-    if (typeof systemThemeQuery.addEventListener === 'function') {
-        systemThemeQuery.addEventListener('change', handleSystemThemeChange);
-    } else {
-        systemThemeQuery.addListener(handleSystemThemeChange);
-    }
-
-    window.addEventListener('storage', (event) => {
-        if (event.key !== 'theme') return;
-        const storedTheme = getSavedTheme();
-        setTheme(storedTheme || (systemThemeQuery.matches ? 'dark' : 'light'));
-    });
-}
-
-/**
- * Publications Logic
- */
-let publications = [];
-let debounceTimer;
-
-function loadAndDisplayPublications() {
-    fetch(`${import.meta.env.BASE_URL}content/papers.json?${Date.now()}`)
-        .then((response) => response.json())
-        .then((data) => {
-            publications = data.papers;
-            displayPublications(publications);
-        })
-        .catch((error) => console.error("Error loading publications:", error));
-}
-
-function toggleAbstract(index) {
-    const card = document.getElementById(`publication-${index}`);
-    const abstractContent = document.getElementById(`abstract-${index}`);
-    
-    if (!card || !abstractContent) return;
-
-    const isExpanded = card.classList.contains("expanded");
-    card.classList.toggle("expanded");
-    
-    // Animate height
-    abstractContent.style.maxHeight = isExpanded ? "0" : `${abstractContent.scrollHeight}px`;
-    
-    const chevronIcon = card.querySelector(".fa-chevron-down");
-    if (chevronIcon) chevronIcon.classList.toggle("rotate-180");
-}
-
-function getVideoPoster(source) {
-    const match = source.match(/^\/media\/paper_videos\/web_optimized\/(.+)\.mp4$/i);
-    return match ? `/media/paper_posters/${match[1]}.webp` : "";
-}
-
-function createMediaTag(source, paperTitle) {
-    if (source && source.trim() !== "") {
-        const isVideo = source.match(/\.(mp4|webm|mov|avi|mkv)$/);
-
-        if (isVideo) {
-            const posterSource = getVideoPoster(source);
-            const posterAttr = posterSource ? `data-poster="${posterSource}"` : '';
-            return `<video class="video-media lazy-video" data-src="${source}" ${posterAttr} muted playsinline loop preload="none" aria-label="${paperTitle} preview" onerror="this.style.display='none'"></video>`;
-        }
-
-        return `<img class="image-media lazy-image" data-src="${source}" alt="${paperTitle} Preview" loading="lazy" decoding="async" fetchpriority="low" onerror="this.style.display='none'">`;
-    }
-
-    return "";
-}
-
-function createMediaElement(paper) {
-    if (typeof paper.media === "string" && paper.media.trim() !== "") {
-        const mediaTag = createMediaTag(paper.media, paper.title);
-
-        if (Array.isArray(paper.media_labels) && paper.media_labels.length === 4) {
-            const labels = paper.media_labels.map((label) => `
-                <div class="media-composite-label-cell">
-                    <span>${label}</span>
-                </div>
-            `).join("");
-
-            return `
-                <div class="media-composite">
-                    ${mediaTag}
-                    <div class="media-composite-label-grid" aria-hidden="true">${labels}</div>
-                </div>
-            `;
-        }
-
-        return mediaTag;
-    }
-
-    return `
-        <div class="media-placeholder">
-            <div class="media-placeholder-icon-container">
-                <i class="fas fa-image media-icon" aria-hidden="true"></i>
-            </div>
-        </div>
-    `;
-}
-
-function isPaperUrl(url) {
-    return /^https?:\/\/(www\.)?arxiv\.org\//i.test(url) || /\.pdf(?:[?#].*)?$/i.test(url);
-}
-
-function createPublicationLinks(publication) {
-    const links = [];
-    const paperUrl = publication.paper;
-
-    if (publication.url) {
-        const isPaper = isPaperUrl(publication.url);
-        links.push({
-            href: publication.url,
-            icon: isPaper ? "fas fa-file-alt" : "fas fa-external-link-alt",
-            label: isPaper ? "Paper" : "Project Page"
+    for (const section of sections) {
+        const item = document.createElement("li");
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "nav-item";
+        button.textContent = getSectionName(section);
+        button.addEventListener("click", () => {
+            // The scroll offset comes from `scroll-margin-top`, the easing from `scroll-behavior`.
+            section.scrollIntoView();
+            setMenuOpen(false);
         });
+
+        item.append(button);
+        list.append(item);
+        navButtons.set(section, button);
     }
 
-    if (paperUrl && paperUrl !== publication.url) {
-        links.push({
-            href: paperUrl,
-            icon: "fas fa-file-alt",
-            label: "Paper"
-        });
-    }
-
-    if (links.length === 0) return "";
-
-    const linksHtml = links.map((link) => `
-        <a href="${link.href}" target="_blank" rel="noopener noreferrer" class="project-link" aria-label="${link.label} (opens in a new tab)" onclick="event.stopPropagation()">
-            <i class="${link.icon}" aria-hidden="true"></i>${link.label}
-        </a>
-    `).join("");
-
-    return `<div class="mt-2 publication-links">${linksHtml}</div>`;
-}
-
-function displayPublications(papers) {
-    const container = document.getElementById("publications-container");
-    container.innerHTML = "";
-    const fragment = document.createDocumentFragment();
-    
-    papers.forEach((paper, index) => {
-        const mediaContent = createMediaElement(paper);
-        const authorsHtml = paper.authors.replace("Ashkan Mirzaei", "<strong>Ashkan Mirzaei</strong>");
-        
-        const colDiv = document.createElement('div');
-        colDiv.className = 'w-full';
-        
-        // Use separate logic for onclick to avoid inline event handler string mess
-        // But for simplicity with existing pattern, we'll keep the structure but clean it up.
-        // Better yet, we attach the event listener after creation if possible, 
-        // but here we are building string HTML.
-        
-        const cardClass = `publication-card publication-card-custom ${paper.abstract ? "pointer" : ""}`;
-        const onClickAttr = paper.abstract ? `onclick="toggleAbstract(${index})"` : "";
-        const publicationLinks = createPublicationLinks(paper);
-            
-        const abstractSection = paper.abstract
-            ? `<div class="abstract-content" id="abstract-${index}">
-                 <p class="mt-2 text-sm">${paper.abstract}</p>
-               </div>
-               <div class="text-center mt-2 abstract-toggle">
-                 <i class="fas fa-chevron-down text-gray-400 transition-transform duration-300"></i>
-               </div>`
-            : "";
-
-        colDiv.innerHTML = `
-        <div class="${cardClass}" id="publication-${index}" ${onClickAttr}>
-            <div class="publication-layout">
-                <div class="publication-media-column">
-                    <div class="media-container-custom">
-                        ${mediaContent}
-                    </div>
-                </div>
-                <div class="publication-content-column">
-                    <div class="publication-body-custom">
-                        <span class="venue-badge">${paper.venue}</span>
-                        <h5 class="mb-1">${paper.title}</h5>
-                        <p class="mb-0 text-sm">${authorsHtml}</p>
-                        ${publicationLinks}
-                        ${abstractSection}
-                    </div>
-                </div>
-            </div>
-        </div>`;
-        
-        fragment.appendChild(colDiv);
-    });
-    
-    container.appendChild(fragment);
-    initLazyLoading();
-}
-
-function filterPublications() {
-    const searchInput = document.getElementById("publicationSearch");
-    if (!searchInput) return;
-    
-    const searchTerm = searchInput.value.toLowerCase();
-    const filteredPapers = publications.filter((paper) =>
-        paper.title.toLowerCase().includes(searchTerm) ||
-        paper.authors.toLowerCase().includes(searchTerm) ||
-        paper.venue.toLowerCase().includes(searchTerm) ||
-        (paper.paper && paper.paper.toLowerCase().includes(searchTerm)) ||
-        (paper.abstract && paper.abstract.toLowerCase().includes(searchTerm))
-    );
-    displayPublications(filteredPapers);
-}
-
-// Make accessible globally for the input oninput
-window.debouncedFilterPublications = function() {
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(filterPublications, 300);
-};
-
-// Make accessible globally for onclick
-window.toggleAbstract = toggleAbstract;
-
-/**
- * Lazy Loading
- */
-function initLazyLoading() {
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const playbackObserver = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            const video = entry.target;
-
-            if (entry.intersectionRatio >= 0.15 && !prefersReducedMotion) {
-                video.play().catch(() => {});
-            } else {
-                video.pause();
-            }
-        });
-    }, {
-        threshold: 0.15
+    toggle.addEventListener("click", () => {
+        setMenuOpen(!list.classList.contains("show"));
     });
 
-    const posterObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const video = entry.target;
-                video.poster = video.dataset.poster;
-                observer.unobserve(video);
-            }
-        });
-    }, {
-        rootMargin: '500px 0px',
-        threshold: 0.01
+    document.addEventListener("click", (event) => {
+        if (!toggle.contains(event.target) && !list.contains(event.target)) setMenuOpen(false);
     });
 
-    const imageObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const element = entry.target;
-                if (element.tagName === 'IMG') {
-                    element.src = element.dataset.src;
-                    element.classList.remove('lazy-image');
-                } else if (element.tagName === 'VIDEO') {
-                    element.src = element.dataset.src;
-                    element.controls = prefersReducedMotion;
-                    element.load();
-                    playbackObserver.observe(element);
-                    element.classList.remove('lazy-video');
+    document.addEventListener("keydown", (event) => {
+        if (event.key !== "Escape" || !list.classList.contains("show")) return;
+        setMenuOpen(false);
+        toggle.focus();
+    });
+
+    // A section becomes current when it crosses a line 15% below the top of the viewport.
+    const observer = new IntersectionObserver((entries) => {
+        for (const entry of entries) {
+            if (!entry.isIntersecting) continue;
+
+            currentSectionName.textContent = getSectionName(entry.target);
+            for (const [section, button] of navButtons) {
+                const isCurrent = section === entry.target;
+                button.classList.toggle("active", isCurrent);
+                if (isCurrent) {
+                    button.setAttribute("aria-current", "location");
+                } else {
+                    button.removeAttribute("aria-current");
                 }
-                observer.unobserve(element);
             }
-        });
+        }
     }, {
-        rootMargin: '50px 0px',
-        threshold: 0.01
+        rootMargin: "-15% 0px -85% 0px",
+        threshold: 0
     });
 
-    document.querySelectorAll('.lazy-image, .lazy-video').forEach(element => {
-        imageObserver.observe(element);
-    });
-
-    document.querySelectorAll('.lazy-video[data-poster]').forEach(video => {
-        posterObserver.observe(video);
-    });
+    sections.forEach((section) => observer.observe(section));
 }
 
 /**
- * Experience Section Logic
+ * Experience timeline: starts scrolled to the newest role and shows edge fades while it can scroll.
  */
-function loadAndDisplayExperience() {
-    fetch(`${import.meta.env.BASE_URL}content/experience.json?${Date.now()}`)
-        .then((response) => response.json())
-        .then((data) => displayExperience(data.experience))
-        .catch((error) => console.error("Error loading experience data:", error));
-}
-
-function displayExperience(experience) {
+function initTimeline() {
+    const shell = document.getElementById("timeline-shell");
+    const container = shell?.querySelector(".timeline-container");
     const timeline = document.getElementById("timeline");
-    timeline.innerHTML = "";
-    const fragment = document.createDocumentFragment();
-    
-    for (let i = experience.length - 1; i >= 0; i--) {
-        const item = experience[i];
-        const div = document.createElement('div');
-        div.className = 'timeline-item';
-
-        const isMonochromeLogo = item.logo_theme === 'monochrome';
-        const logoThemeClass = isMonochromeLogo ? ' experience-logo-container--monochrome' : '';
-        const bgStyle = item.logo_bg ? `style="background-color: ${item.logo_bg}"` : '';
-        const onloadAttr = item.logo_bg || isMonochromeLogo ? '' : 'onload="adjustLogoBackground(this)"';
-
-        div.innerHTML = `
-            <div class="experience-item-layout">
-                <div class="experience-logo-container${logoThemeClass}" ${bgStyle}>
-                    <img src="${item.logo}" alt="${item.company}" class="experience-logo" width="90" height="90" loading="lazy" decoding="async" fetchpriority="low" crossorigin="anonymous" ${onloadAttr}>
-                </div>
-                <div>
-                    <h4 class="mb-1">${item.company}</h4>
-                    <p class="mb-1">${item.title}</p>
-                    <p class="time-range mb-0">${item.time}</p>
-                </div>
-            </div>
-        `;
-        fragment.insertBefore(div, fragment.firstChild);
-    }
-    timeline.appendChild(fragment);
-
-    initTimelineNavigation();
-}
-
-function initTimelineNavigation() {
-    const shell = document.getElementById('timeline-shell');
-    const container = shell?.querySelector('.timeline-container');
-    const timeline = document.getElementById('timeline');
 
     if (!shell || !container || !timeline) return;
 
     const edgeThreshold = 2;
 
-    function updateTimelineNavigation() {
+    function updateScrollFades() {
         const maxScrollLeft = Math.max(0, container.scrollWidth - container.clientWidth);
-        const canScrollLeft = container.scrollLeft > edgeThreshold;
-        const canScrollRight = container.scrollLeft < maxScrollLeft - edgeThreshold;
 
-        shell.classList.toggle('can-scroll-left', canScrollLeft);
-        shell.classList.toggle('can-scroll-right', canScrollRight);
+        shell.classList.toggle("can-scroll-left", container.scrollLeft > edgeThreshold);
+        shell.classList.toggle("can-scroll-right", container.scrollLeft < maxScrollLeft - edgeThreshold);
     }
 
     function alignToNewestRole() {
-        const maxScrollLeft = Math.max(0, container.scrollWidth - container.clientWidth);
-        container.scrollLeft = maxScrollLeft;
-        updateTimelineNavigation();
+        container.scrollLeft = Math.max(0, container.scrollWidth - container.clientWidth);
+        updateScrollFades();
     }
 
-    container.addEventListener('scroll', updateTimelineNavigation, { passive: true });
+    container.addEventListener("scroll", updateScrollFades, { passive: true });
 
-    if ('ResizeObserver' in window) {
-        const resizeObserver = new ResizeObserver(updateTimelineNavigation);
-        resizeObserver.observe(container);
-        resizeObserver.observe(timeline);
-    } else {
-        window.addEventListener('resize', updateTimelineNavigation);
-    }
+    const resizeObserver = new ResizeObserver(updateScrollFades);
+    resizeObserver.observe(container);
+    resizeObserver.observe(timeline);
 
-    shell.classList.add('is-positioning');
+    timeline.querySelectorAll("img[data-auto-background]").forEach((logo) => {
+        if (logo.complete) {
+            adjustLogoBackground(logo);
+        } else {
+            logo.addEventListener("load", () => adjustLogoBackground(logo), { once: true });
+        }
+    });
+
+    // Scroll snapping is paused while positioning; the final alignment waits for fonts and layout.
+    shell.classList.add("is-positioning");
     alignToNewestRole();
 
-    const pageReady = document.readyState === 'complete'
+    const pageReady = document.readyState === "complete"
         ? Promise.resolve()
-        : new Promise((resolve) => window.addEventListener('load', resolve, { once: true }));
-    const fontsReady = document.fonts?.ready || Promise.resolve();
+        : new Promise((resolve) => window.addEventListener("load", resolve, { once: true }));
+    const fontsReady = document.fonts?.ready ?? Promise.resolve();
 
     Promise.all([pageReady, fontsReady]).then(() => {
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
                 alignToNewestRole();
-                shell.classList.remove('is-positioning');
-                shell.classList.remove('is-loading');
-                container.setAttribute('aria-busy', 'false');
+                shell.classList.remove("is-positioning", "is-loading");
             });
         });
     });
 }
 
-// Global exposure for onload attribute
-window.adjustLogoBackground = function(img) {
-    if (!img.complete || img.naturalWidth === 0) return;
+/**
+ * Gives a mostly white logo a dark backing so it stays visible on the default white tile.
+ * Only used for experience entries that set neither `logo_bg` nor `logo_theme`.
+ */
+function adjustLogoBackground(logo) {
+    if (logo.naturalWidth === 0) return;
+
+    const sampleStride = 10;
+    const minimumAlpha = 20;
+    const lightLogoLuminance = 200;
 
     try {
-        const canvas = document.createElement('canvas');
-        canvas.width = img.naturalWidth;
-        canvas.height = img.naturalHeight;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0);
-        
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        const data = imageData.data;
+        const canvas = document.createElement("canvas");
+        canvas.width = logo.naturalWidth;
+        canvas.height = logo.naturalHeight;
+
+        const context = canvas.getContext("2d");
+        context.drawImage(logo, 0, 0);
+
+        const { data } = context.getImageData(0, 0, canvas.width, canvas.height);
         let totalLuminance = 0;
-        let pixelCount = 0;
+        let sampleCount = 0;
 
-        // Sample every 40th pixel to save performance
-        for (let i = 0; i < data.length; i += 40) {
-            const r = data[i];
-            const g = data[i + 1];
-            const b = data[i + 2];
-            const a = data[i + 3];
+        // Sample every tenth pixel (four bytes each) and skip the transparent ones.
+        for (let offset = 0; offset < data.length; offset += sampleStride * 4) {
+            if (data[offset + 3] <= minimumAlpha) continue;
 
-            // Consider only pixels that are opaque enough
-            if (a > 20) {
-                // Perceived luminance: 0.299R + 0.587G + 0.114B
-                const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
-                totalLuminance += luminance;
-                pixelCount++;
-            }
+            totalLuminance += 0.299 * data[offset] + 0.587 * data[offset + 1] + 0.114 * data[offset + 2];
+            sampleCount++;
         }
 
-        if (pixelCount > 0) {
-            const avgLuminance = totalLuminance / pixelCount;
-            // Threshold: if average luminance > 200 (mostly white/light), switch to dark bg
-            if (avgLuminance > 200) {
-                img.parentElement.style.backgroundColor = '#1d1d1f';
-            }
+        if (sampleCount > 0 && totalLuminance / sampleCount > lightLogoLuminance) {
+            logo.parentElement.style.backgroundColor = "#1d1d1f";
         }
-    } catch (e) {
-        console.warn('Could not analyze image for background adjustment:', e);
+    } catch (error) {
+        console.warn("Could not analyze logo for background adjustment:", error);
     }
-};
+}
 
 /**
- * Section Navigation Logic
+ * Publications: abstract toggles, lazy preview media, and search over the prerendered cards.
  */
-function initSectionNav() {
-    const navCurrent = document.getElementById('nav-current');
-    const navList = document.getElementById('nav-list');
-    const currentSectionName = document.getElementById('current-section-name');
-    const sections = document.querySelectorAll('section');
-    
-    if (!navCurrent || !navList || !currentSectionName || sections.length === 0) return;
+function initPublications() {
+    const container = document.getElementById("publications-container");
+    if (!container) return;
 
-    function getSectionName(section) {
-        const heading = section.querySelector('h2');
-        if (heading) return heading.innerText;
-        if (section.id === 'home') return 'Home';
-        return section.id.charAt(0).toUpperCase() + section.id.slice(1);
+    initAbstractToggles(container);
+    initLazyMedia(container);
+    initPublicationSearch(container);
+}
+
+function initAbstractToggles(container) {
+    // The whole card toggles its abstract, except for links and native video controls.
+    container.addEventListener("click", (event) => {
+        if (event.target.closest("a, video[controls]")) return;
+
+        const card = event.target.closest(".publication-card-custom.pointer");
+        if (!card) return;
+
+        const isExpanded = card.classList.toggle("expanded");
+        card.querySelector(".abstract-toggle")?.setAttribute("aria-expanded", String(isExpanded));
+    });
+}
+
+function initLazyMedia(container) {
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const videos = container.querySelectorAll("video.lazy-video");
+
+    // Play previews only while they are on screen; reduced-motion visitors get controls instead.
+    const playbackObserver = new IntersectionObserver((entries) => {
+        for (const { target: video, intersectionRatio } of entries) {
+            if (intersectionRatio >= 0.15 && !prefersReducedMotion) {
+                video.play().catch(() => {});
+            } else {
+                video.pause();
+            }
+        }
+    }, {
+        threshold: 0.15
+    });
+
+    // Posters load well ahead of the viewport so a frame is ready before the video is.
+    const posterObserver = new IntersectionObserver((entries, observer) => {
+        for (const { target: video, isIntersecting } of entries) {
+            if (!isIntersecting) continue;
+
+            video.poster = video.dataset.poster;
+            observer.unobserve(video);
+        }
+    }, {
+        rootMargin: "500px 0px",
+        threshold: 0.01
+    });
+
+    const sourceObserver = new IntersectionObserver((entries, observer) => {
+        for (const { target: video, isIntersecting } of entries) {
+            if (!isIntersecting) continue;
+
+            video.src = video.dataset.src;
+            video.controls = prefersReducedMotion;
+            video.load();
+            video.classList.remove("lazy-video");
+            playbackObserver.observe(video);
+            observer.unobserve(video);
+        }
+    }, {
+        rootMargin: "50px 0px",
+        threshold: 0.01
+    });
+
+    for (const video of videos) {
+        sourceObserver.observe(video);
+        if (video.dataset.poster) posterObserver.observe(video);
     }
 
-    // Populate list
-    sections.forEach(section => {
-        const id = section.id;
-        const name = getSectionName(section);
-        
-        const li = document.createElement('li');
-        li.className = 'nav-item';
-        li.innerText = name;
-        li.dataset.target = id;
-        
-        li.addEventListener('click', () => {
-            const target = document.getElementById(id);
-            if (target) {
-                // Offset for fixed header if any (minimal here)
-                const offset = 20; 
-                const elementPosition = target.getBoundingClientRect().top;
-                const offsetPosition = elementPosition + window.pageYOffset - offset;
-                
-                window.scrollTo({
-                    top: offsetPosition,
-                    behavior: 'smooth'
-                });
-            }
-            navList.classList.remove('show');
-            navCurrent.classList.remove('active');
-        });
-        
-        navList.appendChild(li);
+    // Media errors do not bubble, so listen during capture and hide previews that fail to load.
+    container.addEventListener("error", (event) => {
+        if (event.target.matches("img, video")) event.target.hidden = true;
+    }, true);
+}
+
+function initPublicationSearch(container) {
+    const input = document.getElementById("publicationSearch");
+    const status = document.getElementById("publication-search-status");
+
+    if (!input) return;
+
+    // Searchable text per card: venue, title, authors, abstract, and the paper URL.
+    const entries = Array.from(container.children, (item) => {
+        const fields = Array.from(
+            item.querySelectorAll(".venue-badge, .publication-title, .publication-authors, .abstract-content"),
+            (element) => element.textContent
+        );
+        const paperLink = item.querySelector("a[data-paper-link]");
+        if (paperLink) fields.push(paperLink.getAttribute("href"));
+
+        return { item, text: fields.join("\n").toLowerCase() };
     });
-    
-    // Toggle menu
-    navCurrent.addEventListener('click', (e) => {
-        e.stopPropagation();
-        navList.classList.toggle('show');
-        navCurrent.classList.toggle('active');
-    });
-    
-    // Close when clicking outside
-    document.addEventListener('click', (e) => {
-        if (!navCurrent.contains(e.target) && !navList.contains(e.target)) {
-            navList.classList.remove('show');
-            navCurrent.classList.remove('active');
+
+    function filterPublications() {
+        const searchTerm = input.value.toLowerCase();
+        let matchCount = 0;
+
+        for (const { item, text } of entries) {
+            const isMatch = text.includes(searchTerm);
+            item.hidden = !isMatch;
+            if (isMatch) matchCount++;
         }
+
+        if (status) {
+            status.textContent = searchTerm ? `${matchCount} of ${entries.length} publications shown` : "";
+        }
+    }
+
+    let debounceTimer;
+    input.addEventListener("input", () => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(filterPublications, SEARCH_DEBOUNCE_MS);
     });
-    
-    // Scroll spy
-    const observerOptions = {
-        root: null,
-        // Trigger when section touches the top part of the screen (15% from top)
-        rootMargin: '-15% 0px -85% 0px',
-        threshold: 0
-    };
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const id = entry.target.id;
-                currentSectionName.innerText = getSectionName(entry.target);
-                
-                // Update list active state
-                document.querySelectorAll('.nav-item').forEach(item => {
-                    if (item.dataset.target === id) {
-                        item.classList.add('active');
-                    } else {
-                        item.classList.remove('active');
-                    }
-                });
-            }
-        });
-    }, observerOptions);
-    
-    sections.forEach(section => observer.observe(section));
+
+    // Browsers can restore the field's text on reload or back navigation.
+    if (input.value) filterPublications();
+}
+
+function initFooterYear() {
+    const year = document.getElementById("current-year");
+    if (year) year.textContent = String(new Date().getFullYear());
 }

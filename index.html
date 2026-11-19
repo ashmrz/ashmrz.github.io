@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="icon" href="/icons/laptop.png" type="image/png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ashkan Mirzaei</title>
     <meta name="description" content="Ashkan Mirzaei is a Senior Gen AI Research Scientist at NVIDIA working on world foundation models, video generation, and 3D/4D scene reconstruction and editing.">
     <link rel="canonical" href="https://ashmrz.github.io/">
+    <link rel="icon" href="/icons/laptop.png" type="image/png">
     <meta property="og:type" content="profile">
     <meta property="og:url" content="https://ashmrz.github.io/">
     <meta property="og:title" content="Ashkan Mirzaei">
@@ -50,153 +50,142 @@
             "sameAs": [
                 "https://www.linkedin.com/in/ashkan-mirzaei-6b9651145/",
                 "https://scholar.google.com/citations?user=z8GwuTgAAAAJ&hl=en",
-                "https://twitter.com/ashmrz10",
-                "https://bsky.app/profile/ashmrz.bsky.social"
+                "https://twitter.com/ashmrz10"
             ]
         }
     </script>
-    <script>
-        (() => {
-            const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-            let theme = systemTheme;
-
-            try {
-                const savedTheme = localStorage.getItem('theme');
-                if (savedTheme === 'light' || savedTheme === 'dark') theme = savedTheme;
-            } catch (error) {
-                // Continue with the system theme when storage is unavailable.
-            }
-
-            document.documentElement.setAttribute('data-theme', theme);
-        })();
-    </script>
+    <link rel="preload" href="/src/fonts/poppins-400.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/src/fonts/poppins-500.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/src/fonts/poppins-600.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/src/fonts/poppins-700.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="/src/styles.css">
+    <!-- The experience timeline stays hidden until the script has scrolled it to the newest role. -->
+    <noscript><style>.timeline-shell.is-loading { visibility: visible; }</style></noscript>
+    <script type="module" src="/js/script.js"></script>
 </head>
 <body class="min-h-screen">
-    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle color theme">
-        <i class="fas fa-moon" aria-hidden="true"></i>
-    </button>
-    
-    <!-- Section Navigation -->
-    <nav id="section-nav" class="section-nav">
-        <div id="nav-current" class="nav-current">
+    <!-- Section navigation: the list is generated from the page sections by js/script.js. -->
+    <nav id="section-nav" class="section-nav" aria-label="Page sections">
+        <button type="button" id="nav-current" class="nav-current" aria-expanded="false" aria-controls="nav-list">
             <span id="current-section-name">Home</span>
-            <i class="fas fa-chevron-down ml-2 text-xs"></i>
-        </div>
-        <ul id="nav-list" class="nav-list">
-            <!-- Dynamically populated -->
-        </ul>
+            <!--@icon:chevron-down ml-2 text-xs -->
+        </button>
+        <ul id="nav-list" class="nav-list"></ul>
     </nav>
 
     <div class="site-container">
-        <!-- Home Section -->
-        <section id="home">
-            <div class="flex justify-center">
-                <div class="w-full">
-                    <div class="profile-card">
-                        <div class="text-center">
-                            <img src="/media/profile.webp" alt="Profile Picture" class="profile-image mb-3 mx-auto block" width="140" height="140" decoding="async" fetchpriority="high">
-                            <h1 class="profile-name mb-1">Ashkan Mirzaei</h1>
-                            <p class="profile-focus text-gray-500 mb-1 mt-1">Building World Foundation Models (Cosmos)</p>
-                            <p class="profile-company text-gray-600 mt-0.5">Nvidia</p>
-                        </div>
-                        <div class="social-links">
-                            <a href="mailto:ashkan.m10@gmail.com" class="social-link" title="Email me: ashkan.m10@gmail.com" aria-label="Email Ashkan Mirzaei"><i class="fas fa-envelope" aria-hidden="true"></i></a>
-                            <a href="https://www.linkedin.com/in/ashkan-mirzaei-6b9651145/" class="social-link" title="LinkedIn: Ashkan Mirzaei" aria-label="Ashkan Mirzaei on LinkedIn (opens in a new tab)" target="_blank" rel="me noopener noreferrer"><i class="fab fa-linkedin" aria-hidden="true"></i></a>
-                            <a href="https://scholar.google.com/citations?user=z8GwuTgAAAAJ&hl=en" class="social-link" title="Google Scholar Profile" aria-label="Ashkan Mirzaei on Google Scholar (opens in a new tab)" target="_blank" rel="me noopener noreferrer"><i class="fas fa-graduation-cap" aria-hidden="true"></i></a>
-                            <a href="https://twitter.com/ashmrz10" class="social-link" title="Twitter: @ashmrz10" aria-label="Ashkan Mirzaei on X (opens in a new tab)" target="_blank" rel="me noopener noreferrer"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
-                            <a href="https://bsky.app/profile/ashmrz.bsky.social" class="social-link" title="Bluesky: ashmrz.bsky.social" aria-label="Ashkan Mirzaei on Bluesky (opens in a new tab)" target="_blank" rel="me noopener noreferrer">
-                                <svg class="bluesky-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565C.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479c.815 2.736 3.713 3.66 6.383 3.364c.136-.02.275-.039.415-.056c-.138.022-.276.04-.415.056c-3.912.58-7.387 2.005-2.83 7.078c5.013 5.19 6.87-1.113 7.823-4.308c.953 3.195 2.05 9.271 7.733 4.308c4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056c2.67.297 5.568-.628 6.383-3.364c.246-.828.624-5.79.624-6.478c0-.69-.139-1.861-.902-2.206c-.659-.298-1.664-.62-4.3 1.24C16.046 4.748 13.087 8.687 12 10.8"/></svg>
-                            </a>
-                        </div>
-                        <div class="text-center mt-3">
-                            <p class="text-sm mb-2 text-gray-500 fw-500">When I'm not coding:</p>
-                            <div class="hobby-list" aria-label="Interests outside coding">
-                                <span class="hobby-tag">skateboarding</span>
-                                <span class="hobby-tag">coffee</span>
-                                <span class="hobby-tag">cooking</span>
-                                <span class="hobby-tag">films</span>
-                                <span class="hobby-tag">music</span>
+        <main class="site-main">
+            <!-- Home Section -->
+            <section id="home">
+                <div class="flex justify-center">
+                    <div class="w-full">
+                        <div class="profile-card">
+                            <div class="text-center">
+                                <img src="/media/profile.webp" alt="Portrait of Ashkan Mirzaei" class="profile-image mb-3 mx-auto block" width="140" height="140" decoding="async" fetchpriority="high" vite-ignore>
+                                <h1 class="profile-name mb-1">Ashkan Mirzaei</h1>
+                                <p class="profile-focus text-gray-500 mb-1 mt-1">Building World Foundation Models (Cosmos)</p>
+                                <p class="profile-company text-gray-600 mt-0.5">Nvidia</p>
                             </div>
-                        </div>
-                        <!-- <div class="text-center mt-3">
-                            <div class="info-box">
-                                <p class="text-sm mb-0 text-gray-600 leading-relaxed">
-                                    <i class="fas fa-lightbulb icon-amber"></i>
-                                    If you are a PhD student with a strong background in computer vision and generative modeling, and are looking for internship opportunities, feel free to reach out!
-                                </p>
+                            <div class="social-links">
+                                <a href="mailto:ashkan.m10@gmail.com" class="social-link" title="Email me: ashkan.m10@gmail.com" aria-label="Email Ashkan Mirzaei"><!--@icon:envelope--></a>
+                                <a href="https://www.linkedin.com/in/ashkan-mirzaei-6b9651145/" class="social-link" title="LinkedIn: Ashkan Mirzaei" aria-label="Ashkan Mirzaei on LinkedIn (opens in a new tab)" target="_blank" rel="me noopener noreferrer"><!--@icon:linkedin--></a>
+                                <a href="https://scholar.google.com/citations?user=z8GwuTgAAAAJ&hl=en" class="social-link" title="Google Scholar Profile" aria-label="Ashkan Mirzaei on Google Scholar (opens in a new tab)" target="_blank" rel="me noopener noreferrer"><!--@icon:graduation-cap--></a>
+                                <a href="https://twitter.com/ashmrz10" class="social-link" title="Twitter: @ashmrz10" aria-label="Ashkan Mirzaei on X (opens in a new tab)" target="_blank" rel="me noopener noreferrer"><!--@icon:x-twitter--></a>
                             </div>
-                        </div> -->
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- Research Section -->
-        <section id="research">
-            <h2 class="section-title">Research</h2>
-            <div class="publication-card section-card">
-                <p class="research-copy text-gray-600 mb-0">
-                    My focus is on making it easier to generate, reconstruct, and edit videos and 3D/4D scenes. I did my PhD at the University of Toronto with advisors <a href="https://www.gilitschenski.org/igor/" target="_blank" rel="noopener noreferrer">Igor Gilitschenski</a> and <a href="https://starslab.ca/people/prof-jonathan-kelly/" target="_blank" rel="noopener noreferrer">Jonathan Kelly</a>.
-                </p>
-            </div>
-        </section>
-        <!-- Experience Section -->
-        <section id="experience">
-            <h2 class="section-title">Experience</h2>
-            <div class="timeline-shell is-loading" id="timeline-shell">
-                <div class="timeline-container" tabindex="0" role="region" aria-label="Experience timeline. Scroll horizontally to view earlier roles." aria-busy="true">
-                    <div class="timeline" id="timeline"></div>
-                </div>
-            </div>
-        </section>
-        <!-- Education Section -->
-        <section id="education">
-            <h2 class="section-title">Education</h2>
-            <div class="grid gap-2">
-                <div class="w-full">
-                    <div class="education-card publication-card section-card">
-                        <div class="flex flex-col">
-                            <div class="flex flex-col items-start justify-between min-[576px]:flex-row min-[576px]:items-center">
-                                <h4 class="mb-1 min-[576px]:mb-0">University of Toronto</h4>
-                                <span class="text-gray-500">Sep 2021 - May 2025</span>
+                            <div class="text-center mt-3">
+                                <p class="text-sm mb-2 text-gray-500 fw-500">When I'm not coding:</p>
+                                <div class="hobby-list" aria-label="Interests outside coding">
+                                    <span class="hobby-tag">skateboarding</span>
+                                    <span class="hobby-tag">coffee</span>
+                                    <span class="hobby-tag">cooking</span>
+                                    <span class="hobby-tag">films</span>
+                                    <span class="hobby-tag">music</span>
+                                </div>
                             </div>
-                            <span class="text-gray-600">PhD in Computer Science</span>
+                            <!-- Parked internship note. To re-enable, uncomment it and swap the [lightbulb icon]
+                                 marker for the icon slot "@icon:lightbulb icon-amber" (slots cannot sit inside a comment).
+                            <div class="text-center mt-3">
+                                <div class="info-box">
+                                    <p class="text-sm mb-0 text-gray-600 leading-relaxed">
+                                        [lightbulb icon]
+                                        If you are a PhD student with a strong background in computer vision and generative modeling, and are looking for internship opportunities, feel free to reach out!
+                                    </p>
+                                </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
-                <div class="w-full">
-                    <div class="education-card publication-card section-card">
-                        <div class="flex flex-col">
-                            <div class="flex flex-col items-start justify-between min-[576px]:flex-row min-[576px]:items-center">
-                                <h4 class="mb-1 min-[576px]:mb-0">Sharif University of Technology</h4>
-                                <span class="text-gray-500">Sep 2017 - Jun 2021</span>
-                            </div>
-                            <span class="text-gray-600">BSc in Computer Engineering</span>
+            </section>
+            <!-- Research Section -->
+            <section id="research">
+                <h2 class="section-title">Research</h2>
+                <div class="publication-card section-card">
+                    <p class="research-copy text-gray-600 mb-0">
+                        My focus is on making it easier to generate, reconstruct, and edit videos and 3D/4D scenes. I did my PhD at the University of Toronto with advisors <a href="https://www.gilitschenski.org/igor/" target="_blank" rel="noopener noreferrer">Igor Gilitschenski</a> and <a href="https://starslab.ca/people/prof-jonathan-kelly/" target="_blank" rel="noopener noreferrer">Jonathan Kelly</a>.
+                    </p>
+                </div>
+            </section>
+            <!-- Experience Section -->
+            <section id="experience">
+                <h2 class="section-title">Experience</h2>
+                <div class="timeline-shell is-loading" id="timeline-shell">
+                    <div class="timeline-container" tabindex="0" role="region" aria-label="Experience timeline. Scroll horizontally to view earlier roles.">
+                        <div class="timeline" id="timeline">
+                            <!--@experience-->
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
-        <!-- Publications Section -->
-        <section id="publications">
-            <h2 class="section-title">Publications</h2>
-            <div class="search-container">
-                <label for="publicationSearch" class="sr-only">Search publications</label>
-                <div class="search-field">
-                    <i class="fas fa-search search-icon" aria-hidden="true"></i>
-                    <input type="text" id="publicationSearch" class="search-input" placeholder="Search publications" oninput="debouncedFilterPublications()">
+            </section>
+            <!-- Education Section -->
+            <section id="education">
+                <h2 class="section-title">Education</h2>
+                <div class="grid gap-2">
+                    <div class="w-full">
+                        <div class="education-card publication-card section-card">
+                            <div class="flex flex-col">
+                                <div class="flex flex-col items-start justify-between min-[576px]:flex-row min-[576px]:items-center">
+                                    <h3 class="mb-1 min-[576px]:mb-0">University of Toronto</h3>
+                                    <span class="text-gray-500">Sep 2021 - May 2025</span>
+                                </div>
+                                <span class="text-gray-600">PhD in Computer Science</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-full">
+                        <div class="education-card publication-card section-card">
+                            <div class="flex flex-col">
+                                <div class="flex flex-col items-start justify-between min-[576px]:flex-row min-[576px]:items-center">
+                                    <h3 class="mb-1 min-[576px]:mb-0">Sharif University of Technology</h3>
+                                    <span class="text-gray-500">Sep 2017 - Jun 2021</span>
+                                </div>
+                                <span class="text-gray-600">BSc in Computer Engineering</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="grid gap-3" id="publications-container"></div>
-        </section>
+            </section>
+            <!-- Publications Section -->
+            <section id="publications">
+                <h2 class="section-title">Publications</h2>
+                <div class="search-container" role="search">
+                    <label for="publicationSearch" class="sr-only">Search publications</label>
+                    <div class="search-field">
+                        <!--@icon:magnifying-glass search-icon -->
+                        <input type="text" id="publicationSearch" class="search-input" placeholder="Search publications">
+                    </div>
+                    <p id="publication-search-status" class="sr-only" role="status" aria-live="polite"></p>
+                </div>
+                <div class="grid gap-3" id="publications-container">
+                    <!--@publications-->
+                </div>
+            </section>
+        </main>
         <!-- Footer -->
         <footer class="mt-2 w-full py-4">
             <div class="text-center text-gray-400 text-sm">
-                <p class="mb-0 opacity-60">© 2024 - <script>document.write(new Date().getFullYear());</script> Ashkan Mirzaei</p>
+                <p class="mb-0 opacity-60">© 2024 - <span id="current-year"><!--@year--></span> Ashkan Mirzaei</p>
             </div>
         </footer>
-        <!-- Scripts -->
-        <script type="module" src="/js/script.js"></script>
     </div>
 </body>
 </html>

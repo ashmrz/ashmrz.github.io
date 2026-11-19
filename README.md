@@ -2,6 +2,8 @@
 
 Static academic and personal website, built with Vite and Tailwind CSS and deployed to GitHub Pages.
 
+Publications and the experience timeline live in `content/papers.json` and `content/experience.json`. They are rendered into `index.html` at build time, so the deployed page is plain static HTML.
+
 ## Local development
 
 ```sh
@@ -9,7 +11,7 @@ npm ci
 npm run dev
 ```
 
-Use the local URL printed by Vite. To test the exact production output:
+Use the local URL printed by Vite. The page reloads when the content files change. To test the exact production output:
 
 ```sh
 npm run build
