@@ -599,6 +599,37 @@ footer p {
     color: var(--text-tertiary); 
 }
 
+/* Footnote for marks in author lists: one legend under the search field, plus per-paper notes. */
+.publication-legend {
+    margin-top: 0.75rem;
+    padding-left: 0.25rem;
+    color: var(--text-tertiary);
+    font-size: 0.8rem;
+    line-height: 1.5;
+}
+
+.publication-body-custom .publication-authors-note {
+    margin-top: 0.15rem;
+    color: var(--text-tertiary) !important;
+    font-size: 0.8rem;
+    line-height: 1.5;
+}
+
+/* Shown in place of the list when a search matches nothing. */
+.publication-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 2rem 1rem;
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+.publication-empty .project-link {
+    cursor: pointer;
+}
+
 .abstract-toggle {
     display: block;
     width: 100%;
@@ -738,6 +769,8 @@ footer p {
 }
 
 .timeline-container {
+    /* Lets the cards size themselves against the visible strip (cqi units below). */
+    container-type: inline-size;
     overflow-y: hidden;
     overflow-x: auto; 
     padding: 0;
@@ -849,6 +882,13 @@ footer p {
 .timeline-item {
     border-radius: 20px; 
     min-width: 340px; 
+    /*
+     * On a narrow strip a card shrinks to fit, leaving 3rem for the neighbouring card to
+     * peek in under the edge fade. Wider strips are unaffected. The plain min-width above
+     * is the fallback for browsers without container query units.
+     */
+    min-width: min(340px, calc(100cqi - 3rem));
+    max-width: calc(100cqi - 3rem);
     flex: none; 
     position: relative;
     display: flex;

@@ -304,6 +304,9 @@ function initLazyMedia(container) {
 function initPublicationSearch(container) {
     const input = document.getElementById("publicationSearch");
     const status = document.getElementById("publication-search-status");
+    const emptyState = document.getElementById("publication-empty");
+    const emptyTerm = document.getElementById("publication-empty-term");
+    const clearButton = document.getElementById("publication-search-clear");
 
     if (!input) return;
 
@@ -332,7 +335,18 @@ function initPublicationSearch(container) {
         if (status) {
             status.textContent = searchTerm ? `${matchCount} of ${entries.length} publications shown` : "";
         }
+
+        if (emptyState) {
+            emptyState.hidden = matchCount > 0;
+            if (emptyTerm) emptyTerm.textContent = input.value.trim();
+        }
     }
+
+    clearButton?.addEventListener("click", () => {
+        input.value = "";
+        filterPublications();
+        input.focus();
+    });
 
     let debounceTimer;
     input.addEventListener("input", () => {

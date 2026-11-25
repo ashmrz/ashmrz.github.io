@@ -40,6 +40,7 @@
     {
       "title": "EasyV2V: A High-quality Instruction-based Video Editing Framework",
       "authors": "Jinjie Mai*, Chaoyang Wang, Guocheng Gordon Qian, Willi Menapace, Sergey Tulyakov, Bernard Ghanem, Peter Wonka, Ashkan Mirzaei*",
+      "authors_note": "* Core contributors",
       "abstract": "While image editing has advanced rapidly, video editing remains less explored, facing challenges in consistency, control, and generalization. We study the design space of data, architecture, and control, and introduce EasyV2V, a simple and effective framework for instruction-based video editing. On the data side, we compose existing experts with fast inverses to build diverse video pairs, lift image edit pairs into videos via single-frame supervision and pseudo pairs with shared affine motion, mine dense-captioned clips for video pairs, and add transition supervision to teach how edits unfold. On the model side, we observe that pretrained text-to-video models possess editing capability, motivating a simplified design. Simple sequence concatenation for conditioning with light LoRA fine-tuning suffices to train a strong model. For control, we unify spatiotemporal control via a single mask mechanism and support optional reference images. Overall, EasyV2V works with flexible inputs, e.g., video+text, video+mask+text, video+mask+reference+text, and achieves state-of-the-art video editing results, surpassing concurrent and commercial systems.",
       "media": "/media/paper_videos/web_optimized/easyv2v.mp4",
       "venue": "CVPR 2026",
@@ -119,6 +120,14 @@
       "abstract": "Recent advancements in static feed-forward scene reconstruction have demonstrated significant progress in high-quality novel view synthesis. However, these models often struggle with generalizability across diverse environments and fail to effectively handle dynamic content. We present BTimer (short for BulletTimer), the first motion-aware feed-forward model for real-time reconstruction and novel view synthesis of dynamic scenes. Our approach reconstructs the full scene in a 3D Gaussian Splatting representation at a given target ('bullet') timestamp by aggregating information from all the context frames. Such a formulation allows BTimer to gain scalability and generalization by leveraging both static and dynamic scene datasets. Given a casual monocular dynamic video, BTimer reconstructs a bullet-time scene within 150ms while reaching state-of-the-art performance on both static and dynamic scene datasets, even compared with optimization-based approaches."
     },
     {
+      "title": "Leveraging Image Generative Priors for 3D Editing",
+      "authors": "Ashkan Mirzaei",
+      "media": "/media/paper_images/thesis.webp",
+      "media_labels": ["SPIn-NeRF", "Reference-guided", "Watch Your Steps", "RefFusion"],
+      "venue": "PhD Thesis, University of Toronto 2025",
+      "paper": "https://utoronto.scholaris.ca/items/c1e0bbbf-1b12-466b-80d2-f059c1d1912b"
+    },
+    {
       "title": "3DGUT: Enabling Distorted Cameras and Secondary Rays in Gaussian Splatting",
       "authors": "Qi Wu*, Janick Martinez Esturo*, Ashkan Mirzaei, Nicolas Moenne-Loccoz, Zan Gojcic",
       "venue": "CVPR 2025 (Oral)",
@@ -145,7 +154,7 @@
       "abstract": "Particle-based representations of radiance fields such as 3D Gaussian Splatting have found great success for reconstructing and re-rendering of complex scenes. Most existing methods render particles via rasterization, projecting them to screen space tiles for processing in a sorted order. This work instead considers ray tracing the particles, building a bounding volume hierarchy and casting a ray for each pixel using high-performance GPU ray tracing hardware. To efficiently handle large numbers of semi-transparent particles, we describe a specialized rendering algorithm which encapsulates particles with bounding meshes to leverage fast ray-triangle intersections, and shades batches of intersections in depth-order. The benefits of ray tracing are well-known in computer graphics: processing incoherent rays for secondary lighting effects such as shadows and reflections, rendering from highly-distorted cameras common in robotics, stochastically sampling rays, and more. With our renderer, this flexibility comes at little cost compared to rasterization. Experiments demonstrate the speed and accuracy of our approach, as well as several applications in computer graphics and vision. We further propose related improvements to the basic Gaussian representation, including a simple use of generalized kernel functions which significantly reduces particle hit counts."
     },
     {
-      "title": "GaussianCut: Fast Interactive Segmentation via Graph Cut for 3D Gaussian Splatting",
+      "title": "GaussianCut: Interactive Segmentation via Graph Cut for 3D Gaussian Splatting",
       "authors": "Umangi Jain, Ashkan Mirzaei, Igor Gilitschenski",
       "venue": "NeurIPS 2024",
       "url": "https://umangi-jain.github.io/gaussiancut/",
@@ -154,7 +163,7 @@
       "media": "/media/paper_videos/web_optimized/gaussian_cut.mp4"
     },
     {
-      "title": "Large 4D Gaussian Reconstruction Model",
+      "title": "L4GM: Large 4D Gaussian Reconstruction Model",
       "authors": "Jiawei Ren, Kevin Xie, Ashkan Mirzaei, Hanxue Liang, Xiaohui Zeng, Karsten Kreis, Ziwei Liu, Antonio Torralba, Sanja Fidler, Seung Wook Kim, Huan Ling",
       "venue": "NeurIPS 2024",
       "url": "https://research.nvidia.com/labs/toronto-ai/l4gm/",

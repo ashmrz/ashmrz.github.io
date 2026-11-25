@@ -19,14 +19,15 @@
 - `scripts/icons.mjs`: the inline SVG icon registry.
 - `scripts/site-content.mjs`: shared content loading and the list of media the production site needs.
 - `scripts/validate-content.mjs` and `scripts/verify-dist.mjs`: content validation and production artifact checks.
-- `media/`: profile images, organization logos, poster frames, optimized publication previews, and source-quality media.
+- `media/`: only the files the site serves: profile images, organization logos, poster frames, and optimized publication previews. The validator rejects anything else here.
+- `source-media/` and the two master folders under `media/paper_videos/`: git-ignored, local-only homes for source-quality files (see Content conventions).
 - `public/icons/`: the favicon.
 - `package.json` and `vite.config.js`: local development, validation, and production build configuration.
 - `.github/workflows/pages.yml`: GitHub Pages build and deployment configuration.
 
 ## Build-time rendering
 
-- `vite.config.js` replaces comment slots in `index.html`, both in `npm run dev` and in the production build: `<!--@publications-->`, `<!--@experience-->`, `<!--@year-->`, and `<!--@icon:name extra-classes -->`.
+- `vite.config.js` replaces comment slots in `index.html`, both in `npm run dev` and in the production build: `<!--@publications-->`, `<!--@legend-->`, `<!--@experience-->`, `<!--@year-->`, and `<!--@icon:name extra-classes -->`.
 - Add an icon by registering its outline in `scripts/icons.mjs`, then reference it with an icon slot in `index.html` or with `renderIcon()` in `scripts/render-content.mjs`.
 - Keep a space before the closing `-->` of an icon slot that carries classes, so Tailwind sees each class name. A slot cannot be placed inside another HTML comment.
 - All content values are HTML-escaped when rendered, so the JSON holds plain text rather than markup.
@@ -34,9 +35,10 @@
 ## Content conventions
 
 - Keep `content/papers.json` ordered newest first. Every paper should provide `title`, `authors`, and `venue`; `abstract`, `media`, `url` (project page), and `paper` are optional. `media_labels` (four strings) captions the quadrants of a 2x2 preview, and `poster` overrides the poster frame derived from the video name.
+- An asterisk in `authors` means equal contribution, which the `<!--@legend-->` note under the search field explains. When a paper uses its marks differently, give that paper an `authors_note` (for example `"* Core contributors"`); it is shown under the authors.
 - Keep `content/experience.json` chronological from oldest to newest. Entries use `title`, `company`, `time`, and `logo`. `logo_bg` sets the logo tile color, `logo_theme: "monochrome"` marks a white single-color logo that is drawn dark on a transparent tile, and a logo with neither gets a dark tile automatically when it is mostly white.
 - Use root-relative public asset URLs. Put organization logos in `media/logos/`, publication videos in `media/paper_videos/web_optimized/`, and matching WebP poster frames in `media/paper_posters/` to limit page weight.
-- Keep original and intermediate publication videos under `media/paper_videos/original_quality/` and `media/paper_videos/reduced_quality/`; never reference them from site content.
+- Source-quality and intermediate media are not tracked in git. Keep publication video masters on disk under `media/paper_videos/original_quality/` and `media/paper_videos/reduced_quality/`, and other source files under `source-media/`; all three are git-ignored and must never be referenced from site content. The masters that used to be tracked are preserved at the tag `media-masters-2026-11` and can be restored with `git checkout media-masters-2026-11 -- <path>`.
 - Edit biography, education, profile links, and section structure directly in `index.html`.
 - Section navigation is generated from each `<section>` element's `id` and heading. Keep section IDs unique and stable.
 
@@ -78,6 +80,7 @@ For user-facing changes, manually check desktop and mobile layouts, publication 
 
 - This website is deployed on GitHub Pages. Pushes to `main` and manual workflow dispatches run `.github/workflows/pages.yml`.
 - The workflow installs the locked npm dependencies, runs the validation and Vite build, uploads `dist/`, and deploys it to the `github-pages` environment.
-- Vite copies only media referenced by the content data plus required profile assets into `dist/`. Original and reduced-quality videos are excluded by construction and checked by the production artifact verifier.
+- Vite copies only media referenced by the content data plus required profile assets into `dist/`. Source-quality media is untracked, so it never reaches the workflow, and the production artifact verifier still checks that none of it is deployed.
 - Prefer a fast-start H.264 asset in `media/paper_videos/web_optimized/` with a matching WebP poster.
 - Changes merged or pushed to `main` can affect the live site, so treat `package-lock.json`, `vite.config.js`, and `.github/workflows/pages.yml` as production configuration.
+- Pin every GitHub Action to a full commit SHA with its exact version in a trailing comment (for example `# v7.0.1`), and pin npm packages to exact versions, so Dependabot updates stay reviewable.

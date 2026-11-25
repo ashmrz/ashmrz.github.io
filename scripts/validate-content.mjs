@@ -1,10 +1,11 @@
 /*
  * Validates content/papers.json and content/experience.json before every build:
- * required fields, asset paths, link protocols, and ordering.
+ * required fields, asset paths, link protocols, and ordering. Also checks that media/
+ * holds only files the site serves.
  */
 import fs from "node:fs";
 import path from "node:path";
-import { PROFILE_ASSETS, getPosterPath, isVideo, loadContent, repositoryRoot } from "./site-content.mjs";
+import { PROFILE_ASSETS, SOURCE_MEDIA_DIRECTORIES, collectProductionMedia, getPosterPath, isVideo, loadContent, repositoryRoot } from "./site-content.mjs";
 
 const publicRoot = path.join(repositoryRoot, "public");
 const problems = [];
@@ -53,7 +54,7 @@ function validatePapers(papers) {
     papers.forEach((paper, index) => {
         const location = `content/papers.json paper ${index + 1}`;
         ["title", "authors", "venue"].forEach((field) => requireNonEmptyString(paper, field, location));
-        ["abstract", "media", "poster", "url", "paper"].forEach((field) => validateOptionalString(paper, field, location));
+        ["abstract", "authors_note", "media", "poster", "url", "paper"].forEach((field) => validateOptionalString(paper, field, location));
 
         if (typeof paper.title === "string") {
             if (titles.has(paper.title)) problems.push(`${location}: duplicate title (${paper.title})`);
@@ -106,6 +107,30 @@ function validateExperience(experience) {
     });
 }
 
+/**
+ * Keeps the repository lean: every file under media/ must be served by the site.
+ * Masters and other source files belong in the git-ignored source-media folders.
+ */
+function validateMediaDirectory(servedAssets) {
+    const served = new Set(servedAssets.map((asset) => asset.slice(1)));
+    const pending = ["media"];
+
+    while (pending.length > 0) {
+        const directory = pending.pop();
+
+        for (const entry of fs.readdirSync(path.join(repositoryRoot, directory), { withFileTypes: true })) {
+            const relativePath = `${directory}/${entry.name}`;
+            if (entry.name.startsWith(".") || SOURCE_MEDIA_DIRECTORIES.includes(relativePath)) continue;
+
+            if (entry.isDirectory()) {
+                pending.push(relativePath);
+            } else if (!served.has(relativePath)) {
+                problems.push(`${relativePath}: not referenced by the site; remove it or move it to source-media/`);
+            }
+        }
+    }
+}
+
 const { papers, experience } = await loadContent();
 
 if (Array.isArray(papers)) {
@@ -121,6 +146,10 @@ if (Array.isArray(experience)) {
 }
 
 PROFILE_ASSETS.forEach((asset) => validateAsset(asset, "profile asset"));
+
+if (Array.isArray(papers) && Array.isArray(experience)) {
+    validateMediaDirectory(collectProductionMedia({ papers, experience }));
+}
 
 if (problems.length > 0) {
     problems.forEach((problem) => console.error(`- ${problem}`));

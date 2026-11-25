@@ -3,12 +3,13 @@ import path from "node:path";
 import { defineConfig } from "vite";
 import tailwindcss from "@tailwindcss/vite";
 import { renderIcon } from "./scripts/icons.mjs";
-import { renderExperience, renderPublications } from "./scripts/render-content.mjs";
+import { renderExperience, renderPublicationLegend, renderPublications } from "./scripts/render-content.mjs";
 import { collectProductionMedia, contentDirectory, loadContent, repositoryRoot } from "./scripts/site-content.mjs";
 
 /*
  * index.html marks build-time content with comment slots:
  *   <!--@publications-->   publication cards from content/papers.json
+ *   <!--@legend-->         the note explaining the asterisk in author lists, when one is needed
  *   <!--@experience-->     timeline items from content/experience.json
  *   <!--@year-->           the build year (the browser script keeps it current)
  *   <!--@icon:name extra classes-->   an inline SVG icon from scripts/icons.mjs
@@ -19,6 +20,7 @@ async function renderSlots(html) {
     const { papers, experience } = await loadContent();
     const slots = {
         publications: () => renderPublications(papers),
+        legend: () => renderPublicationLegend(papers),
         experience: () => renderExperience(experience),
         year: () => String(new Date().getFullYear()),
         icon: (name, className) => renderIcon(name, className)

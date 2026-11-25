@@ -30,6 +30,11 @@ function renderAuthors(authors) {
     return escapeHtml(authors).replace(highlighted, `<strong>${highlighted}</strong>`);
 }
 
+function renderAuthorsNote(paper) {
+    if (!paper.authors_note) return "";
+    return `<p class="publication-authors-note">${escapeHtml(paper.authors_note)}</p>`;
+}
+
 function renderMedia(paper) {
     const hasMedia = typeof paper.media === "string" && paper.media.trim() !== "";
 
@@ -110,6 +115,7 @@ function renderPublication(paper, index) {
                         <span class="venue-badge">${escapeHtml(paper.venue)}</span>
                         <h3 class="publication-title mb-1">${escapeHtml(paper.title)}</h3>
                         <p class="publication-authors mb-0 text-sm">${renderAuthors(paper.authors)}</p>
+                        ${renderAuthorsNote(paper)}
                         ${renderLinks(paper)}
                         ${renderAbstract(paper, index)}
                     </div>
@@ -117,6 +123,15 @@ function renderPublication(paper, index) {
             </div>
         </div>
     </div>`;
+}
+
+/**
+ * Explains the asterisk used in author lists. A paper whose marks mean something else
+ * carries its own `authors_note`, so the legend is only rendered for the others.
+ */
+export function renderPublicationLegend(papers) {
+    const needsLegend = papers.some((paper) => paper.authors.includes("*") && !paper.authors_note);
+    return needsLegend ? `<p class="publication-legend">* Equal contribution, unless an entry says otherwise.</p>` : "";
 }
 
 /** Renders the publication cards in file order (newest first). */

@@ -181,10 +181,16 @@
                         <!--@icon:magnifying-glass search-icon -->
                         <input type="text" id="publicationSearch" class="search-input" placeholder="Search publications">
                     </div>
+                    <!--@legend-->
                     <p id="publication-search-status" class="sr-only" role="status" aria-live="polite"></p>
                 </div>
                 <div class="grid gap-3" id="publications-container">
                     <!--@publications-->
+                </div>
+                <!-- Shown by js/script.js when a search matches nothing. -->
+                <div class="publication-empty" id="publication-empty" hidden>
+                    <p>No publications match <q id="publication-empty-term"></q>.</p>
+                    <button type="button" class="project-link" id="publication-search-clear">Clear search</button>
                 </div>
             </section>
         </main>
