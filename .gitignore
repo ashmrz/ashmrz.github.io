@@ -9,3 +9,8 @@ dist/
 
 # Operating-system metadata
 .DS_Store
+
+# Source-quality and intermediate media are kept on disk, not in the repository
+/media/paper_videos/original_quality/
+/media/paper_videos/reduced_quality/
+/source-media/

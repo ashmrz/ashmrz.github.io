@@ -24,7 +24,9 @@ npm run preview
 npm run check
 ```
 
-This validates publication and experience content, lints the JavaScript, builds the site, and verifies that the GitHub Pages artifact contains all referenced production assets without source-quality videos.
+This validates publication and experience content, lints the JavaScript, builds the site, and verifies that the GitHub Pages artifact contains all referenced production assets without source-quality videos. It also fails if `media/` holds a file the site does not use.
+
+Source-quality and intermediate media are not tracked. They stay on disk in git-ignored folders; see `AGENTS.md` for where they live and how to restore the ones archived at the `media-masters-2026-11` tag.
 
 ## Deployment
 

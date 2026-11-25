@@ -15,6 +15,16 @@ export const PROFILE_ASSETS = [
     "/media/profile_280.png"
 ];
 
+/**
+ * Folders for source-quality and intermediate media. They are git-ignored: the files stay
+ * on disk for re-encoding but are never tracked, referenced by content, or deployed.
+ */
+export const SOURCE_MEDIA_DIRECTORIES = [
+    "media/paper_videos/original_quality",
+    "media/paper_videos/reduced_quality",
+    "source-media"
+];
+
 const VIDEO_EXTENSION = /\.(mp4|webm|mov)$/i;
 
 async function readContentFile(filename) {

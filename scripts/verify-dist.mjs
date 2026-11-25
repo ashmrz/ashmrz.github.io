@@ -4,7 +4,7 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { collectProductionMedia, loadContent, repositoryRoot } from "./site-content.mjs";
+import { SOURCE_MEDIA_DIRECTORIES, collectProductionMedia, loadContent, repositoryRoot } from "./site-content.mjs";
 
 const distRoot = path.join(repositoryRoot, "dist");
 const problems = [];
@@ -25,12 +25,7 @@ const content = await loadContent();
 ["index.html", "icons/laptop.png"].forEach(requireFile);
 collectProductionMedia(content).forEach(requireFile);
 
-[
-    "content",
-    "media/paper_videos/original_quality",
-    "media/paper_videos/reduced_quality",
-    "source-media"
-].forEach((relativePath) => {
+["content", ...SOURCE_MEDIA_DIRECTORIES].forEach((relativePath) => {
     if (fs.existsSync(path.join(distRoot, relativePath))) {
         problems.push(`Source-only files leaked into production: ${relativePath}`);
     }
