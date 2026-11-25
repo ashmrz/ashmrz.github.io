@@ -100,25 +100,58 @@ function initTimeline() {
 
     if (!shell || !container || !timeline) return;
 
+    const controls = document.getElementById("timeline-controls");
+    const previousButton = controls?.querySelector('[data-scroll="-1"]');
+    const nextButton = controls?.querySelector('[data-scroll="1"]');
+    const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     const edgeThreshold = 2;
 
-    function updateScrollFades() {
+    // Keeps the edge fades and the previous/next buttons in step with the scroll position.
+    function updateScrollState() {
         const maxScrollLeft = Math.max(0, container.scrollWidth - container.clientWidth);
+        const canScrollLeft = container.scrollLeft > edgeThreshold;
+        const canScrollRight = container.scrollLeft < maxScrollLeft - edgeThreshold;
 
-        shell.classList.toggle("can-scroll-left", container.scrollLeft > edgeThreshold);
-        shell.classList.toggle("can-scroll-right", container.scrollLeft < maxScrollLeft - edgeThreshold);
+        shell.classList.toggle("can-scroll-left", canScrollLeft);
+        shell.classList.toggle("can-scroll-right", canScrollRight);
+
+        if (!previousButton || !nextButton) return;
+
+        // The buttons replace the scrollbar only while there is something to scroll.
+        const overflows = maxScrollLeft > edgeThreshold;
+        controls.hidden = !overflows;
+        shell.classList.toggle("has-controls", overflows);
+
+        // aria-disabled keeps a button focusable when it reaches the end of the timeline.
+        previousButton.setAttribute("aria-disabled", String(!canScrollLeft));
+        nextButton.setAttribute("aria-disabled", String(!canScrollRight));
     }
 
     function alignToNewestRole() {
         container.scrollLeft = Math.max(0, container.scrollWidth - container.clientWidth);
-        updateScrollFades();
+        updateScrollState();
     }
 
-    container.addEventListener("scroll", updateScrollFades, { passive: true });
+    container.addEventListener("scroll", updateScrollState, { passive: true });
 
-    const resizeObserver = new ResizeObserver(updateScrollFades);
+    const resizeObserver = new ResizeObserver(updateScrollState);
     resizeObserver.observe(container);
     resizeObserver.observe(timeline);
+
+    controls?.addEventListener("click", (event) => {
+        const button = event.target.closest("button[data-scroll]");
+        if (!button || button.getAttribute("aria-disabled") === "true") return;
+
+        // Move by most of the visible width, and never by less than one card.
+        const firstItem = timeline.firstElementChild;
+        const cardStep = firstItem ? firstItem.getBoundingClientRect().width + parseFloat(getComputedStyle(timeline).columnGap || "0") : 0;
+        const step = Math.max(container.clientWidth * 0.8, cardStep);
+
+        container.scrollBy({
+            left: Number(button.dataset.scroll) * step,
+            behavior: reducedMotionQuery.matches ? "auto" : "smooth"
+        });
+    });
 
     timeline.querySelectorAll("img[data-auto-background]").forEach((logo) => {
         if (logo.complete) {

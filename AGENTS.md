@@ -12,7 +12,7 @@
 - `index.html`: page structure and static profile, research, education, and footer content, plus the build slots described below.
 - `src/styles.css`: build entry for Tailwind CSS, the local fonts, and the custom stylesheet. It lists the files Tailwind scans for class names.
 - `css/style.css`: the light theme tokens, responsive layout, glass-style components, and styles for the build-rendered content.
-- `js/script.js`: section navigation, publication search and abstract expansion, lazy media loading, and timeline positioning.
+- `js/script.js`: section navigation, publication search and abstract expansion, lazy media loading, and the experience timeline's positioning and previous/next controls.
 - `content/papers.json`: publication records rendered in file order.
 - `content/experience.json`: experience timeline records.
 - `scripts/render-content.mjs`: build-time HTML for publication cards and timeline items.

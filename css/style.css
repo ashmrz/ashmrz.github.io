@@ -81,6 +81,8 @@ html {
     .social-link::before,
     .project-link,
     .project-link::before,
+    .timeline-control,
+    .timeline-control::before,
     .timeline-item::before,
     .media-composite-label-cell span {
         corner-shape: round;
@@ -292,6 +294,7 @@ button:focus-visible {
 .venue-badge::before,
 .social-link::before,
 .project-link::before,
+.timeline-control::before,
 .info-box::before,
 .publication-card::after,
 .profile-card::after,
@@ -321,7 +324,8 @@ button:focus-visible {
 
 .nav-current:hover::before,
 .social-link:hover::before,
-.project-link:hover::before {
+.project-link:hover::before,
+.timeline-control:hover::before {
     opacity: var(--specular-hover-opacity);
 }
 
@@ -334,6 +338,7 @@ button:focus-visible {
 .venue-badge,
 .social-link,
 .project-link,
+.timeline-control,
 .info-box {
     position: relative;
     isolation: isolate;
@@ -465,6 +470,19 @@ input, button, select, textarea {
     font-size: var(--type-section-title);
     line-height: 1.12;
     margin: 0 0 var(--space-heading-content);
+}
+
+/* A section heading with controls on its right; the row carries the heading's bottom spacing. */
+.section-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: var(--space-heading-content);
+}
+
+.section-heading .section-title {
+    margin-bottom: 0;
 }
 
 .section-card,
@@ -732,6 +750,69 @@ footer p {
 
 .timeline-shell.is-positioning .timeline-container {
     scroll-snap-type: none;
+}
+
+/*
+ * When the script has shown the previous/next buttons, they replace the scrollbar.
+ * Swiping, the trackpad, and the arrow keys still scroll the timeline.
+ */
+.timeline-shell.has-controls .timeline-container {
+    scrollbar-width: none;
+}
+
+.timeline-shell.has-controls .timeline-container::-webkit-scrollbar {
+    display: none;
+}
+
+.timeline-controls {
+    display: flex;
+    flex: none;
+    gap: 0.5rem;
+}
+
+.timeline-control {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--badge-bg);
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, opacity 0.2s ease;
+    box-shadow: inset 0 1px 0 var(--surface-highlight), 0 4px 12px var(--shadow-sm);
+    -webkit-backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-saturate));
+    backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-saturate));
+    border: 1px solid var(--control-border);
+}
+
+.timeline-control:hover {
+    transform: translateY(-2px);
+    background: var(--hover-bg);
+    box-shadow: inset 0 1px 0 var(--surface-highlight), 0 10px 24px var(--shadow-md);
+}
+
+.timeline-control:active {
+    transform: translateY(0) scale(0.97);
+}
+
+/* At either end of the timeline the matching button dims but stays focusable. */
+.timeline-control[aria-disabled="true"] {
+    opacity: 0.4;
+    cursor: default;
+    transform: none;
+    background: var(--badge-bg);
+    box-shadow: inset 0 1px 0 var(--surface-highlight), 0 4px 12px var(--shadow-sm);
+}
+
+/* Slightly smaller beside the smaller phone heading. */
+@media (max-width: 768px) {
+    .timeline-control {
+        width: 36px;
+        height: 36px;
+    }
 }
 
 .timeline-container:focus-visible {
@@ -1109,6 +1190,7 @@ img, video {
     .social-link,
     .search-input,
     .project-link,
+    .timeline-control,
     .info-box {
         background: var(--solid-control-bg);
     }
@@ -1122,6 +1204,7 @@ img, video {
     .social-link,
     .search-input,
     .project-link,
+    .timeline-control,
     .info-box,
     .media-composite-label-cell span {
         -webkit-backdrop-filter: none;

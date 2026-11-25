@@ -127,9 +127,16 @@
             </section>
             <!-- Experience Section -->
             <section id="experience">
-                <h2 class="section-title">Experience</h2>
+                <div class="section-heading">
+                    <h2 class="section-title">Experience</h2>
+                    <!-- Shown by js/script.js when the timeline overflows; the buttons then stand in for the scrollbar. -->
+                    <div class="timeline-controls" id="timeline-controls" hidden>
+                        <button type="button" class="timeline-control" data-scroll="-1" aria-controls="timeline-container" aria-label="Show earlier roles"><!--@icon:chevron-left--></button>
+                        <button type="button" class="timeline-control" data-scroll="1" aria-controls="timeline-container" aria-label="Show more recent roles"><!--@icon:chevron-right--></button>
+                    </div>
+                </div>
                 <div class="timeline-shell is-loading" id="timeline-shell">
-                    <div class="timeline-container" tabindex="0" role="region" aria-label="Experience timeline. Scroll horizontally to view earlier roles.">
+                    <div class="timeline-container" id="timeline-container" tabindex="0" role="region" aria-label="Experience timeline. Scroll horizontally to view earlier roles.">
                         <div class="timeline" id="timeline">
                             <!--@experience-->
                         </div>
